@@ -118,7 +118,7 @@
     .ltr{direction:ltr}
     @media(max-width:1180px){.drawing-workspace{grid-template-columns:1fr}.workspace-preview{position:static}.report-shell{max-height:none}.report-sheet{transform-origin:top right;transform:scale(.78);margin-bottom:-165px}}
     @media(max-width:760px){.mini-grid,.mini-grid-3{grid-template-columns:1fr}.fitting-fields{grid-template-columns:1fr}.report-sheet{transform:scale(.55);margin-bottom:-355px}.metric-strip{grid-template-columns:1fr}}
-    .hook-row{border:1px solid #dbe6e2;border-radius:11px;padding:10px;background:#fbfcfc;margin-bottom:10px}.hook-row-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.hook-id{font-weight:800;font-size:12px;color:var(--brand)}.support-hint{font-size:11px;color:var(--muted);line-height:1.65;margin-top:6px}
+    .hook-row{border:1px solid #dbe6e2;border-radius:11px;padding:10px;background:#fbfcfc;margin-bottom:10px}.hook-row-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.hook-id{font-weight:800;font-size:12px;color:var(--brand)}.support-hint{font-size:11px;color:var(--muted);line-height:1.65;margin-top:6px}.pick-fitting.active{background:#1f5f52!important;color:#fff!important;border-color:#1f5f52!important}.pick-mode-hint{font-size:11px;padding:8px 10px;border:1px dashed #8fb6aa;border-radius:9px;background:#f4faf8;color:#1f5f52;margin-top:8px}
 
     /* ===== Enterprise Engineering Platform ===== */
     .nav-sep{height:1px;background:rgba(255,255,255,.10);margin:7px 8px}
@@ -264,8 +264,14 @@
                 <div class="field"><label>المعيار / Design Standard</label><input id="designStandard" value="Manufacturer Standard / Approved Specification" dir="ltr" /></div>
                 <div class="field"><label>عمق الدفن / Burial Depth (mm)</label><input id="burialDepth" type="number" min="0" value="0" dir="ltr" /></div>
                 <div class="field"><label>الخدمة / Service Medium</label><input id="serviceMedium" placeholder="Water / Diesel / HCL / NaOH ..." dir="ltr" /></div>
-                <div class="field"><label>شكل النهايات / Head Type</label><select id="tankHeadType"><option value="elliptical">2:1 Elliptical / بيضاوي</option><option value="torispherical">Torispherical / عدسي</option><option value="hemispherical">Hemispherical / نصف كروي</option><option value="flat">Flat / مسطح</option></select></div>
-                <div class="field"><label>عمق النهاية / Head Depth mm</label><input id="tankHeadDepth" type="number" min="0" value="0" dir="ltr" /><div class="form-note">0 = Auto حسب النوع</div></div>
+                <div class="field"><label>شكل النهايات / Head Type</label><select id="tankHeadType"><option value="torispherical" selected>عدسي منخفض التحدب / Shallow Dished</option><option value="elliptical">2:1 Elliptical / بيضاوي</option><option value="hemispherical">Hemispherical / نصف كروي</option><option value="flat">Flat / مسطح</option></select></div>
+                <div class="field"><label>نمط القبة / Head Profile</label><select id="tankHeadProfile"><option value="reference" selected>Reference Shallow / مثل المخطط المرجعي</option><option value="standard">Standard / قياسي</option><option value="custom">Custom / يدوي</option></select></div>
+                <div class="field"><label>عمق القبتين المشترك / Common Depth mm</label><input id="tankHeadDepth" type="number" min="0" value="0" dir="ltr" /><div class="form-note">0 = Auto من القطر والنمط</div></div>
+                <div class="field"><label>عمق القبة اليسرى / Left Head Depth mm</label><input id="leftHeadDepth" type="number" min="0" value="0" dir="ltr" /><div class="form-note">0 = استخدام العمق المشترك/التلقائي</div></div>
+                <div class="field"><label>عمق القبة اليمنى / Right Head Depth mm</label><input id="rightHeadDepth" type="number" min="0" value="0" dir="ltr" /><div class="form-note">0 = استخدام العمق المشترك/التلقائي</div></div>
+                <div class="field"><label>شدة تقعر/تحدب اليسرى <span id="leftBulgeValue">30%</span></label><input id="leftHeadBulge" type="range" min="10" max="100" step="1" value="30" /></div>
+                <div class="field"><label>شدة تقعر/تحدب اليمنى <span id="rightBulgeValue">30%</span></label><input id="rightHeadBulge" type="range" min="10" max="100" step="1" value="30" /></div>
+                <div class="field"><label>ربط القبتين / Mirror Heads</label><select id="mirrorHeads"><option value="on" selected>نعم - نفس الشكل</option><option value="off">لا - تحكم مستقل</option></select><div class="form-note">عند الفصل يمكن إعطاء كل قبة عمق وتحدب مختلف.</div></div>
                 <div class="field"><label>طول الجزء المستقيم / Straight Shell mm</label><input id="tankStraightLength" class="derived" type="number" value="0" readonly dir="ltr" /></div>
                 <div class="field"><label>كثافة FRP kg/m³</label><input id="frpDensity" type="number" min="100" value="1850" dir="ltr" /></div>
               </div>
@@ -317,7 +323,7 @@
 
             <div class="form-section">
               <h3>5. الفتحات والأنابيب <small>NOZZLES / FITTINGS</small></h3>
-              <div id="fittingsEditor" class="fittings-editor"></div>
+              <div class="support-hint" style="margin-bottom:8px">الآن يمكنك إضافة الأنابيب بأي موضع على طول الخزان بما في ذلك القبتين. اضغط «حدد من الرسم» ثم انقر على Side View أو Top View، أو أدخل X يدويًا. ويمكن سحب إيضاح كل مسقط بالفأرة مع بقاء خط التتبع ملتصقًا بالأنبوب.</div><div id="fittingsEditor" class="fittings-editor"></div>
               <button id="addFittingBtn" class="btn btn-ghost" type="button" style="margin-top:10px">+ إضافة فتحة / Add Fitting</button>
             </div>
 
@@ -340,7 +346,7 @@
                 <label class="option-check"><span>Position Dimensions</span><input id="optPositionDims" type="checkbox" checked></label>
                 <label class="option-check"><span>Top View</span><input id="optTopView" type="checkbox" checked></label>
               </div>
-              <div class="drawing-status-bar"><span class="pill"><span class="status-dot live"></span> Firebase Live</span><span class="pill">SVG Vector</span><span class="pill">Revision Controlled</span><span class="drag-help">↔ اسحب N / H / MH مباشرة داخل الرسم لتغيير الموقع</span></div>
+              <div class="btn-row" style="margin-top:10px"><button id="resetLabelsBtn" class="btn btn-ghost" type="button">إعادة توزيع الإيضاحات تلقائيًا</button><button id="cancelPickBtn" class="btn btn-ghost" type="button">إلغاء تحديد الأنبوب</button></div><div class="drawing-status-bar"><span class="pill"><span class="status-dot live"></span> Firebase Live</span><span class="pill">SVG Vector</span><span class="pill">Revision Controlled</span><span class="drag-help">↔ اسحب N / H / MH مباشرة داخل الرسم لتغيير الموقع • اسحب مربعات الإيضاح لتحريكها مستقلة في Side/Top View</span></div>
             </div>
             <div id="drawValidation" class="validation"></div>
             <div class="btn-row">
@@ -544,6 +550,8 @@
   let autoSaveTimer = null;
   let dragGeometry = null;
   let activeDrag = null;
+  let activeFittingPick = null;
+  let manholeLabel = {dx:0,dy:0};
 
   function toast(msg){ const el=$("toast"); el.textContent=msg; el.classList.add("show"); clearTimeout(window.__toastTimer); window.__toastTimer=setTimeout(()=>el.classList.remove("show"),2600); }
   function showLoginError(msg){ loginMsg.textContent=msg; loginMsg.className="msg error"; }
@@ -682,7 +690,7 @@
 
 
   // ===== Phase 2: automatic tank drawing =====
-  const tankInputIds=["drawClient","drawProject","drawNo","drawRevision","drawDate","drawStatus","projectCode","clientRef","drawnBy","checkedBy","approvedBy","revisionDescription","drawingNotes","reportLanguage","drawingScale","drawingUnit","tankOrientation","tankInstallation","tankUse","tankCapacity","tankDiameter","tankLength","tankThickness","tankWeight","designTemp","designPressure","specificGravity","designStandard","burialDepth","serviceMedium","tankHeadType","tankHeadDepth","frpDensity","tankResin","tankGlass","tankInner","tankColorText","tankGelcoat","tankGlassType","tankBarrier","manholeDia","manholePosMode","manholeX","manholeNeckHeight","manholeCoverType","hookCount","supportCount","supportHeight","supportType","supportTopWidth","supportBaseWidth","supportMode","supportContactAngle","supportBaseThickness","supportAnchorQty","stiffenerCount","stiffenerWidth","stiffenerProjection","optInnerWall","optCenterLines","optDimensions","optTags","optNozzleDetail","optSupportDetail","optSectionHatch","optPositionDims","optTopView","paperSize"];
+  const tankInputIds=["drawClient","drawProject","drawNo","drawRevision","drawDate","drawStatus","projectCode","clientRef","drawnBy","checkedBy","approvedBy","revisionDescription","drawingNotes","reportLanguage","drawingScale","drawingUnit","tankOrientation","tankInstallation","tankUse","tankCapacity","tankDiameter","tankLength","tankThickness","tankWeight","designTemp","designPressure","specificGravity","designStandard","burialDepth","serviceMedium","tankHeadType","tankHeadProfile","tankHeadDepth","leftHeadDepth","rightHeadDepth","leftHeadBulge","rightHeadBulge","mirrorHeads","frpDensity","tankResin","tankGlass","tankInner","tankColorText","tankGelcoat","tankGlassType","tankBarrier","manholeDia","manholePosMode","manholeX","manholeNeckHeight","manholeCoverType","hookCount","supportCount","supportHeight","supportType","supportTopWidth","supportBaseWidth","supportMode","supportContactAngle","supportBaseThickness","supportAnchorQty","stiffenerCount","stiffenerWidth","stiffenerProjection","optInnerWall","optCenterLines","optDimensions","optTags","optNozzleDetail","optSupportDetail","optSectionHatch","optPositionDims","optTopView","paperSize"];
   function n(id, fallback=0){ const v=Number($(id)?.value); return Number.isFinite(v)?v:fallback; }
   function esc(v){ return String(v??"").replace(/[&<>\"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c])); }
   function todayISO(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
@@ -691,9 +699,9 @@
   function defaultFittings(){
     const L=Math.max(100,n("tankLength",5150));
     return [
-      {id:crypto.randomUUID(),type:"INLET",size:'2"',connection:"FRP FLANGE",material:"FRP",note:"",angle:0,neckLength:150,flangeOD:0,x:Math.round(L*.78),orientation:"top",qty:1},
-      {id:crypto.randomUUID(),type:"OUTLET",size:'2"',connection:"FRP FLANGE",material:"FRP",note:"",angle:0,neckLength:150,flangeOD:0,x:Math.round(L*.18),orientation:"top",qty:1},
-      {id:crypto.randomUUID(),type:"VENT",size:'4"',connection:"FRP FLANGE",material:"FRP",note:"",angle:0,neckLength:180,flangeOD:0,x:Math.round(L*.62),orientation:"top",qty:1}
+      {id:crypto.randomUUID(),type:"INLET",size:'2"',connection:"FRP FLANGE",material:"FRP",note:"",angle:0,neckLength:150,flangeOD:0,x:Math.round(L*.78),orientation:"top",qty:1,labelDx:0,labelDy:0,topLabelDx:0,topLabelDy:0},
+      {id:crypto.randomUUID(),type:"OUTLET",size:'2"',connection:"FRP FLANGE",material:"FRP",note:"",angle:0,neckLength:150,flangeOD:0,x:Math.round(L*.18),orientation:"top",qty:1,labelDx:0,labelDy:0,topLabelDx:0,topLabelDy:0},
+      {id:crypto.randomUUID(),type:"VENT",size:'4"',connection:"FRP FLANGE",material:"FRP",note:"",angle:0,neckLength:180,flangeOD:0,x:Math.round(L*.62),orientation:"top",qty:1,labelDx:0,labelDy:0,topLabelDx:0,topLabelDy:0}
     ];
   }
   fittings=defaultFittings();
@@ -741,6 +749,7 @@
         <div class="field"><label>موقع سريع / Preset</label><select data-k="preset"><option value="custom">مخصص</option><option value="leftEnd">طرف يسار</option><option value="left">يسار</option><option value="center">الوسط</option><option value="right">يمين</option><option value="rightEnd">طرف يمين</option></select></div>
         <div class="field"><label>X mm من بداية الخزان</label><input data-k="x" type="number" value="${Number(h.x)||0}" min="0" dir="ltr" /></div>
       </div>
+      <div class="form-note" style="grid-column:1 / -1">X يقاس من بداية الخزان اليسرى عبر الطول الكلي. يمكنك وضع الفتحة داخل القبة أو على الجسم المستقيم وسحبها مباشرة من الرسم. كما يمكنك سحب مربع الإيضاح نفسه بالفأرة لإعادة ترتيبه.</div>
     </div>`).join('');
     box.querySelectorAll('.hook-row').forEach(row=>{
       const id=row.dataset.hookId;
@@ -761,12 +770,12 @@
   function renderFittingsEditor(){
     const box=$("fittingsEditor"); if(!box) return;
     box.innerHTML=fittings.map((f,i)=>`<div class="fitting-row" data-fit-id="${f.id}">
-      <div class="fitting-row-head"><span class="fitting-id">N${i+1}</span><button class="icon-btn remove-fitting" type="button" data-id="${f.id}">حذف</button></div>
+      <div class="fitting-row-head"><span class="fitting-id">N${i+1}</span><div style="display:flex;gap:6px"><button class="small-btn pick-fitting ${activeFittingPick===i?'active':''}" type="button" data-id="${f.id}">حدد من الرسم</button><button class="icon-btn remove-fitting" type="button" data-id="${f.id}">حذف</button></div></div>
       <div class="fitting-fields">
         <div class="field"><label>النوع / Type</label><select data-k="type"><option ${f.type==='INLET'?'selected':''}>INLET</option><option ${f.type==='OUTLET'?'selected':''}>OUTLET</option><option ${f.type==='VENT'?'selected':''}>VENT</option><option ${f.type==='DRAIN'?'selected':''}>DRAIN</option><option ${f.type==='OVERFLOW'?'selected':''}>OVERFLOW</option><option ${f.type==='NOZZLE'?'selected':''}>NOZZLE</option><option ${f.type==='LEVEL'?'selected':''}>LEVEL</option><option ${f.type==='DIP PIPE'?'selected':''}>DIP PIPE</option><option ${f.type==='SPARE'?'selected':''}>SPARE</option></select></div>
         <div class="field"><label>المقاس / Size</label><input data-k="size" value="${esc(f.size)}" dir="ltr" /></div>
         <div class="field"><label>X mm</label><input data-k="x" type="number" value="${Number(f.x)||0}" min="0" dir="ltr" /></div>
-        <div class="field"><label>الاتجاه / Orientation</label><select data-k="orientation"><option value="top" ${f.orientation==='top'?'selected':''}>TOP</option><option value="right" ${f.orientation==='right'?'selected':''}>RIGHT</option><option value="left" ${f.orientation==='left'?'selected':''}>LEFT</option><option value="bottom" ${f.orientation==='bottom'?'selected':''}>BOTTOM</option></select></div>
+        <div class="field"><label>اتجاه الأنبوب / Pipe Direction</label><select data-k="orientation"><option value="top" ${f.orientation==='top'?'selected':''}>TOP / رأسي لأعلى</option><option value="bottom" ${f.orientation==='bottom'?'selected':''}>BOTTOM / رأسي لأسفل</option><option value="right" ${f.orientation==='right'?'selected':''}>RIGHT / طولي لليمين</option><option value="left" ${f.orientation==='left'?'selected':''}>LEFT / طولي لليسار</option></select></div>
         <div class="field"><label>الكمية / Qty</label><input data-k="qty" type="number" min="1" value="${Number(f.qty)||1}" /></div>
         <div class="field"><label>التوصيل / Connection</label><input data-k="connection" value="${esc(f.connection||'FRP FLANGE')}" dir="ltr" /></div>
         <div class="field"><label>المادة / Material</label><input data-k="material" value="${esc(f.material||'FRP')}" dir="ltr" /></div>
@@ -775,6 +784,7 @@
         <div class="field"><label>Flange OD mm</label><input data-k="flangeOD" type="number" min="0" value="${Number(f.flangeOD??0)}" dir="ltr" /><div class="form-note">0 = Auto</div></div>
         <div class="field"><label>ملاحظة / Note</label><input data-k="note" value="${esc(f.note||'')}" /></div>
       </div>
+      <div class="form-note" style="grid-column:1 / -1">X يقاس من بداية الخزان اليسرى عبر الطول الكلي. يمكنك وضع الفتحة داخل القبة أو على الجسم المستقيم وسحبها مباشرة من الرسم. كما يمكنك سحب مربع الإيضاح نفسه بالفأرة لإعادة ترتيبه.</div>
     </div>`).join('');
     box.querySelectorAll('.fitting-row').forEach(row=>{
       const id=row.dataset.fitId;
@@ -782,9 +792,10 @@
         const f=fittings.find(x=>x.id===id); if(!f) return; const k=inp.dataset.k; f[k]=(['x','qty','angle','neckLength','flangeOD'].includes(k))?Number(inp.value):inp.value; renderTankDrawing(); scheduleAutoSave();
       }));
     });
-    box.querySelectorAll('.remove-fitting').forEach(b=>b.addEventListener('click',()=>{ fittings=fittings.filter(x=>x.id!==b.dataset.id); renderFittingsEditor(); renderTankDrawing(); }));
+    box.querySelectorAll('.pick-fitting').forEach(b=>b.addEventListener('click',()=>{ const idx=fittings.findIndex(x=>x.id===b.dataset.id); if(idx<0)return; activeFittingPick=(activeFittingPick===idx?null:idx); renderFittingsEditor(); if(activeFittingPick!==null)toast(`N${activeFittingPick+1}: انقر على جسم الخزان في Side View أو Top View`); else toast('تم إلغاء وضع تحديد الأنبوب'); }));
+    box.querySelectorAll('.remove-fitting').forEach(b=>b.addEventListener('click',()=>{ const idx=fittings.findIndex(x=>x.id===b.dataset.id); fittings=fittings.filter(x=>x.id!==b.dataset.id); if(activeFittingPick===idx)activeFittingPick=null; else if(activeFittingPick!==null&&activeFittingPick>idx)activeFittingPick--; renderFittingsEditor(); renderTankDrawing(); }));
   }
-  $("addFittingBtn")?.addEventListener("click",()=>{ fittings.push({id:crypto.randomUUID(),type:"NOZZLE",size:'2"',connection:"FRP FLANGE",material:"FRP",note:"",angle:0,neckLength:150,flangeOD:0,x:Math.round(n("tankLength",5000)/2),orientation:"top",qty:1}); renderFittingsEditor(); renderTankDrawing(); });
+  $("addFittingBtn")?.addEventListener("click",()=>{ fittings.push({id:crypto.randomUUID(),type:"NOZZLE",size:'2"',connection:"FRP FLANGE",material:"FRP",note:"",angle:0,neckLength:150,flangeOD:0,x:Math.round(n("tankLength",5000)/2),orientation:"top",qty:1,labelDx:0,labelDy:0,topLabelDx:0,topLabelDy:0}); renderFittingsEditor(); renderTankDrawing(); });
 
   function syncManholeX(){
     const mode=$("manholePosMode")?.value, L=Math.max(100,n("tankLength",5000));
@@ -802,24 +813,73 @@
   $("tankLength")?.addEventListener("input",()=>{ hooks=hooks.map((h,i)=>({ ...h, x: Math.max(0, Math.min(n("tankLength",5150), Number(h.x)||Math.round(n("tankLength",5150)*(i+1)/(hooks.length+1)))) })); syncSupportsToCount(); renderHooksEditor(); renderSupportsEditor(); });
 
   tankInputIds.forEach(id=>$(id)?.addEventListener("input",renderTankDrawing));
-  function autoHeadDepth(D,type){ if(type==='hemispherical')return D/2; if(type==='elliptical')return D/4; if(type==='torispherical')return D*.1935; return 0; }
-  function headPairVolume(D,depth,type){ const r=D/2; if(type==='flat'||depth<=0)return 0; return (4/3)*Math.PI*r*r*depth; }
+
+  function clampNum(v,a,b){ return Math.max(a,Math.min(b,Number(v)||0)); }
+  function defaultBulge(type,profile){
+    if(type==='flat') return 10;
+    if(type==='hemispherical') return 82;
+    if(profile==='reference') return type==='torispherical'?30:38;
+    if(profile==='standard') return type==='torispherical'?48:58;
+    return 45;
+  }
+  function autoHeadDepth(D,type,profile='reference'){
+    if(type==='flat')return 0;
+    if(type==='hemispherical')return D/2;
+    if(type==='torispherical')return D*(profile==='reference'?.145:.1935);
+    if(type==='elliptical')return D*(profile==='reference'?.18:.25);
+    return D*.16;
+  }
+  function resolveHeadGeometry(t){
+    const D=Math.max(1,Number(t.diameter)||1), L=Math.max(1,Number(t.length)||1), type=t.headType||'torispherical', profile=t.headProfile||'reference';
+    const common=Number(t.headDepth)>0?Number(t.headDepth):autoHeadDepth(D,type,profile);
+    let left=Number(t.leftHeadDepth)>0?Number(t.leftHeadDepth):common;
+    let right=Number(t.rightHeadDepth)>0?Number(t.rightHeadDepth):common;
+    if(type==='flat'){left=0;right=0;}
+    const lb=clampNum(t.leftHeadBulge??defaultBulge(type,profile),10,100)||defaultBulge(type,profile);
+    const rb=clampNum(t.rightHeadBulge??defaultBulge(type,profile),10,100)||defaultBulge(type,profile);
+    return {type,profile,leftDepth:left,rightDepth:right,leftBulge:lb,rightBulge:rb,straight:Math.max(0,L-left-right)};
+  }
+  function singleHeadVolume(D,depth,type){ const r=D/2; if(type==='flat'||depth<=0)return 0; return (2/3)*Math.PI*r*r*depth; }
+  function headPairVolume(D,leftDepth,rightDepth,type){ return singleHeadVolume(D,leftDepth,type)+singleHeadVolume(D,rightDepth,type); }
+
+  function syncHeadControls(source=''){
+    const type=$('tankHeadType')?.value||'torispherical', profile=$('tankHeadProfile')?.value||'reference', mirrored=$('mirrorHeads')?.value!=='off';
+    if(source==='profile'){
+      const b=defaultBulge(type,profile); $('leftHeadBulge').value=b; if(mirrored)$('rightHeadBulge').value=b;
+    }
+    if(mirrored){
+      if(source==='leftDepth') $('rightHeadDepth').value=$('leftHeadDepth').value;
+      if(source==='leftBulge'||source==='profile'||source==='mirror') $('rightHeadBulge').value=$('leftHeadBulge').value;
+    }
+    $('rightHeadDepth').disabled=mirrored;
+    $('rightHeadBulge').disabled=mirrored;
+    $('leftBulgeValue').textContent=`${$('leftHeadBulge').value}%`;
+    $('rightBulgeValue').textContent=`${$('rightHeadBulge').value}%`;
+  }
+  $('tankHeadProfile')?.addEventListener('change',()=>{syncHeadControls('profile');renderTankDrawing();});
+  $('mirrorHeads')?.addEventListener('change',()=>{syncHeadControls('mirror');renderTankDrawing();});
+  $('leftHeadDepth')?.addEventListener('input',()=>{syncHeadControls('leftDepth');renderTankDrawing();});
+  $('leftHeadBulge')?.addEventListener('input',()=>{syncHeadControls('leftBulge');renderTankDrawing();});
+  $('rightHeadBulge')?.addEventListener('input',()=>{syncHeadControls();renderTankDrawing();});
+  syncHeadControls('profile');
+
   $("calcLengthBtn")?.addEventListener("click",()=>{
     const V=n("tankCapacity")*1e6,D=n("tankDiameter"); if(D<=0||V<=0) return toast("أدخل السعة والقطر أولًا");
-    const type=$("tankHeadType").value, hd=n("tankHeadDepth")||autoHeadDepth(D,type), headV=headPairVolume(D,hd,type), area=Math.PI*Math.pow(D/2,2);
-    const straight=Math.max(0,(V-headV)/area); const overall=straight+2*hd; $("tankLength").value=Math.round(overall); $("tankStraightLength").value=Math.round(straight); syncManholeX(); renderTankDrawing(); toast("تم حساب الطول مع تعويض حجم النهايات بصورة تقريبية");
+    const temp={diameter:D,length:Math.max(1,n('tankLength')),headType:$("tankHeadType").value,headProfile:$("tankHeadProfile").value,headDepth:n("tankHeadDepth"),leftHeadDepth:n('leftHeadDepth'),rightHeadDepth:n('rightHeadDepth'),leftHeadBulge:n('leftHeadBulge'),rightHeadBulge:n('rightHeadBulge')};
+    const hg=resolveHeadGeometry(temp), headV=headPairVolume(D,hg.leftDepth,hg.rightDepth,hg.type), area=Math.PI*Math.pow(D/2,2);
+    const straight=Math.max(0,(V-headV)/area), overall=straight+hg.leftDepth+hg.rightDepth; $("tankLength").value=Math.round(overall); $("tankStraightLength").value=Math.round(straight); syncManholeX(); renderTankDrawing(); toast("تم حساب الطول مع شكل القبتين الحالي");
   });
   $("calcWeightBtn")?.addEventListener("click",()=>{
     const D=n("tankDiameter"),L=n("tankLength"),th=n("tankThickness"),rho=n("frpDensity",1850);if(D<=0||L<=0||th<=0)return toast("أدخل القطر والطول والسماكة أولًا");
-    const type=$("tankHeadType").value,hd=n("tankHeadDepth")||autoHeadDepth(D,type),straight=Math.max(0,L-2*hd);
-    const shellArea=(Math.PI*D*straight + Math.PI*D*D/2)/1e6; const kg=shellArea*(th/1000)*rho; $("tankWeight").value=Math.round(kg*10)/10; renderTankDrawing(); toast("تم حساب وزن جسم الخزان تقريبياً - Shell only");
+    const hg=resolveHeadGeometry({diameter:D,length:L,headType:$("tankHeadType").value,headProfile:$("tankHeadProfile").value,headDepth:n("tankHeadDepth"),leftHeadDepth:n('leftHeadDepth'),rightHeadDepth:n('rightHeadDepth'),leftHeadBulge:n('leftHeadBulge'),rightHeadBulge:n('rightHeadBulge')});
+    const shellArea=(Math.PI*D*hg.straight + Math.PI*D*D/2)/1e6; const kg=shellArea*(th/1000)*rho; $("tankWeight").value=Math.round(kg*10)/10; renderTankDrawing(); toast("تم حساب وزن جسم الخزان تقريبياً - Shell only");
   });
 
   function collectDrawingData(){
     return {
       project:{client:$("drawClient").value.trim(),projectName:$("drawProject").value.trim(),drawingNo:$("drawNo").value.trim(),revision:$("drawRevision").value.trim(),date:$("drawDate").value,status:$("drawStatus").value,projectCode:$("projectCode").value.trim(),clientRef:$("clientRef").value.trim(),drawnBy:$("drawnBy").value.trim(),checkedBy:$("checkedBy").value.trim(),approvedBy:$("approvedBy").value.trim(),revisionDescription:$("revisionDescription").value.trim(),notes:$("drawingNotes").value.trim()},
-      tank:{orientation:$("tankOrientation").value,installation:$("tankInstallation").value,use:$("tankUse").value,capacity:n("tankCapacity"),diameter:n("tankDiameter"),length:n("tankLength"),thickness:n("tankThickness"),weight:n("tankWeight"),designTemp:n("designTemp"),designPressure:n("designPressure"),specificGravity:n("specificGravity",1),designStandard:$("designStandard").value.trim(),burialDepth:n("burialDepth"),serviceMedium:$("serviceMedium").value.trim(),resin:$("tankResin").value.trim(),glass:$("tankGlass").value.trim(),inner:$("tankInner").value.trim(),color:$("tankColorText").value.trim(),gelcoat:$("tankGelcoat").value.trim(),glassType:$("tankGlassType").value.trim(),barrier:$("tankBarrier").value.trim(),headType:$("tankHeadType").value,headDepth:n("tankHeadDepth"),straightLength:n("tankStraightLength"),frpDensity:n("frpDensity",1850)},
-      manhole:{diameter:n("manholeDia"),x:n("manholeX"),neckHeight:n("manholeNeckHeight"),coverType:$("manholeCoverType").value},hooks:{count:n("hookCount"),items:hooks.map(h=>({...h}))},supports:{count:n("supportCount"),height:n("supportHeight"),type:$("supportType").value,topWidth:n("supportTopWidth"),baseWidth:n("supportBaseWidth"),mode:$("supportMode").value,contactAngle:n("supportContactAngle",120),baseThickness:n("supportBaseThickness",10),anchorQty:n("supportAnchorQty",2),stiffenerCount:n("stiffenerCount",0),stiffenerWidth:n("stiffenerWidth",90),stiffenerProjection:n("stiffenerProjection",45),items:supportItems.map(x=>({...x}))},fittings:fittings.map(f=>({...f})),
+      tank:{orientation:$("tankOrientation").value,installation:$("tankInstallation").value,use:$("tankUse").value,capacity:n("tankCapacity"),diameter:n("tankDiameter"),length:n("tankLength"),thickness:n("tankThickness"),weight:n("tankWeight"),designTemp:n("designTemp"),designPressure:n("designPressure"),specificGravity:n("specificGravity",1),designStandard:$("designStandard").value.trim(),burialDepth:n("burialDepth"),serviceMedium:$("serviceMedium").value.trim(),resin:$("tankResin").value.trim(),glass:$("tankGlass").value.trim(),inner:$("tankInner").value.trim(),color:$("tankColorText").value.trim(),gelcoat:$("tankGelcoat").value.trim(),glassType:$("tankGlassType").value.trim(),barrier:$("tankBarrier").value.trim(),headType:$("tankHeadType").value,headProfile:$("tankHeadProfile").value,headDepth:n("tankHeadDepth"),leftHeadDepth:n("leftHeadDepth"),rightHeadDepth:n("rightHeadDepth"),leftHeadBulge:n("leftHeadBulge",30),rightHeadBulge:n("rightHeadBulge",30),mirrorHeads:$("mirrorHeads").value,straightLength:n("tankStraightLength"),frpDensity:n("frpDensity",1850)},
+      manhole:{diameter:n("manholeDia"),x:n("manholeX"),neckHeight:n("manholeNeckHeight"),coverType:$("manholeCoverType").value,labelDx:Number(manholeLabel.dx)||0,labelDy:Number(manholeLabel.dy)||0},hooks:{count:n("hookCount"),items:hooks.map(h=>({...h}))},supports:{count:n("supportCount"),height:n("supportHeight"),type:$("supportType").value,topWidth:n("supportTopWidth"),baseWidth:n("supportBaseWidth"),mode:$("supportMode").value,contactAngle:n("supportContactAngle",120),baseThickness:n("supportBaseThickness",10),anchorQty:n("supportAnchorQty",2),stiffenerCount:n("stiffenerCount",0),stiffenerWidth:n("stiffenerWidth",90),stiffenerProjection:n("stiffenerProjection",45),items:supportItems.map(x=>({...x}))},fittings:fittings.map(f=>({...f})),
       documentControl:{language:$("reportLanguage").value,scale:$("drawingScale").value,unit:$("drawingUnit").value,drawingOptions:{innerWall:$("optInnerWall").checked,centerLines:$("optCenterLines").checked,dimensions:$("optDimensions").checked,tags:$("optTags").checked,nozzleDetail:$("optNozzleDetail").checked,supportDetail:$("optSupportDetail").checked,sectionHatch:$("optSectionHatch").checked,positionDims:$("optPositionDims").checked,topView:$("optTopView").checked}},
       headerSnapshot:{companyNameAr:$("companyNameAr").value.trim(),companyNameEn:$("companyNameEn").value.trim(),logoDataUrl:companyLogoData||"",drawingTitle:$("drawingTitle").value.trim(),headerColor:$("headerColor").value,headerBorder:n("headerBorder",2),logoWidth:n("logoWidth",130),showLogo:$("showLogo").checked,showArName:$("showArName").checked,showEnName:$("showEnName").checked},
       paperSize:$("paperSize").value,
@@ -852,17 +912,17 @@
     if(!$('tankSvg')) return;
     const d=collectDrawingData(), t=d.tank;
     const L=Math.max(100,t.length), D=Math.max(100,t.diameter), thk=Math.max(.1,t.thickness||1);
-    const headType=t.headType||'elliptical', hd=Math.max(0,t.headDepth||autoHeadDepth(D,headType));
-    const straight=Math.max(0,L-2*hd); $('tankStraightLength').value=Math.round(straight);
+    const hg=resolveHeadGeometry(t), headType=hg.type, leftHd=hg.leftDepth, rightHd=hg.rightDepth, leftBulge=hg.leftBulge, rightBulge=hg.rightBulge;
+    const hd=(leftHd+rightHd)/2, straight=hg.straight; $('tankStraightLength').value=Math.round(straight);
     const mhX=Math.max(0,Math.min(L,d.manhole.x)), mhD=Math.max(0,d.manhole.diameter), mhNeck=Math.max(0,d.manhole.neckHeight||180);
-    const r=D/2, cylV=Math.PI*r*r*straight/1e6, headsV=headPairVolume(D,hd,headType)/1e6, calcVol=cylV+headsV;
+    const r=D/2, cylV=Math.PI*r*r*straight/1e6, headsV=headPairVolume(D,leftHd,rightHd,headType)/1e6, calcVol=cylV+headsV;
     const area=(Math.PI*D*Math.max(0,straight)+Math.PI*D*D/2)/1e6;
     $('metricCalcVol').textContent=fmt(calcVol,0); $('metricArea').textContent=fmt(area,2); $('metricRatio').textContent=fmt(L/D,2);
     const opt=d.documentControl?.drawingOptions||{};
 
     const warns=[];
     if(t.capacity<=0||D<=0||L<=0) warns.push('السعة والقطر والطول يجب أن تكون أكبر من صفر.');
-    if(L<2*hd && headType!=='flat') warns.push('الطول الكلي أقل من مجموع عمق النهايتين.');
+    if(L<leftHd+rightHd && headType!=='flat') warns.push('الطول الكلي أقل من مجموع عمق القبتين.');
     d.fittings.forEach((f,i)=>{if(Number(f.x)<0||Number(f.x)>L)warns.push(`موقع N${i+1} خارج حدود الخزان.`);});
     (d.hooks.items||[]).forEach((h,i)=>{if(Number(h.x)<0||Number(h.x)>L)warns.push(`موقع H${i+1} خارج حدود الخزان.`);});
     const minSep=Math.max(120,D*.10), sf=[...d.fittings].map((f,i)=>({...f,idx:i})).sort((a,b)=>a.x-b.x);
@@ -881,7 +941,7 @@
 
     const svg=$('tankSvg');
     const defs=`<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto-start-reverse"><path d="M0,0 L7,3.5 L0,7 Z" fill="#253a35"/></marker><pattern id="hatch" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" stroke="#71827d" stroke-width=".7"/></pattern></defs>
-    <style>.obj{fill:none;stroke:#262626;stroke-width:1.55}.heavy{fill:none;stroke:#111;stroke-width:2.05}.thin{fill:none;stroke:#3f3f3f;stroke-width:.82}.hiddenline{fill:none;stroke:#777;stroke-width:.72;stroke-dasharray:5 3}.center{fill:none;stroke:#c77f86;stroke-width:.72;stroke-dasharray:13 4 2 4}.centerDark{fill:none;stroke:#333;stroke-width:.72;stroke-dasharray:10 4 2 4}.dim{fill:none;stroke:#222;stroke-width:.78}.dim text,.label{font:10px Arial,sans-serif;fill:#111;stroke:none}.viewtitle{font:700 11px Arial,sans-serif;fill:#111}.note{font:9px Arial,sans-serif;fill:#333}.tag{fill:#fff;stroke:#222;stroke-width:.9}.tagtext{font:700 8.4px Arial,sans-serif;fill:#111}.callbox{fill:#fff;stroke:#555;stroke-width:.65}.calltext{font:8.4px Arial,sans-serif;fill:#111}.flange{fill:#d6d6d6;stroke:#222;stroke-width:1.2}.manholefill{fill:#b7b7b7;stroke:#222;stroke-width:1.35}.rib{fill:#f7f7f7;stroke:#333;stroke-width:1}.draghandle{fill:rgba(31,95,82,.01);stroke:none;pointer-events:all;cursor:ew-resize}.draghandle.v{cursor:ns-resize}.hatchfill{fill:url(#hatch);stroke:#263c37;stroke-width:1}</style>`;
+    <style>.obj{fill:none;stroke:#262626;stroke-width:1.55}.heavy{fill:none;stroke:#111;stroke-width:2.05}.thin{fill:none;stroke:#3f3f3f;stroke-width:.82}.hiddenline{fill:none;stroke:#777;stroke-width:.72;stroke-dasharray:5 3}.center{fill:none;stroke:#c77f86;stroke-width:.72;stroke-dasharray:13 4 2 4}.centerDark{fill:none;stroke:#333;stroke-width:.72;stroke-dasharray:10 4 2 4}.dim{fill:none;stroke:#222;stroke-width:.78}.dim text,.label{font:10px Arial,sans-serif;fill:#111;stroke:none}.viewtitle{font:700 11px Arial,sans-serif;fill:#111}.note{font:9px Arial,sans-serif;fill:#333}.tag{fill:#fff;stroke:#222;stroke-width:.9}.tagtext{font:700 8.4px Arial,sans-serif;fill:#111}.callbox{fill:#fff;stroke:#555;stroke-width:.65}.calltext{font:8.4px Arial,sans-serif;fill:#111}.flange{fill:#d6d6d6;stroke:#222;stroke-width:1.2}.manholefill{fill:#b7b7b7;stroke:#222;stroke-width:1.35}.rib{fill:#f7f7f7;stroke:#333;stroke-width:1}.draghandle{fill:rgba(31,95,82,.01);stroke:none;pointer-events:all;cursor:ew-resize}.draghandle.v{cursor:ns-resize}.labeldrag{fill:rgba(31,95,82,.02);stroke:none;pointer-events:all;cursor:move}.labelgrab{fill:#1f5f52;stroke:#fff;stroke-width:.7;pointer-events:none}.pickzone{fill:rgba(255,255,255,.001);stroke:none;pointer-events:all;cursor:crosshair}.hatchfill{fill:url(#hatch);stroke:#263c37;stroke-width:1}</style>`;
     let parts=defs; const hookItems=(d.hooks.items||[]);
     const showCenter=opt.centerLines!==false, showDims=opt.dimensions!==false, showTags=opt.tags!==false;
     const showInner=opt.innerWall!==false, showPosDims=opt.positionDims!==false;
@@ -891,13 +951,20 @@
       const w=Math.max(74,Math.min(145,34+String(label).length*4.4)),hh=18;let bx=x-w/2;if(align==='left')bx=x;if(align==='right')bx=x-w;const by=y-hh/2;
       return `${line(anchorX,anchorY,x,y,'class="thin"')}<rect x="${bx}" y="${by}" width="${w}" height="${hh}" rx="2.5" class="callbox"/>${textEl(bx+w/2,y+3,label,'class="calltext" text-anchor="middle"')}`;
     }
-    function headPathHorizontal(x0,x1,y0,y1,depthPx,type){
-      const cy=(y0+y1)/2, shellL=x0+depthPx, shellR=x1-depthPx;
-      if(type==='flat'||depthPx<2)return `M ${x0} ${y0} L ${x1} ${y0} L ${x1} ${y1} L ${x0} ${y1} Z`;
-      const k=type==='hemispherical'?.62:type==='torispherical'?.42:.50;
-      return `M ${shellL} ${y0} L ${shellR} ${y0} C ${shellR+depthPx*k} ${y0} ${x1} ${cy-depthPx*.36} ${x1} ${cy} C ${x1} ${cy+depthPx*.36} ${shellR+depthPx*k} ${y1} ${shellR} ${y1} L ${shellL} ${y1} C ${shellL-depthPx*k} ${y1} ${x0} ${cy+depthPx*.36} ${x0} ${cy} C ${x0} ${cy-depthPx*.36} ${shellL-depthPx*k} ${y0} ${shellL} ${y0} Z`;
+    function headPathHorizontal(x0,x1,y0,y1,leftDepthPx,rightDepthPx,type,leftBulgePct=30,rightBulgePct=30){
+      const cy=(y0+y1)/2, H=y1-y0, ld=Math.max(0,leftDepthPx), rd=Math.max(0,rightDepthPx), shellL=x0+ld, shellR=x1-rd;
+      if(type==='flat'||(ld<2&&rd<2))return `M ${x0} ${y0} L ${x1} ${y0} L ${x1} ${y1} L ${x0} ${y1} Z`;
+      const ctrl=(dep,pct)=>{const b=clampNum(pct,10,100)/100;return {x:dep*(.16+.56*b), y:H*(.16+.22*b)};};
+      const lc=ctrl(ld,leftBulgePct), rc=ctrl(rd,rightBulgePct);
+      let p=`M ${shellL} ${y0} L ${shellR} ${y0}`;
+      if(rd>=2) p+=` C ${shellR+rc.x} ${y0} ${x1} ${cy-rc.y} ${x1} ${cy} C ${x1} ${cy+rc.y} ${shellR+rc.x} ${y1} ${shellR} ${y1}`; else p+=` L ${x1} ${y1}`;
+      p+=` L ${shellL} ${y1}`;
+      if(ld>=2) p+=` C ${shellL-lc.x} ${y1} ${x0} ${cy+lc.y} ${x0} ${cy} C ${x0} ${cy-lc.y} ${shellL-lc.x} ${y0} ${shellL} ${y0}`; else p+=` L ${x0} ${y0}`;
+      return p+' Z';
     }
-    function innerHeadPathHorizontal(x0,x1,y0,y1,depthPx,type,inset){return headPathHorizontal(x0+inset,x1-inset,y0+inset,y1-inset,Math.max(0,depthPx-inset),type);}
+    function innerHeadPathHorizontal(x0,x1,y0,y1,leftDepthPx,rightDepthPx,type,leftBulge,rightBulge,inset){
+      return headPathHorizontal(x0+inset,x1-inset,y0+inset,y1-inset,Math.max(0,leftDepthPx-inset),Math.max(0,rightDepthPx-inset),type,leftBulge,rightBulge);
+    }
     function drawNozzleSide(f,i,sx,sy,sw,sh,s,L){
       const fx=sx+Math.max(0,Math.min(L,Number(f.x)||0))/L*sw, proj=Math.max(12,Math.min(38,(Number(f.neckLength)||150)*s*.75)), fOD=Math.max(14,Math.min(34,((Number(f.flangeOD)||80))*s*.55+12));
       let x1=fx,y1=sy,x2=fx,y2=sy-proj,flange='';
@@ -931,57 +998,81 @@
 
     if(t.orientation==='vertical'){
       const area={x:75,y:45,w:430,h:250}, scale=Math.min(area.w/D,area.h/L),bw=D*scale,bh=L*scale,bx=area.x+(area.w-bw)/2,by=area.y+(area.h-bh)/2,wall=Math.max(1.2,Math.min(4,thk*scale));
-      dragGeometry={orientation:'vertical',start:by,span:bh,length:L};parts+=textEl(area.x+area.w/2,18,'FRONT ELEVATION','class="viewtitle" text-anchor="middle"');
-      const dome=Math.max(0,Math.min(bw*.28,hd*scale));
-      const topY=by+dome,bottomY=by+bh-dome;
-      let outline=`M ${bx} ${topY} Q ${bx+bw/2} ${by-Math.min(4,dome*.08)} ${bx+bw} ${topY} L ${bx+bw} ${bottomY} Q ${bx+bw/2} ${by+bh+Math.min(4,dome*.08)} ${bx} ${bottomY} Z`;
+      dragGeometry={orientation:'vertical',start:by,span:bh,length:L,front:{bx,by,bw,bh},verticalTop:null};parts+=textEl(area.x+area.w/2,18,'FRONT ELEVATION','class="viewtitle" text-anchor="middle"');
+      const topDome=Math.max(0,Math.min(bw*.42,leftHd*scale)), bottomDome=Math.max(0,Math.min(bw*.42,rightHd*scale));
+      const topY=by+topDome,bottomY=by+bh-bottomDome, lb=leftBulge/100, rb=rightBulge/100;
+      let outline=`M ${bx} ${topY} C ${bx+bw*.20} ${by+topDome*(.20-.10*lb)} ${bx+bw*.80} ${by+topDome*(.20-.10*lb)} ${bx+bw} ${topY} L ${bx+bw} ${bottomY} C ${bx+bw*.80} ${by+bh-bottomDome*(.20-.10*rb)} ${bx+bw*.20} ${by+bh-bottomDome*(.20-.10*rb)} ${bx} ${bottomY} Z`;
       if(headType==='flat')outline=`M ${bx} ${by} L ${bx+bw} ${by} L ${bx+bw} ${by+bh} L ${bx} ${by+bh} Z`;
       parts+=`<path d="${outline}" class="heavy"/>`;
-      if(showInner){const ibx=bx+wall, iby=by+wall, ibw=bw-2*wall, ibh=bh-2*wall;parts+=`<rect x="${ibx}" y="${iby+dome}" width="${ibw}" height="${Math.max(1,ibh-2*dome)}" class="hiddenline"/>`;}
+      parts+=`<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" class="pickzone" data-pick-view="front"/>`;
+      if(showInner){const ibx=bx+wall, iby=by+wall, ibw=bw-2*wall, ibh=bh-2*wall;parts+=`<rect x="${ibx}" y="${iby+topDome}" width="${ibw}" height="${Math.max(1,ibh-topDome-bottomDome)}" class="hiddenline"/>`;}
       if(showCenter){parts+=line(bx+bw/2,by-15,bx+bw/2,by+bh+15,'class="center"');parts+=line(bx-15,by+bh/2,bx+bw+15,by+bh/2,'class="center"');}
-      if(mhD>0){const mw=Math.max(30,Math.min(bw*.62,mhD*scale)),nh=Math.max(12,Math.min(34,mhNeck*scale));parts+=`<rect x="${bx+bw/2-mw/2}" y="${by-nh}" width="${mw}" height="${nh}" class="obj"/><rect x="${bx+bw/2-mw*.56}" y="${by-nh-5}" width="${mw*1.12}" height="6" class="flange"/>`;parts+=calloutBox(bx+bw+68,by-nh-5,`MH Ø${fmt(mhD)}`,bx+bw/2,by-nh-5,'left');}
-      d.fittings.forEach((f,i)=>{const yy=by+bh-(Math.max(0,Math.min(L,Number(f.x)||0))/L)*bh,left=f.orientation==='left',sideRight=f.orientation==='right'||f.orientation==='top',xx=left?bx:bx+bw,proj=Math.max(15,Math.min(38,(f.neckLength||150)*scale)),x2=left?xx-proj:xx+proj;parts+=line(xx,yy,x2,yy,'class="obj"');parts+=`<rect x="${x2-3}" y="${yy-10}" width="6" height="20" class="flange"/>`;parts+=calloutBox(left?bx-40:bx+bw+40,yy-20,`N${i+1} ${f.type} ${f.size}`,x2,yy,left?'right':'left');if(showPosDims)parts+=textEl(left?bx-8:bx+bw+8,yy+12,`EL ${fmt(f.x)}`,'class="note" text-anchor="middle"');});
+      if(mhD>0){const mw=Math.max(30,Math.min(bw*.62,mhD*scale)),nh=Math.max(12,Math.min(34,mhNeck*scale));parts+=`<rect x="${bx+bw/2-mw/2}" y="${by-nh}" width="${mw}" height="${nh}" class="obj"/><rect x="${bx+bw/2-mw*.56}" y="${by-nh-5}" width="${mw*1.12}" height="6" class="flange"/>`;{ const mhTx=(Number(manholeLabel.dx)||0)?bx+bw/2+(Number(manholeLabel.dx)||0):bx+bw+68, mhTy=(Number(manholeLabel.dy)||0)?by-nh-5+(Number(manholeLabel.dy)||0):by-nh-5; parts+=draggableLeaderLabel(mhTx,mhTy,`MH Ø${fmt(mhD)}`,bx+bw/2,by-nh-5,mhTx<bx+bw/2?'right':'left','mhlabel','0'); }}
+      d.fittings.forEach((f,i)=>{const yy=by+bh-(Math.max(0,Math.min(L,Number(f.x)||0))/L)*bh,left=f.orientation==='left',sideRight=f.orientation==='right'||f.orientation==='top',xx=left?bx:bx+bw,proj=Math.max(15,Math.min(38,(f.neckLength||150)*scale)),x2=left?xx-proj:xx+proj;parts+=line(xx,yy,x2,yy,'class="obj"');parts+=`<rect x="${x2-3}" y="${yy-10}" width="6" height="20" class="flange"/>`;{ const tx=(Number(f.labelDx)||0)?x2+(Number(f.labelDx)||0):(left?bx-40:bx+bw+40), ty=(Number(f.labelDy)||0)?yy+(Number(f.labelDy)||0):yy-20; parts+=draggableLeaderLabel(tx,ty,`N${i+1} ${f.type} ${f.size}`,x2,yy,tx<x2?'right':'left','fitlabel',String(i)); }if(showPosDims)parts+=textEl(left?bx-8:bx+bw+8,yy+12,`EL ${fmt(f.x)}`,'class="note" text-anchor="middle"');});
       hookItems.forEach((h,i)=>{const px=bx+bw*(i+1)/(hookItems.length+1);parts+=`<path d="M ${px-8} ${by+3} Q ${px} ${by-14} ${px+8} ${by+3}" class="obj"/>`;if(showTags)parts+=textEl(px,by-19,'H'+(i+1),'class="tagtext" text-anchor="middle"');});
       if(t.installation==='above'){const sc=Math.max(0,d.supports.count),supportPx=Math.max(14,Math.min(48,d.supports.height*scale));for(let i=0;i<Math.max(2,Math.min(4,sc||2));i++){const cx=bx+bw*(i+1)/(Math.max(2,Math.min(4,sc||2))+1),topW=Math.max(16,bw*.12),baseW=topW*1.65;parts+=sideSaddleSupport(cx,by+bh-1,topW,baseW,supportPx,d.supports.type,`S${i+1}`);}if(showDims&&sc>0)parts+=dimV(bx-48,by+bh,by+bh+supportPx,bx,`${fmt(d.supports.height)} mm`);}else parts+=line(bx-50,by+bh+20,bx+bw+50,by+bh+20,'class="hiddenline"');
       if(showDims){parts+=dimV(bx-62,by,by+bh,bx,`${fmt(L)} mm`);parts+=dimH(bx,bx+bw,by+bh+60,by+bh,`Ø ${fmt(D)} mm`);}
-      const tcx=790,tcy=178,tr=92;parts+=textEl(tcx,38,'TOP VIEW','class="viewtitle" text-anchor="middle"');parts+=`<circle cx="${tcx}" cy="${tcy}" r="${tr}" class="heavy"/>${showInner?`<circle cx="${tcx}" cy="${tcy}" r="${tr-3}" class="hiddenline"/>`:''}`;if(showCenter){parts+=line(tcx-tr-14,tcy,tcx+tr+14,tcy,'class="center"');parts+=line(tcx,tcy-tr-14,tcx,tcy+tr+14,'class="center"');}
+      const tcx=790,tcy=178,tr=92;dragGeometry.verticalTop={tcx,tcy,tr};parts+=textEl(tcx,38,'TOP VIEW','class="viewtitle" text-anchor="middle"');parts+=`<circle cx="${tcx}" cy="${tcy}" r="${tr}" class="heavy"/><circle cx="${tcx}" cy="${tcy}" r="${tr}" class="pickzone" data-pick-view="verticaltop"/>${showInner?`<circle cx="${tcx}" cy="${tcy}" r="${tr-3}" class="hiddenline"/>`:''}`;if(showCenter){parts+=line(tcx-tr-14,tcy,tcx+tr+14,tcy,'class="center"');parts+=line(tcx,tcy-tr-14,tcx,tcy+tr+14,'class="center"');}
       if(mhD>0){const mr=Math.max(18,Math.min(45,(mhD/D)*tr));parts+=`<circle cx="${tcx}" cy="${tcy}" r="${mr}" class="obj"/>`;}
       d.fittings.forEach((f,i)=>{const deg=Number(f.angle)||0,ang=(deg-90)*Math.PI/180,rr=tr*.73,px=tcx+Math.cos(ang)*rr,py=tcy+Math.sin(ang)*rr;parts+=`<circle cx="${px}" cy="${py}" r="5.5" class="obj"/>`;if(showTags)parts+=textEl(px,py-9,'N'+(i+1),'class="tagtext" text-anchor="middle"');});
       if(showDims)parts+=dimH(tcx-tr,tcx+tr,tcy+tr+36,tcy+tr,`Ø ${fmt(D)} mm`);parts+=nozzleDetail(875,60);
     }else{
       // ===== JAK PRECISION 2D SHOP-DRAWING STYLE =====
       // NTS presentation with true numeric dimensions: cross-section + side elevation + full top view.
-      const cross={cx:160,cy:176,r:90};
-      const side={x:355,y:92,w:790,h:158};
-      // Independent display scales are intentional: drawing is NTS, dimensions are authoritative.
-      const sxScale=side.w/L, syScale=side.h/D;
-      const sw=side.w, sh=side.h, sx=side.x, sy=side.y;
-      const hdpx=Math.min(sw*.28,Math.max(0,hd*sxScale));
-      const wallPx=Math.max(1.3,Math.min(4.2,thk*syScale*1.5));
-      const xMap=x=>sx+Math.max(0,Math.min(L,Number(x)||0))*sxScale;
-      const shellLeft=sx+hdpx, shellRight=sx+sw-hdpx;
-      dragGeometry={orientation:'horizontal',start:sx,span:sw,length:L};
+      const cross={cx:160,cy:176,r:Math.max(58,Math.min(105,90*(D/2000)))};
+      const sideArea={x:340,y:82,w:820,h:190};
+      // Preserve the actual L:D visual proportion inside the available drawing area.
+      const uniformScale=Math.min(sideArea.w/L,sideArea.h/D);
+      const sw=L*uniformScale, sh=D*uniformScale, sx=sideArea.x+(sideArea.w-sw)/2, sy=sideArea.y+(sideArea.h-sh)/2;
+      const sxScale=uniformScale, syScale=uniformScale;
+      const leftHdPx=Math.max(0,leftHd*uniformScale), rightHdPx=Math.max(0,rightHd*uniformScale);
+      const wallPx=Math.max(1.3,Math.min(4.2,thk*uniformScale*1.5));
+      const xMap=x=>sx+Math.max(0,Math.min(L,Number(x)||0))*uniformScale;
+      const shellLeft=sx+leftHdPx, shellRight=sx+sw-rightHdPx;
+      dragGeometry={orientation:'horizontal',start:sx,span:sw,length:L,side:{sx,sy,sw,sh,leftHdPx,rightHdPx},top:null};
 
       function leaderLabel(tx,ty,label,ax,ay,sideDir='left'){
         if(!showTags)return '';
         const elbowX=sideDir==='right'?tx-18:tx+18;
         return `${line(ax,ay,elbowX,ty,'class="thin"')}${line(elbowX,ty,tx,ty,'class="thin"')}${textEl(tx+(sideDir==='right'?-3:3),ty-4,label,`class="label" text-anchor="${sideDir==='right'?'end':'start'}"`)}`;
       }
+      function draggableLeaderLabel(tx,ty,label,ax,ay,sideDir='left',dragKind='',dragIndex=''){
+        if(!showTags) return '';
+        const elbowX=sideDir==='right'?tx-18:tx+18;
+        const textAnchor=sideDir==='right'?'end':'start';
+        const textX=tx+(sideDir==='right'?-3:3);
+        const w=Math.max(68,label.length*5.8+10), h=14;
+        const rx=sideDir==='right' ? textX-w+2 : textX-2;
+        const ry=ty-12;
+        return `${line(ax,ay,elbowX,ty,'class="thin"')}${line(elbowX,ty,tx,ty,'class="thin"')}<rect x="${rx}" y="${ry}" width="${w}" height="${h}" class="callbox"/><text x="${textX}" y="${ty-3}" class="calltext" text-anchor="${textAnchor}">${esc(label)}</text><rect x="${rx}" y="${ry}" width="${w}" height="${h}" class="labeldrag" data-drag-kind="${dragKind}" data-drag-index="${dragIndex}" data-anchor-x="${ax}" data-anchor-y="${ay}"/><circle cx="${sideDir==='right'?rx:rx+w}" cy="${ry+h/2}" r="2.6" class="labelgrab"/>`;
+      }
+      function sideHalfHeightAtPx(px){
+        if(px<=shellLeft && leftHdPx>0){
+          const u=Math.max(0,Math.min(1,(px-sx)/Math.max(1,leftHdPx)));
+          return (sh/2)*Math.sqrt(Math.max(0,1-Math.pow(1-u,2)));
+        }
+        if(px>=shellRight && rightHdPx>0){
+          const u=Math.max(0,Math.min(1,((sx+sw)-px)/Math.max(1,rightHdPx)));
+          return (sh/2)*Math.sqrt(Math.max(0,1-Math.pow(1-u,2)));
+        }
+        return sh/2;
+      }
       function classicNozzle(f,i){
         const fx=xMap(f.x), proj=Math.max(17,Math.min(40,(Number(f.neckLength)||150)*syScale*.9));
         const fOD=Math.max(14,Math.min(31,((Number(f.flangeOD)||90))*syScale*.28+12));
-        let svg='',anchorX=fx,anchorY=sy;
+        const hh=sideHalfHeightAtPx(fx), midY=sy+sh/2, topY=midY-hh, botY=midY+hh;
+        let svg='',anchorX=fx,anchorY=midY;
         if(f.orientation==='left'){
-          const yy=sy+sh*.5,x2=sx-proj;svg+=line(sx,yy,x2,yy,'class="heavy"');svg+=`<rect x="${x2-5}" y="${yy-fOD/2}" width="5" height="${fOD}" class="flange"/>`;anchorX=x2;anchorY=yy;
+          const x2=fx-proj;svg+=line(fx,midY,x2,midY,'class="heavy"');svg+=`<rect x="${x2-5}" y="${midY-fOD/2}" width="5" height="${fOD}" class="flange"/>`;anchorX=x2;anchorY=midY;
         }else if(f.orientation==='right'){
-          const yy=sy+sh*.5,x2=sx+sw+proj;svg+=line(sx+sw,yy,x2,yy,'class="heavy"');svg+=`<rect x="${x2}" y="${yy-fOD/2}" width="5" height="${fOD}" class="flange"/>`;anchorX=x2;anchorY=yy;
+          const x2=fx+proj;svg+=line(fx,midY,x2,midY,'class="heavy"');svg+=`<rect x="${x2}" y="${midY-fOD/2}" width="5" height="${fOD}" class="flange"/>`;anchorX=x2;anchorY=midY;
         }else if(f.orientation==='bottom'){
-          const y2=sy+sh+proj;svg+=line(fx,sy+sh,fx,y2,'class="heavy"');svg+=`<rect x="${fx-fOD/2}" y="${y2}" width="${fOD}" height="5" class="flange"/>`;anchorX=fx;anchorY=y2;
+          const y2=botY+proj;svg+=line(fx,botY,fx,y2,'class="heavy"');svg+=`<rect x="${fx-fOD/2}" y="${y2}" width="${fOD}" height="5" class="flange"/>`;anchorX=fx;anchorY=y2;
         }else{
-          const y2=sy-proj;svg+=line(fx,sy,fx,y2,'class="heavy"');svg+=`<rect x="${fx-fOD/2}" y="${y2-5}" width="${fOD}" height="5" class="flange"/>`;anchorX=fx;anchorY=y2;
+          const y2=topY-proj;svg+=line(fx,topY,fx,y2,'class="heavy"');svg+=`<rect x="${fx-fOD/2}" y="${y2-5}" width="${fOD}" height="5" class="flange"/>`;anchorX=fx;anchorY=y2;
         }
-        svg+=`<circle cx="${fx}" cy="${sy+sh/2}" r="13" class="draghandle" data-drag-kind="fitting" data-drag-index="${i}"/>`;
-        return {svg,anchorX,anchorY,fx};
+        svg+=`<circle cx="${fx}" cy="${midY}" r="13" class="draghandle" data-drag-kind="fitting" data-drag-index="${i}"/>`;
+        return {svg,anchorX,anchorY,fx,topY,bottomY:botY,midY};
       }
       function posDatum(px,label,value,lane=0){
         if(!showPosDims)return '';
@@ -1013,11 +1104,12 @@
 
       // ---- MAIN SIDE ELEVATION ----
       parts+=textEl(sx+sw/2,25,'SIDE ELEVATION','class="viewtitle" text-anchor="middle"');
-      parts+=`<path d="${headPathHorizontal(sx,sx+sw,sy,sy+sh,hdpx,headType)}" class="heavy"/>`;
-      if(showInner)parts+=`<path d="${innerHeadPathHorizontal(sx,sx+sw,sy,sy+sh,hdpx,headType,wallPx)}" class="hiddenline"/>`;
+      parts+=`<path d="${headPathHorizontal(sx,sx+sw,sy,sy+sh,leftHdPx,rightHdPx,headType,leftBulge,rightBulge)}" class="heavy"/>`;
+      parts+=`<rect x="${sx}" y="${sy}" width="${sw}" height="${sh}" class="pickzone" data-pick-view="side"/>`;
+      if(showInner)parts+=`<path d="${innerHeadPathHorizontal(sx,sx+sw,sy,sy+sh,leftHdPx,rightHdPx,headType,leftBulge,rightBulge,wallPx)}" class="hiddenline"/>`;
       if(showCenter)parts+=line(sx-28,sy+sh/2,sx+sw+28,sy+sh/2,'class="center"');
       // tangent lines
-      if(headType!=='flat' && hdpx>2){
+      if(headType!=='flat' && (leftHdPx>2||rightHdPx>2)){
         parts+=line(shellLeft,sy-14,shellLeft,sy+sh+14,'class="hiddenline"');
         parts+=line(shellRight,sy-14,shellRight,sy+sh+14,'class="hiddenline"');
         if(showTags){parts+=textEl(shellLeft,sy+sh+12,'T.L.','class="note" text-anchor="middle"');parts+=textEl(shellRight,sy+sh+12,'T.L.','class="note" text-anchor="middle"');}
@@ -1045,22 +1137,35 @@
         parts+=`<rect x="${mx-mw*.58}" y="${sy-nh-5}" width="${mw*1.16}" height="6" class="obj"/>`;
         parts+=line(mx,sy-nh-9,mx,sy+5,'class="centerDark"');
         parts+=`<circle cx="${mx}" cy="${sy+4}" r="15" class="draghandle" data-drag-kind="manhole"/>`;
-        parts+=leaderLabel(mx-10,sy-58,`MH Ø${fmt(mhD)} x ${fmt(mhNeck)}`,mx,sy-nh-5,'right');
+        { const mtx=(Number(manholeLabel.dx)||0)?mx+(Number(manholeLabel.dx)||0):mx-10; const mty=(Number(manholeLabel.dy)||0)?(sy-nh-5)+(Number(manholeLabel.dy)||0):sy-58; parts+=draggableLeaderLabel(mtx,mty,`MH Ø${fmt(mhD)} x ${fmt(mhNeck)}`,mx,sy-nh-5,mtx<mx?'right':'left','mhlabel','0'); }
       }
 
-      // Nozzles + real leader notes.
+      // Nozzles + draggable leader notes.
       const topNozzles=[];
       d.fittings.forEach((f,i)=>{
         const nz=classicNozzle(f,i);parts+=nz.svg;
         const typ=String(f.type)==='VENT'?'AIR VENT':String(f.type).replaceAll('_',' '), label=`N${i+1}  ${typ}  ${f.size}`;
-        if(f.orientation==='left')parts+=leaderLabel(sx-75,sy-28-(i%2)*18,label,nz.anchorX,nz.anchorY,'right');
-        else if(f.orientation==='right')parts+=leaderLabel(sx+sw+75,sy-28-(i%2)*18,label,nz.anchorX,nz.anchorY,'left');
-        else if(f.orientation==='top')topNozzles.push({i,f,nz,label});
-        else parts+=leaderLabel(nz.fx,sy+sh+50,label,nz.anchorX,nz.anchorY,'left');
+        if(f.orientation==='top') topNozzles.push({i,f,nz,label});
+        else {
+          let tx=nz.anchorX, ty=nz.anchorY, side='left';
+          if(Number(f.labelDx)||Number(f.labelDy)){
+            tx=nz.anchorX+(Number(f.labelDx)||0); ty=nz.anchorY+(Number(f.labelDy)||0); side=tx<nz.anchorX?'right':'left';
+          }else if(f.orientation==='left'){
+            tx=nz.anchorX-74; ty=sy-28-(i%2)*18; side='right';
+          }else if(f.orientation==='right'){
+            tx=nz.anchorX+74; ty=sy-28-(i%2)*18; side='left';
+          }else{
+            tx=nz.anchorX+10; ty=sy+sh+50+(i%2)*10; side='left';
+          }
+          parts+=draggableLeaderLabel(tx,ty,label,nz.anchorX,nz.anchorY,side,'fitlabel',String(i));
+        }
       });
       topNozzles.sort((a,b)=>a.f.x-b.f.x).forEach((o,j)=>{
-        const lane=j%3,dir=j%2===0?'right':'left',tx=o.nz.fx+(dir==='right'?-30:30),ty=sy-45-lane*17;
-        parts+=leaderLabel(tx,ty,o.label,o.nz.anchorX,o.nz.anchorY,dir);
+        let lane=j%4,dir=j%2===0?'right':'left',tx=o.nz.fx+(dir==='right'?-30:30),ty=sy-46-lane*18;
+        if(Number(o.f.labelDx)||Number(o.f.labelDy)){
+          tx=o.nz.anchorX+(Number(o.f.labelDx)||0); ty=o.nz.anchorY+(Number(o.f.labelDy)||0); dir=tx<o.nz.anchorX?'right':'left';
+        }
+        parts+=draggableLeaderLabel(tx,ty,o.label,o.nz.anchorX,o.nz.anchorY,dir,'fitlabel',String(o.i));
       });
 
       // Lifting lugs.
@@ -1076,10 +1181,10 @@
       // Side view dimension hierarchy.
       if(showDims){
         const dimBase=sy+sh+42;
-        if(headType!=='flat' && hd>0){
-          parts+=smallTickDim(sx,shellLeft,dimBase,sy+sh,`HEAD ${fmt(hd)}`);
+        if(headType!=='flat' && (leftHd>0||rightHd>0)){
+          parts+=smallTickDim(sx,shellLeft,dimBase,sy+sh,`L HEAD ${fmt(leftHd)}`);
           parts+=smallTickDim(shellLeft,shellRight,dimBase,sy+sh,`STRAIGHT SHELL ${fmt(straight)}`);
-          parts+=smallTickDim(shellRight,sx+sw,dimBase,sy+sh,`HEAD ${fmt(hd)}`);
+          parts+=smallTickDim(shellRight,sx+sw,dimBase,sy+sh,`R HEAD ${fmt(rightHd)}`);
         }
         parts+=dimH(sx,sx+sw,dimBase+26,sy+sh,`OVERALL LENGTH ${fmt(L)} mm`);
         parts+=dimV(sx+sw+36,sy,sy+sh,sx+sw,`Ø ${fmt(D)} mm`);
@@ -1099,13 +1204,15 @@
 
       // ---- FULL TOP VIEW ----
       if(opt.topView!==false){
-        const top={x:355,y:348,w:790,h:82};
-        const tx0=top.x,ty0=top.y,tw=top.w,th=top.h,td=Math.min(tw*.28,(hd/L)*tw),topX=x=>tx0+Math.max(0,Math.min(L,Number(x)||0))/L*tw;
-        parts+=textEl(tx0+tw/2,326,'TOP VIEW','class="viewtitle" text-anchor="middle"');
-        parts+=`<path d="${headPathHorizontal(tx0,tx0+tw,ty0,ty0+th,td,headType)}" class="heavy"/>`;
-        if(showInner)parts+=`<path d="${innerHeadPathHorizontal(tx0,tx0+tw,ty0,ty0+th,td,headType,3)}" class="hiddenline"/>`;
+        const topArea={x:340,y:340,w:820,h:104};
+        const topScale=Math.min(topArea.w/L,topArea.h/D),tw=L*topScale,th=D*topScale,tx0=topArea.x+(topArea.w-tw)/2,ty0=topArea.y+(topArea.h-th)/2;
+        const tdL=leftHd*topScale,tdR=rightHd*topScale,topX=x=>tx0+Math.max(0,Math.min(L,Number(x)||0))*topScale; dragGeometry.top={tx0,ty0,tw,th};
+        parts+=textEl(tx0+tw/2,ty0-16,'TOP VIEW','class="viewtitle" text-anchor="middle"');
+        parts+=`<path d="${headPathHorizontal(tx0,tx0+tw,ty0,ty0+th,tdL,tdR,headType,leftBulge,rightBulge)}" class="heavy"/>`;
+        parts+=`<rect x="${tx0}" y="${ty0}" width="${tw}" height="${th}" class="pickzone" data-pick-view="top"/>`;
+        if(showInner)parts+=`<path d="${innerHeadPathHorizontal(tx0,tx0+tw,ty0,ty0+th,tdL,tdR,headType,leftBulge,rightBulge,3)}" class="hiddenline"/>`;
         if(showCenter){parts+=line(tx0-16,ty0+th/2,tx0+tw+16,ty0+th/2,'class="center"');}
-        if(headType!=='flat'&&td>2){parts+=line(tx0+td,ty0-7,tx0+td,ty0+th+7,'class="hiddenline"');parts+=line(tx0+tw-td,ty0-7,tx0+tw-td,ty0+th+7,'class="hiddenline"');}
+        if(headType!=='flat'&&(tdL>2||tdR>2)){parts+=line(tx0+tdL,ty0-7,tx0+tdL,ty0+th+7,'class="hiddenline"');parts+=line(tx0+tw-tdR,ty0-7,tx0+tw-tdR,ty0+th+7,'class="hiddenline"');}
         // rings/bands in plan
         ribCenters.forEach((rx,i)=>{const px=tx0+(rx-sx)/sw*tw;parts+=`<rect x="${px-Math.max(2,ribWidthPx*.35)}" y="${ty0-3}" width="${Math.max(4,ribWidthPx*.7)}" height="${th+6}" class="rib"/>`;});
         supportCenters.forEach((cx,i)=>{const px=tx0+(cx-sx)/sw*tw;parts+=line(px,ty0-5,px,ty0+th+5,'class="thin" stroke-width="2"');if(showTags)parts+=textEl(px,ty0+th+14,`S${i+1}`,'class="tagtext" text-anchor="middle"');});
@@ -1118,20 +1225,24 @@
           const fy=ty0+th/2+frac*(th*.43);
           parts+=`<circle cx="${fx}" cy="${fy}" r="5" class="obj"/>`;
           if(f.orientation==='bottom')parts+=`<circle cx="${fx}" cy="${fy}" r="7" class="hiddenline"/>`;
-          if(showTags)parts+=textEl(fx,fy-8,`N${i+1}`,'class="tagtext" text-anchor="middle"');
+          if(showTags){
+            let ltx=fx+(Number(f.topLabelDx)||0), lty=fy+(Number(f.topLabelDy)||0);
+            if(!(Number(f.topLabelDx)||Number(f.topLabelDy))){ const lane=i%3; ltx=fx+(i%2===0?-22:22); lty=ty0-12-lane*14; }
+            parts+=draggableLeaderLabel(ltx,lty,`N${i+1}`,fx,fy,ltx<fx?'right':'left','toplabel',String(i));
+          }
         });
         hookItems.forEach((h,i)=>{const hx=topX(h.x);parts+=`<path d="M ${hx-5} ${ty0+th/2-3} L ${hx} ${ty0+th/2-10} L ${hx+5} ${ty0+th/2-3}" class="obj"/>`;if(showTags)parts+=textEl(hx,ty0+th/2+16,`H${i+1}`,'class="tagtext" text-anchor="middle"');});
         if(showDims){
           parts+=dimH(tx0,tx0+tw,ty0+th+38,ty0+th,`OVERALL LENGTH ${fmt(L)} mm`);
           parts+=dimV(tx0+tw+35,ty0,ty0+th,tx0+tw,`WIDTH / Ø ${fmt(D)} mm`);
-          if(headType!=='flat'&&hd>0)parts+=smallTickDim(tx0+td,tx0+tw-td,ty0-16,ty0,`STRAIGHT SHELL ${fmt(straight)} mm`);
+          if(headType!=='flat'&&(leftHd>0||rightHd>0))parts+=smallTickDim(tx0+tdL,tx0+tw-tdR,ty0-16,ty0,`STRAIGHT SHELL ${fmt(straight)} mm`);
         }
       }
     }
     parts+=textEl(1178,490,`${d.documentControl?.scale||'NTS'} - Dimensions in ${d.documentControl?.unit||'mm'}`,'class="note" text-anchor="end"');svg.innerHTML=parts;
 
     $('projectDataBody').innerHTML=[['Client / العميل',d.project.client||'--'],['Project / المشروع',d.project.projectName||'--'],['Project Code',d.project.projectCode||'--'],['Client Ref.',d.project.clientRef||'--'],['Drawing No.',d.project.drawingNo||'--'],['Revision / الإصدار',d.project.revision||'--'],['Rev. Description',d.project.revisionDescription||'--'],['Status / الحالة',d.project.status.toUpperCase()]].map(r=>`<tr><td>${esc(r[0])}</td><td class="value">${esc(r[1])}</td></tr>`).join('');
-    $('tankDataBody').innerHTML=[['Capacity / السعة',`${fmt(t.capacity)} L`],['Diameter / القطر',`${fmt(D)} mm`],[t.orientation==='vertical'?'Overall Height / الارتفاع':'Overall Length / الطول',`${fmt(L)} mm`],['Head Type',String(headType).toUpperCase()],['Head Depth',`${fmt(hd)} mm`],['Straight Shell',`${fmt(straight)} mm`],['Thickness / السماكة',`${fmt(t.thickness,1)} mm`],['Approx. Weight / الوزن',t.weight?`${fmt(t.weight,1)} kg`:'--'],['Design Temp.',`${fmt(t.designTemp,1)} °C`],['Design Pressure',`${fmt(t.designPressure,1)} bar`],['Specific Gravity',fmt(t.specificGravity,2)],['Design Standard',t.designStandard||'--'],['Service Medium',t.serviceMedium||useLabel(t.use)],['Burial Depth',t.installation==='underground'?`${fmt(t.burialDepth)} mm`:'--'],['Resin / الراتنج',t.resin||'--'],['Gelcoat',t.gelcoat||'--'],['Reinforcement / التدعيم',t.glass||'--'],['Orientation / الاتجاه',t.orientation==='vertical'?'VERTICAL':'HORIZONTAL'],['Installation / التركيب',installLabel(t.installation)],['Supports / القواعد',`${fmt(d.supports.count)} - ${String(d.supports.type||'').toUpperCase()}`],['Stiffener Rings / حلقات التقوية',t.installation==='underground'?`${(d.supports.stiffenerCount||0)||Math.max(3,Math.min(9,Math.round(Math.max(1,straight)/900)+1))} x ${fmt(d.supports.stiffenerWidth||90)} mm`:'--'],['Hooks / الهوكات',`${fmt(hookItems.length)} Items`]].map(r=>`<tr><td>${esc(r[0])}</td><td class="value">${esc(r[1])}</td></tr>`).join('');
+    $('tankDataBody').innerHTML=[['Capacity / السعة',`${fmt(t.capacity)} L`],['Diameter / القطر',`${fmt(D)} mm`],[t.orientation==='vertical'?'Overall Height / الارتفاع':'Overall Length / الطول',`${fmt(L)} mm`],['Head Type',String(headType).toUpperCase()],['Head Profile',String(hg.profile).toUpperCase()],['Left Head Depth',`${fmt(leftHd)} mm`],['Right Head Depth',`${fmt(rightHd)} mm`],['L/R Bulge',`${fmt(leftBulge)}% / ${fmt(rightBulge)}%`],['Straight Shell',`${fmt(straight)} mm`],['Thickness / السماكة',`${fmt(t.thickness,1)} mm`],['Approx. Weight / الوزن',t.weight?`${fmt(t.weight,1)} kg`:'--'],['Design Temp.',`${fmt(t.designTemp,1)} °C`],['Design Pressure',`${fmt(t.designPressure,1)} bar`],['Specific Gravity',fmt(t.specificGravity,2)],['Design Standard',t.designStandard||'--'],['Service Medium',t.serviceMedium||useLabel(t.use)],['Burial Depth',t.installation==='underground'?`${fmt(t.burialDepth)} mm`:'--'],['Resin / الراتنج',t.resin||'--'],['Gelcoat',t.gelcoat||'--'],['Reinforcement / التدعيم',t.glass||'--'],['Orientation / الاتجاه',t.orientation==='vertical'?'VERTICAL':'HORIZONTAL'],['Installation / التركيب',installLabel(t.installation)],['Supports / القواعد',`${fmt(d.supports.count)} - ${String(d.supports.type||'').toUpperCase()}`],['Stiffener Rings / حلقات التقوية',t.installation==='underground'?`${(d.supports.stiffenerCount||0)||Math.max(3,Math.min(9,Math.round(Math.max(1,straight)/900)+1))} x ${fmt(d.supports.stiffenerWidth||90)} mm`:'--'],['Hooks / الهوكات',`${fmt(hookItems.length)} Items`]].map(r=>`<tr><td>${esc(r[0])}</td><td class="value">${esc(r[1])}</td></tr>`).join('');
     const mhRow=`<tr><td>MH</td><td>MANHOLE - ${esc(String(d.manhole.coverType||'').toUpperCase())}</td><td>Ø${fmt(mhD)} mm</td><td>FRP</td><td>1</td><td>X=${fmt(mhX)}</td></tr>`,hookRows=hookItems.map((hh,i)=>`<tr><td>H${i+1}</td><td>LIFTING LUG - ${esc(String(hh.type).toUpperCase())}</td><td>--</td><td>--</td><td>1</td><td>X=${fmt(hh.x)}</td></tr>`).join('');
     $('fittingsDataBody').innerHTML=d.fittings.map((f,i)=>`<tr><td>N${i+1}</td><td>${esc(f.type)}</td><td>${esc(f.size)}</td><td>${esc(f.connection||'--')}</td><td>${fmt(f.qty||1)}</td><td>X=${fmt(f.x)} / ${esc(String(f.orientation).toUpperCase())}${Number(f.angle)?' / '+fmt(f.angle)+'°':''}</td></tr>`).join('')+hookRows+mhRow;
   }
@@ -1149,7 +1260,7 @@
   $("saveDrawingBtn")?.addEventListener('click',saveDrawing);
 
   function resetDrawing(){
-    currentDrawingId=null; loadedOriginalStatus=null; $("drawClient").value=''; $("drawProject").value=''; $("drawRevision").value='00'; $("drawDate").value=todayISO(); $("drawStatus").value='draft'; $("projectCode").value=''; $("clientRef").value=''; $("drawnBy").value=''; $("checkedBy").value=''; $("approvedBy").value=''; $("revisionDescription").value='Initial Issue'; $("drawingNotes").value=''; $("reportLanguage").value=systemSettings.defaultLanguage||'bilingual'; $("drawingScale").value=systemSettings.defaultScale||'NTS'; $("tankCapacity").value=15000; $("tankDiameter").value=2000; $("tankLength").value=5150; $("tankHeadType").value="elliptical"; $("tankHeadDepth").value=0; $("tankStraightLength").value=0; $("frpDensity").value=1850; $("tankThickness").value=10; $("tankWeight").value=0; $("designTemp").value=40; $("designPressure").value=0; $("specificGravity").value=1; $("designStandard").value="Manufacturer Standard / Approved Specification"; $("burialDepth").value=0; $("serviceMedium").value=""; $("tankGelcoat").value="Isophthalic Gelcoat"; $("tankGlassType").value="E-Glass"; $("tankBarrier").value="Resin-rich corrosion barrier"; $("tankOrientation").value='horizontal'; $("tankInstallation").value='above'; $("tankUse").value='water'; $("manholePosMode").value='center'; $("manholeNeckHeight").value=180; $("manholeCoverType").value='bolted'; $("hookCount").value=2; $("supportCount").value=3; $("supportHeight").value=250; $("supportType").value='steel'; $("supportTopWidth").value=0; $("supportBaseWidth").value=0; $("supportMode").value='auto'; $("supportContactAngle").value=120; $("supportBaseThickness").value=10; $("supportAnchorQty").value=2; $("stiffenerCount").value=0; $("stiffenerWidth").value=90; $("stiffenerProjection").value=45; ["optInnerWall","optCenterLines","optDimensions","optTags","optNozzleDetail","optSupportDetail","optSectionHatch","optPositionDims"].forEach(id=>$(id).checked=true); $("optTopView").checked=true; supportItems=defaultSupports(); $("paperSize").value=systemSettings.defaultPaper||'A3'; fittings=defaultFittings(); hooks=defaultHooks(); supportItems=defaultSupports(); renderFittingsEditor(); renderHooksEditor(); renderSupportsEditor(); syncManholeX(); suggestNextDrawingNo(); $("saveStateText").textContent='غير محفوظ'; updateApprovalLock(); renderTankDrawing();
+    currentDrawingId=null; loadedOriginalStatus=null; activeFittingPick=null; $("drawClient").value=''; $("drawProject").value=''; $("drawRevision").value='00'; $("drawDate").value=todayISO(); $("drawStatus").value='draft'; $("projectCode").value=''; $("clientRef").value=''; $("drawnBy").value=''; $("checkedBy").value=''; $("approvedBy").value=''; $("revisionDescription").value='Initial Issue'; $("drawingNotes").value=''; $("reportLanguage").value=systemSettings.defaultLanguage||'bilingual'; $("drawingScale").value=systemSettings.defaultScale||'NTS'; $("tankCapacity").value=15000; $("tankDiameter").value=2000; $("tankLength").value=5150; $("tankHeadType").value="torispherical"; $("tankHeadProfile").value="reference"; $("tankHeadDepth").value=0; $("leftHeadDepth").value=0; $("rightHeadDepth").value=0; $("leftHeadBulge").value=30; $("rightHeadBulge").value=30; $("mirrorHeads").value="on"; syncHeadControls("profile"); $("tankStraightLength").value=0; $("frpDensity").value=1850; $("tankThickness").value=10; $("tankWeight").value=0; $("designTemp").value=40; $("designPressure").value=0; $("specificGravity").value=1; $("designStandard").value="Manufacturer Standard / Approved Specification"; $("burialDepth").value=0; $("serviceMedium").value=""; $("tankGelcoat").value="Isophthalic Gelcoat"; $("tankGlassType").value="E-Glass"; $("tankBarrier").value="Resin-rich corrosion barrier"; $("tankOrientation").value='horizontal'; $("tankInstallation").value='above'; $("tankUse").value='water'; manholeLabel={dx:0,dy:0}; $("manholePosMode").value='center'; $("manholeNeckHeight").value=180; $("manholeCoverType").value='bolted'; $("hookCount").value=2; $("supportCount").value=3; $("supportHeight").value=250; $("supportType").value='steel'; $("supportTopWidth").value=0; $("supportBaseWidth").value=0; $("supportMode").value='auto'; $("supportContactAngle").value=120; $("supportBaseThickness").value=10; $("supportAnchorQty").value=2; $("stiffenerCount").value=0; $("stiffenerWidth").value=90; $("stiffenerProjection").value=45; ["optInnerWall","optCenterLines","optDimensions","optTags","optNozzleDetail","optSupportDetail","optSectionHatch","optPositionDims"].forEach(id=>$(id).checked=true); $("optTopView").checked=true; supportItems=defaultSupports(); $("paperSize").value=systemSettings.defaultPaper||'A3'; fittings=defaultFittings(); hooks=defaultHooks(); supportItems=defaultSupports(); renderFittingsEditor(); renderHooksEditor(); renderSupportsEditor(); syncManholeX(); suggestNextDrawingNo(); $("saveStateText").textContent='غير محفوظ'; updateApprovalLock(); renderTankDrawing();
   }
   $("newDrawingResetBtn")?.addEventListener('click',resetDrawing);
 
@@ -1188,11 +1299,11 @@
   }
 
   function openDrawing(id){
-    const d=drawingsCache.get(id); if(!d) return; currentDrawingId=id;
+    const d=drawingsCache.get(id); if(!d) return; currentDrawingId=id; activeFittingPick=null;
     $("drawClient").value=d.project?.client||''; $("drawProject").value=d.project?.projectName||''; $("drawNo").value=d.project?.drawingNo||''; $("drawRevision").value=d.project?.revision||'00'; $("drawDate").value=d.project?.date||todayISO(); $("drawStatus").value=d.project?.status||'draft'; $("projectCode").value=d.project?.projectCode||''; $("clientRef").value=d.project?.clientRef||''; $("drawnBy").value=d.project?.drawnBy||''; $("checkedBy").value=d.project?.checkedBy||''; $("approvedBy").value=d.project?.approvedBy||''; $("revisionDescription").value=d.project?.revisionDescription||''; $("drawingNotes").value=d.project?.notes||''; $("reportLanguage").value=d.documentControl?.language||systemSettings.defaultLanguage||'bilingual'; $("drawingScale").value=d.documentControl?.scale||systemSettings.defaultScale||'NTS'; loadedOriginalStatus=d.project?.status||'draft';
-    $("tankOrientation").value=d.tank?.orientation||'horizontal'; $("tankInstallation").value=d.tank?.installation||'above'; $("tankUse").value=d.tank?.use||'water'; $("tankCapacity").value=d.tank?.capacity||0; $("tankDiameter").value=d.tank?.diameter||0; $("tankLength").value=d.tank?.length||0; $("tankThickness").value=d.tank?.thickness||0; $("tankWeight").value=d.tank?.weight||0; $("designTemp").value=d.tank?.designTemp??40; $("designPressure").value=d.tank?.designPressure??0; $("specificGravity").value=d.tank?.specificGravity??1; $("designStandard").value=d.tank?.designStandard||"Manufacturer Standard / Approved Specification"; $("burialDepth").value=d.tank?.burialDepth||0; $("serviceMedium").value=d.tank?.serviceMedium||""; $("tankResin").value=d.tank?.resin||''; $("tankGlass").value=d.tank?.glass||''; $("tankInner").value=d.tank?.inner||''; $("tankColorText").value=d.tank?.color||''; $("tankGelcoat").value=d.tank?.gelcoat||"Isophthalic Gelcoat"; $("tankGlassType").value=d.tank?.glassType||"E-Glass"; $("tankBarrier").value=d.tank?.barrier||"Resin-rich corrosion barrier"; $("tankHeadType").value=d.tank?.headType||"elliptical"; $("tankHeadDepth").value=d.tank?.headDepth||0; $("tankStraightLength").value=d.tank?.straightLength||0; $("frpDensity").value=d.tank?.frpDensity||1850;
-    $("manholePosMode").value='custom'; $("manholeX").disabled=false; $("manholeDia").value=d.manhole?.diameter||0; $("manholeX").value=d.manhole?.x||0; $("manholeNeckHeight").value=d.manhole?.neckHeight??180; $("manholeCoverType").value=d.manhole?.coverType||'bolted'; $("hookCount").value=d.hooks?.count||((d.hooks?.items||[]).length)||0; $("supportCount").value=d.supports?.count||0; $("supportHeight").value=d.supports?.height||0; $("supportType").value=d.supports?.type||'steel'; $("supportTopWidth").value=d.supports?.topWidth||0; $("supportBaseWidth").value=d.supports?.baseWidth||0; $("supportMode").value=d.supports?.mode||'auto'; $("supportContactAngle").value=d.supports?.contactAngle??120; $("supportBaseThickness").value=d.supports?.baseThickness??10; $("supportAnchorQty").value=d.supports?.anchorQty??2; $("stiffenerCount").value=d.supports?.stiffenerCount??0; $("stiffenerWidth").value=d.supports?.stiffenerWidth??90; $("stiffenerProjection").value=d.supports?.stiffenerProjection??45; const ro=d.documentControl?.drawingOptions||{}; $("optInnerWall").checked=ro.innerWall!==false; $("optCenterLines").checked=ro.centerLines!==false; $("optDimensions").checked=ro.dimensions!==false; $("optTags").checked=ro.tags!==false; $("optNozzleDetail").checked=ro.nozzleDetail!==false; $("optSupportDetail").checked=ro.supportDetail!==false; $("optSectionHatch").checked=ro.sectionHatch!==false; $("optPositionDims").checked=ro.positionDims!==false; $("optTopView").checked=ro.topView!==false; supportItems=(d.supports?.items||[]).map(x=>({...x,id:x.id||crypto.randomUUID()}));
-    hooks=(d.hooks?.items||[]).map(h=>({...h,id:h.id||crypto.randomUUID()})); fittings=(d.fittings||[]).map(f=>({...f,id:f.id||crypto.randomUUID()})); renderFittingsEditor(); renderHooksEditor(); renderSupportsEditor(); updateOrientationUI(); $("paperSize").value=d.paperSize||systemSettings.defaultPaper||'A3'; $("saveStateText").textContent='محمّل من Firebase'; updateApprovalLock();
+    $("tankOrientation").value=d.tank?.orientation||'horizontal'; $("tankInstallation").value=d.tank?.installation||'above'; $("tankUse").value=d.tank?.use||'water'; $("tankCapacity").value=d.tank?.capacity||0; $("tankDiameter").value=d.tank?.diameter||0; $("tankLength").value=d.tank?.length||0; $("tankThickness").value=d.tank?.thickness||0; $("tankWeight").value=d.tank?.weight||0; $("designTemp").value=d.tank?.designTemp??40; $("designPressure").value=d.tank?.designPressure??0; $("specificGravity").value=d.tank?.specificGravity??1; $("designStandard").value=d.tank?.designStandard||"Manufacturer Standard / Approved Specification"; $("burialDepth").value=d.tank?.burialDepth||0; $("serviceMedium").value=d.tank?.serviceMedium||""; $("tankResin").value=d.tank?.resin||''; $("tankGlass").value=d.tank?.glass||''; $("tankInner").value=d.tank?.inner||''; $("tankColorText").value=d.tank?.color||''; $("tankGelcoat").value=d.tank?.gelcoat||"Isophthalic Gelcoat"; $("tankGlassType").value=d.tank?.glassType||"E-Glass"; $("tankBarrier").value=d.tank?.barrier||"Resin-rich corrosion barrier"; $("tankHeadType").value=d.tank?.headType||"torispherical"; $("tankHeadProfile").value=d.tank?.headProfile||"reference"; $("tankHeadDepth").value=d.tank?.headDepth||0; $("leftHeadDepth").value=d.tank?.leftHeadDepth||0; $("rightHeadDepth").value=d.tank?.rightHeadDepth||0; $("leftHeadBulge").value=d.tank?.leftHeadBulge??30; $("rightHeadBulge").value=d.tank?.rightHeadBulge??30; $("mirrorHeads").value=d.tank?.mirrorHeads||"on"; syncHeadControls(); $("tankStraightLength").value=d.tank?.straightLength||0; $("frpDensity").value=d.tank?.frpDensity||1850;
+    $("manholePosMode").value='custom'; $("manholeX").disabled=false; $("manholeDia").value=d.manhole?.diameter||0; $("manholeX").value=d.manhole?.x||0; manholeLabel={dx:Number(d.manhole?.labelDx)||0,dy:Number(d.manhole?.labelDy)||0}; $("manholeNeckHeight").value=d.manhole?.neckHeight??180; $("manholeCoverType").value=d.manhole?.coverType||'bolted'; $("hookCount").value=d.hooks?.count||((d.hooks?.items||[]).length)||0; $("supportCount").value=d.supports?.count||0; $("supportHeight").value=d.supports?.height||0; $("supportType").value=d.supports?.type||'steel'; $("supportTopWidth").value=d.supports?.topWidth||0; $("supportBaseWidth").value=d.supports?.baseWidth||0; $("supportMode").value=d.supports?.mode||'auto'; $("supportContactAngle").value=d.supports?.contactAngle??120; $("supportBaseThickness").value=d.supports?.baseThickness??10; $("supportAnchorQty").value=d.supports?.anchorQty??2; $("stiffenerCount").value=d.supports?.stiffenerCount??0; $("stiffenerWidth").value=d.supports?.stiffenerWidth??90; $("stiffenerProjection").value=d.supports?.stiffenerProjection??45; const ro=d.documentControl?.drawingOptions||{}; $("optInnerWall").checked=ro.innerWall!==false; $("optCenterLines").checked=ro.centerLines!==false; $("optDimensions").checked=ro.dimensions!==false; $("optTags").checked=ro.tags!==false; $("optNozzleDetail").checked=ro.nozzleDetail!==false; $("optSupportDetail").checked=ro.supportDetail!==false; $("optSectionHatch").checked=ro.sectionHatch!==false; $("optPositionDims").checked=ro.positionDims!==false; $("optTopView").checked=ro.topView!==false; supportItems=(d.supports?.items||[]).map(x=>({...x,id:x.id||crypto.randomUUID()}));
+    hooks=(d.hooks?.items||[]).map(h=>({...h,id:h.id||crypto.randomUUID()})); fittings=(d.fittings||[]).map(f=>({labelDx:0,labelDy:0,topLabelDx:0,topLabelDy:0,...f,id:f.id||crypto.randomUUID()})); renderFittingsEditor(); renderHooksEditor(); renderSupportsEditor(); updateOrientationUI(); $("paperSize").value=d.paperSize||systemSettings.defaultPaper||'A3'; $("saveStateText").textContent='محمّل من Firebase'; updateApprovalLock();
     goPage('newDrawing'); updateOrientationUI(); renderTankDrawing();
   }
 
@@ -1248,10 +1359,10 @@
   function restoreRevision(revId){ const r=revisionsCache.find(x=>x.id===revId); if(!r?.snapshot)return; loadDrawingObject(r.snapshot,false); $("revisionDialog").close(); toast('تم تحميل النسخة التاريخية للمراجعة - لم يتم الحفظ فوق المخطط الحالي'); }
 
   function loadDrawingObject(d,keepId=false){
-    if(!keepId){ currentDrawingId=null; loadedOriginalStatus=null; }
+    if(!keepId){ currentDrawingId=null; loadedOriginalStatus=null; } activeFittingPick=null;
     $("drawClient").value=d.project?.client||''; $("drawProject").value=d.project?.projectName||''; $("drawNo").value=d.project?.drawingNo||''; $("drawRevision").value=d.project?.revision||'00'; $("drawDate").value=d.project?.date||todayISO(); $("drawStatus").value=d.project?.status||'draft'; $("projectCode").value=d.project?.projectCode||''; $("clientRef").value=d.project?.clientRef||''; $("drawnBy").value=d.project?.drawnBy||''; $("checkedBy").value=d.project?.checkedBy||''; $("approvedBy").value=d.project?.approvedBy||''; $("revisionDescription").value=d.project?.revisionDescription||''; $("drawingNotes").value=d.project?.notes||'';
-    $("tankOrientation").value=d.tank?.orientation||'horizontal'; $("tankInstallation").value=d.tank?.installation||'above'; $("tankUse").value=d.tank?.use||'water'; $("tankCapacity").value=d.tank?.capacity||0; $("tankDiameter").value=d.tank?.diameter||0; $("tankLength").value=d.tank?.length||0; $("tankThickness").value=d.tank?.thickness||0; $("tankWeight").value=d.tank?.weight||0; $("designTemp").value=d.tank?.designTemp??40; $("designPressure").value=d.tank?.designPressure??0; $("specificGravity").value=d.tank?.specificGravity??1; $("designStandard").value=d.tank?.designStandard||"Manufacturer Standard / Approved Specification"; $("burialDepth").value=d.tank?.burialDepth||0; $("serviceMedium").value=d.tank?.serviceMedium||""; $("tankResin").value=d.tank?.resin||''; $("tankGlass").value=d.tank?.glass||''; $("tankInner").value=d.tank?.inner||''; $("tankColorText").value=d.tank?.color||''; $("tankGelcoat").value=d.tank?.gelcoat||"Isophthalic Gelcoat"; $("tankGlassType").value=d.tank?.glassType||"E-Glass"; $("tankBarrier").value=d.tank?.barrier||"Resin-rich corrosion barrier"; $("tankHeadType").value=d.tank?.headType||"elliptical"; $("tankHeadDepth").value=d.tank?.headDepth||0; $("tankStraightLength").value=d.tank?.straightLength||0; $("frpDensity").value=d.tank?.frpDensity||1850;
-    $("manholePosMode").value='custom'; $("manholeX").disabled=false; $("manholeDia").value=d.manhole?.diameter||0; $("manholeX").value=d.manhole?.x||0; $("manholeNeckHeight").value=d.manhole?.neckHeight??180; $("manholeCoverType").value=d.manhole?.coverType||'bolted'; $("hookCount").value=d.hooks?.count||((d.hooks?.items||[]).length)||0; $("supportCount").value=d.supports?.count||0; $("supportHeight").value=d.supports?.height||0; $("supportType").value=d.supports?.type||'steel'; $("supportTopWidth").value=d.supports?.topWidth||0; $("supportBaseWidth").value=d.supports?.baseWidth||0; $("supportMode").value=d.supports?.mode||'auto'; $("supportContactAngle").value=d.supports?.contactAngle??120; $("supportBaseThickness").value=d.supports?.baseThickness??10; $("supportAnchorQty").value=d.supports?.anchorQty??2; $("stiffenerCount").value=d.supports?.stiffenerCount??0; $("stiffenerWidth").value=d.supports?.stiffenerWidth??90; $("stiffenerProjection").value=d.supports?.stiffenerProjection??45; const ro=d.documentControl?.drawingOptions||{}; $("optInnerWall").checked=ro.innerWall!==false; $("optCenterLines").checked=ro.centerLines!==false; $("optDimensions").checked=ro.dimensions!==false; $("optTags").checked=ro.tags!==false; $("optNozzleDetail").checked=ro.nozzleDetail!==false; $("optSupportDetail").checked=ro.supportDetail!==false; $("optSectionHatch").checked=ro.sectionHatch!==false; $("optPositionDims").checked=ro.positionDims!==false; $("optTopView").checked=ro.topView!==false; supportItems=(d.supports?.items||[]).map(x=>({...x,id:x.id||crypto.randomUUID()})); hooks=(d.hooks?.items||[]).map(h=>({...h,id:h.id||crypto.randomUUID()})); fittings=(d.fittings||[]).map(f=>({...f,id:f.id||crypto.randomUUID()})); renderFittingsEditor();renderHooksEditor();renderSupportsEditor(); $("paperSize").value=d.paperSize||systemSettings.defaultPaper||'A3'; $("reportLanguage").value=d.documentControl?.language||systemSettings.defaultLanguage||'bilingual'; $("drawingScale").value=d.documentControl?.scale||systemSettings.defaultScale||'NTS'; updateOrientationUI();updateApprovalLock();renderTankDrawing();
+    $("tankOrientation").value=d.tank?.orientation||'horizontal'; $("tankInstallation").value=d.tank?.installation||'above'; $("tankUse").value=d.tank?.use||'water'; $("tankCapacity").value=d.tank?.capacity||0; $("tankDiameter").value=d.tank?.diameter||0; $("tankLength").value=d.tank?.length||0; $("tankThickness").value=d.tank?.thickness||0; $("tankWeight").value=d.tank?.weight||0; $("designTemp").value=d.tank?.designTemp??40; $("designPressure").value=d.tank?.designPressure??0; $("specificGravity").value=d.tank?.specificGravity??1; $("designStandard").value=d.tank?.designStandard||"Manufacturer Standard / Approved Specification"; $("burialDepth").value=d.tank?.burialDepth||0; $("serviceMedium").value=d.tank?.serviceMedium||""; $("tankResin").value=d.tank?.resin||''; $("tankGlass").value=d.tank?.glass||''; $("tankInner").value=d.tank?.inner||''; $("tankColorText").value=d.tank?.color||''; $("tankGelcoat").value=d.tank?.gelcoat||"Isophthalic Gelcoat"; $("tankGlassType").value=d.tank?.glassType||"E-Glass"; $("tankBarrier").value=d.tank?.barrier||"Resin-rich corrosion barrier"; $("tankHeadType").value=d.tank?.headType||"torispherical"; $("tankHeadProfile").value=d.tank?.headProfile||"reference"; $("tankHeadDepth").value=d.tank?.headDepth||0; $("leftHeadDepth").value=d.tank?.leftHeadDepth||0; $("rightHeadDepth").value=d.tank?.rightHeadDepth||0; $("leftHeadBulge").value=d.tank?.leftHeadBulge??30; $("rightHeadBulge").value=d.tank?.rightHeadBulge??30; $("mirrorHeads").value=d.tank?.mirrorHeads||"on"; syncHeadControls(); $("tankStraightLength").value=d.tank?.straightLength||0; $("frpDensity").value=d.tank?.frpDensity||1850;
+    $("manholePosMode").value='custom'; $("manholeX").disabled=false; $("manholeDia").value=d.manhole?.diameter||0; $("manholeX").value=d.manhole?.x||0; manholeLabel={dx:Number(d.manhole?.labelDx)||0,dy:Number(d.manhole?.labelDy)||0}; $("manholeNeckHeight").value=d.manhole?.neckHeight??180; $("manholeCoverType").value=d.manhole?.coverType||'bolted'; $("hookCount").value=d.hooks?.count||((d.hooks?.items||[]).length)||0; $("supportCount").value=d.supports?.count||0; $("supportHeight").value=d.supports?.height||0; $("supportType").value=d.supports?.type||'steel'; $("supportTopWidth").value=d.supports?.topWidth||0; $("supportBaseWidth").value=d.supports?.baseWidth||0; $("supportMode").value=d.supports?.mode||'auto'; $("supportContactAngle").value=d.supports?.contactAngle??120; $("supportBaseThickness").value=d.supports?.baseThickness??10; $("supportAnchorQty").value=d.supports?.anchorQty??2; $("stiffenerCount").value=d.supports?.stiffenerCount??0; $("stiffenerWidth").value=d.supports?.stiffenerWidth??90; $("stiffenerProjection").value=d.supports?.stiffenerProjection??45; const ro=d.documentControl?.drawingOptions||{}; $("optInnerWall").checked=ro.innerWall!==false; $("optCenterLines").checked=ro.centerLines!==false; $("optDimensions").checked=ro.dimensions!==false; $("optTags").checked=ro.tags!==false; $("optNozzleDetail").checked=ro.nozzleDetail!==false; $("optSupportDetail").checked=ro.supportDetail!==false; $("optSectionHatch").checked=ro.sectionHatch!==false; $("optPositionDims").checked=ro.positionDims!==false; $("optTopView").checked=ro.topView!==false; supportItems=(d.supports?.items||[]).map(x=>({...x,id:x.id||crypto.randomUUID()})); hooks=(d.hooks?.items||[]).map(h=>({...h,id:h.id||crypto.randomUUID()})); fittings=(d.fittings||[]).map(f=>({labelDx:0,labelDy:0,topLabelDx:0,topLabelDy:0,...f,id:f.id||crypto.randomUUID()})); renderFittingsEditor();renderHooksEditor();renderSupportsEditor(); $("paperSize").value=d.paperSize||systemSettings.defaultPaper||'A3'; $("reportLanguage").value=d.documentControl?.language||systemSettings.defaultLanguage||'bilingual'; $("drawingScale").value=d.documentControl?.scale||systemSettings.defaultScale||'NTS'; updateOrientationUI();updateApprovalLock();renderTankDrawing();
   }
 
   // Clients master
@@ -1290,12 +1401,12 @@
   $("downloadSvgBtn")?.addEventListener('click',()=>{const svg=$("tankSvg");const xml='<?xml version="1.0" encoding="UTF-8"?>\n'+new XMLSerializer().serializeToString(svg);downloadTextFile(($("drawNo").value||'tank-drawing')+'.svg',xml,'image/svg+xml');});
   function dxfPair(code,value){return `${code}\n${value}\n`;}
   function exportDxf(){
-    const d=collectDrawingData(),t=d.tank,L=Math.max(1,t.length),D=Math.max(1,t.diameter),hd=Math.max(0,t.headDepth||autoHeadDepth(D,t.headType||'elliptical')),R=D/2;
+    const d=collectDrawingData(),t=d.tank,L=Math.max(1,t.length),D=Math.max(1,t.diameter),hgD=resolveHeadGeometry(t),leftD=hgD.leftDepth,rightD=hgD.rightDepth,R=D/2;
     let out='0\nSECTION\n2\nHEADER\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n';
     const lineD=(x1,y1,x2,y2,layer='TANK')=>{out+='0\nLINE\n8\n'+layer+'\n10\n'+x1+'\n20\n'+y1+'\n11\n'+x2+'\n21\n'+y2+'\n';};
     const circ=(x,y,r,layer='NOZZLES')=>{out+='0\nCIRCLE\n8\n'+layer+'\n10\n'+x+'\n20\n'+y+'\n40\n'+r+'\n';};
     if(t.orientation==='horizontal'){
-      const xL=hd,xR=L-hd;lineD(xL,R,xR,R);lineD(xL,-R,xR,-R);lineD(0,0,xL,R);lineD(0,0,xL,-R);lineD(L,0,xR,R);lineD(L,0,xR,-R);lineD(0,0,L,0,'CENTER');
+      const xL=leftD,xR=L-rightD;lineD(xL,R,xR,R);lineD(xL,-R,xR,-R);lineD(0,0,xL,R);lineD(0,0,xL,-R);lineD(L,0,xR,R);lineD(L,0,xR,-R);lineD(0,0,L,0,'CENTER');
       d.fittings.forEach((f,i)=>{const y=f.orientation==='bottom'?-R:f.orientation==='top'?R:0;circ(Number(f.x)||0,y,Math.max(20,Number(f.flangeOD)||50)/2);});
       (d.supports.items||[]).forEach((s,i)=>lineD(Number(s.x)||0,-R,Number(s.x)||0,-R-(d.supports.height||250),'SUPPORTS'));
     }else{lineD(-R,0,-R,L);lineD(R,0,R,L);lineD(-R,0,R,0);lineD(-R,L,R,L);lineD(0,0,0,L,'CENTER');d.fittings.forEach(f=>circ(R,Number(f.x)||0,Math.max(20,Number(f.flangeOD)||50)/2));}
@@ -1303,10 +1414,42 @@
   }
   $("downloadDxfBtn")?.addEventListener('click',exportDxf);
 
-  // Direct drag editing on SVG
+  $("resetLabelsBtn")?.addEventListener('click',()=>{ manholeLabel={dx:0,dy:0}; fittings.forEach(f=>{f.labelDx=0;f.labelDy=0;f.topLabelDx=0;f.topLabelDy=0;}); renderFittingsEditor(); renderTankDrawing(); scheduleAutoSave(); toast('تمت إعادة توزيع الإيضاحات تلقائيًا'); });
+  $("cancelPickBtn")?.addEventListener('click',()=>{activeFittingPick=null;renderFittingsEditor();toast('تم إلغاء وضع تحديد الأنبوب');});
+
+  // Direct placement and drag editing on SVG
+  function applyFittingPick(index,view,p){
+    const f=fittings[index]; if(!f||!dragGeometry)return;
+    const L=Math.max(1,n("tankLength",1));
+    if(view==='side'&&dragGeometry.side){
+      const g=dragGeometry.side;
+      f.x=Math.max(0,Math.min(L,Math.round(((p.x-g.sx)/g.sw*L)/10)*10));
+      const dl=Math.abs(p.x-g.sx), dr=Math.abs(p.x-(g.sx+g.sw)), dt=Math.abs(p.y-g.sy), db=Math.abs(p.y-(g.sy+g.sh));
+      const m=Math.min(dl,dr,dt,db); f.orientation=m===dl?'left':m===dr?'right':m===db?'bottom':'top';
+    }else if(view==='top'&&dragGeometry.top){
+      const g=dragGeometry.top;
+      f.x=Math.max(0,Math.min(L,Math.round(((p.x-g.tx0)/g.tw*L)/10)*10));
+      const frac=Math.max(-1,Math.min(1,(p.y-(g.ty0+g.th/2))/(g.th*.43)));
+      f.angle=Math.round(Math.asin(frac)*180/Math.PI);
+      f.orientation=frac<-.55?'left':frac>.55?'right':'top';
+    }else if(view==='front'&&dragGeometry.front){
+      const g=dragGeometry.front;
+      f.x=Math.max(0,Math.min(L,Math.round(((g.by+g.bh-p.y)/g.bh*L)/10)*10));
+      f.orientation=p.x<(g.bx+g.bw/2)?'left':'right';
+    }else if(view==='verticaltop'&&dragGeometry.verticalTop){
+      const g=dragGeometry.verticalTop, dx=p.x-g.tcx, dy=p.y-g.tcy;
+      f.angle=Math.round(Math.atan2(dy,dx)*180/Math.PI);
+      f.orientation=dx<0?'left':'right';
+    }
+    f.labelDx=0;f.labelDy=0;f.topLabelDx=0;f.topLabelDy=0;
+  }
   function eventToSvgPoint(evt){const svg=$("tankSvg"),r=svg.getBoundingClientRect(),vb=svg.viewBox.baseVal;return{x:vb.x+(evt.clientX-r.left)*vb.width/r.width,y:vb.y+(evt.clientY-r.top)*vb.height/r.height};}
-  $("tankSvg")?.addEventListener('pointerdown',e=>{const h=e.target.closest?.('[data-drag-kind]');if(!h||!dragGeometry)return;activeDrag={kind:h.dataset.dragKind,index:Number(h.dataset.dragIndex)};e.preventDefault();});
-  window.addEventListener('pointermove',e=>{if(!activeDrag||!dragGeometry)return;const p=eventToSvgPoint(e);let v=0;if(dragGeometry.orientation==='horizontal')v=(p.x-dragGeometry.start)/dragGeometry.span*dragGeometry.length;else v=(dragGeometry.start+dragGeometry.span-p.y)/dragGeometry.span*dragGeometry.length;v=Math.max(0,Math.min(dragGeometry.length,Math.round(v/10)*10));if(activeDrag.kind==='fitting'&&fittings[activeDrag.index])fittings[activeDrag.index].x=v;if(activeDrag.kind==='hook'&&hooks[activeDrag.index])hooks[activeDrag.index].x=v;if(activeDrag.kind==='manhole'){$("manholePosMode").value='custom';$("manholeX").disabled=false;$("manholeX").value=v;}renderTankDrawing();});
+  $("tankSvg")?.addEventListener('pointerdown',e=>{
+    const zone=e.target.closest?.('[data-pick-view]');
+    if(zone&&activeFittingPick!==null&&fittings[activeFittingPick]){ const p=eventToSvgPoint(e); applyFittingPick(activeFittingPick,zone.dataset.pickView,p); const done=activeFittingPick; activeFittingPick=null; renderFittingsEditor(); renderTankDrawing(); scheduleAutoSave(); toast(`تم تحديد موقع N${done+1} من الرسم`); e.preventDefault(); return; }
+    const h=e.target.closest?.('[data-drag-kind]');if(!h||!dragGeometry)return;activeDrag={kind:h.dataset.dragKind,index:Number(h.dataset.dragIndex),anchorX:Number(h.dataset.anchorX||0),anchorY:Number(h.dataset.anchorY||0)};e.preventDefault();
+  });
+  window.addEventListener('pointermove',e=>{if(!activeDrag||!dragGeometry)return;const p=eventToSvgPoint(e);let v=0;if(dragGeometry.orientation==='horizontal')v=(p.x-dragGeometry.start)/dragGeometry.span*dragGeometry.length;else v=(dragGeometry.start+dragGeometry.span-p.y)/dragGeometry.span*dragGeometry.length;v=Math.max(0,Math.min(dragGeometry.length,Math.round(v/10)*10));if(activeDrag.kind==='fitting'&&fittings[activeDrag.index])fittings[activeDrag.index].x=v;else if(activeDrag.kind==='hook'&&hooks[activeDrag.index])hooks[activeDrag.index].x=v;else if(activeDrag.kind==='manhole'){$("manholePosMode").value='custom';$("manholeX").disabled=false;$("manholeX").value=v;}else if(activeDrag.kind==='fitlabel'&&fittings[activeDrag.index]){fittings[activeDrag.index].labelDx=Math.round(p.x-activeDrag.anchorX);fittings[activeDrag.index].labelDy=Math.round(p.y-activeDrag.anchorY);}else if(activeDrag.kind==='toplabel'&&fittings[activeDrag.index]){fittings[activeDrag.index].topLabelDx=Math.round(p.x-activeDrag.anchorX);fittings[activeDrag.index].topLabelDy=Math.round(p.y-activeDrag.anchorY);}else if(activeDrag.kind==='mhlabel'){manholeLabel.dx=Math.round(p.x-activeDrag.anchorX);manholeLabel.dy=Math.round(p.y-activeDrag.anchorY);}renderTankDrawing();});
   window.addEventListener('pointerup',()=>{if(!activeDrag)return;activeDrag=null;renderFittingsEditor();renderHooksEditor();scheduleAutoSave();});
 
   function downloadSvgPng(){
