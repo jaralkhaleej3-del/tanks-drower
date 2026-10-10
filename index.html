@@ -1,0 +1,1339 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>JK Tanks - Engineering Drawing System</title>
+  <style>
+    :root{
+      --bg:#f4f7f6;
+      --panel:#ffffff;
+      --ink:#18312c;
+      --muted:#70807c;
+      --line:#dfe7e4;
+      --brand:#1f5f52;
+      --brand-2:#143f37;
+      --soft:#eaf3f0;
+      --danger:#a43b3b;
+      --shadow:0 10px 30px rgba(18,52,44,.08);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Tahoma,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    button,input,select,textarea{font:inherit}
+    button{cursor:pointer}
+    .hidden{display:none!important}
+    .login-wrap{min-height:100vh;display:grid;place-items:center;padding:24px;background:linear-gradient(135deg,#eef6f3,#f8fbfa)}
+    .login-card{width:min(460px,100%);background:#fff;border:1px solid var(--line);border-radius:22px;padding:32px;box-shadow:var(--shadow)}
+    .logo-mark{width:62px;height:62px;border-radius:18px;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:800;font-size:20px;margin:0 auto 14px}
+    h1,h2,h3{margin:0}
+    .login-card h1{text-align:center;font-size:23px;margin-bottom:6px}
+    .sub{text-align:center;color:var(--muted);font-size:14px;margin-bottom:26px}
+    .field{margin-bottom:15px}
+    label{display:block;margin-bottom:7px;font-weight:700;font-size:13px;color:#35524b}
+    input,select,textarea{width:100%;border:1px solid #cfdbd7;border-radius:11px;padding:11px 12px;background:#fff;outline:none;transition:.15s}
+    input:focus,select:focus,textarea:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(31,95,82,.10)}
+    textarea{min-height:88px;resize:vertical}
+    .btn{border:0;border-radius:11px;padding:11px 16px;font-weight:700}
+    .btn-primary{background:var(--brand);color:#fff}
+    .btn-primary:hover{background:var(--brand-2)}
+    .btn-ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+    .btn-danger{background:#fff1f1;color:var(--danger);border:1px solid #efd2d2}
+    .btn-row{display:flex;gap:10px;flex-wrap:wrap}
+    .msg{margin-top:12px;border-radius:10px;padding:10px 12px;font-size:13px;display:none}
+    .msg.error{display:block;background:#fff1f1;color:#8c2c2c;border:1px solid #efd2d2}
+    .msg.ok{display:block;background:#eef8f3;color:#24644f;border:1px solid #cde6dc}
+
+    .app{min-height:100vh;display:grid;grid-template-columns:250px 1fr;direction:ltr}
+    .sidebar{background:#123f36;color:#fff;padding:20px 14px;position:sticky;top:0;height:100vh;direction:rtl;display:flex;flex-direction:column}
+    .brand{padding:8px 10px 22px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:16px}
+    .brand strong{display:block;font-size:18px}.brand span{display:block;opacity:.7;font-size:11px;margin-top:4px}
+    .nav{display:grid;gap:6px}.nav button{border:0;text-align:right;background:transparent;color:#dceae6;border-radius:10px;padding:12px 13px}
+    .nav button:hover,.nav button.active{background:rgba(255,255,255,.12);color:#fff}
+    .side-bottom{margin-top:auto;border-top:1px solid rgba(255,255,255,.12);padding-top:15px}
+    .user-email{font-size:12px;opacity:.8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:8px}
+    .content{direction:rtl;min-width:0}
+    .topbar{height:72px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:10}
+    .topbar h2{font-size:19px}.top-actions{display:flex;gap:8px}
+    main{padding:26px;max-width:1500px;margin:auto}
+    .page{display:none}.page.active{display:block}
+    .page-title{margin-bottom:20px}.page-title h2{font-size:24px;margin-bottom:6px}.page-title p{margin:0;color:var(--muted);font-size:13px}
+    .cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:0 5px 18px rgba(18,52,44,.035)}
+    .stat .num{font-size:28px;font-weight:800;color:var(--brand);margin-top:8px}.stat .label{font-size:13px;color:var(--muted)}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .section-title{font-size:16px;margin-bottom:14px}.hint{font-size:12px;color:var(--muted);line-height:1.7}
+    .hr{height:1px;background:var(--line);margin:18px 0}
+    .logo-box{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+    .logo-preview{width:170px;height:105px;border:1px dashed #bdd0ca;border-radius:12px;background:#fafdfc;display:grid;place-items:center;overflow:hidden;color:var(--muted);font-size:12px}
+    .logo-preview img{max-width:100%;max-height:100%;object-fit:contain}
+    .switch-row{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:9px}
+    .switch-row input{width:auto}
+
+    .designer{display:grid;grid-template-columns:380px minmax(0,1fr);gap:18px;align-items:start}
+    .preview-wrap{background:#dfe5e3;border-radius:16px;padding:20px;overflow:auto;min-height:650px}
+    .drawing-sheet{width:1120px;min-height:760px;background:#fff;margin:auto;border:1px solid #aebbb7;box-shadow:0 10px 30px rgba(0,0,0,.12);padding:18px}
+    .header-preview{border:var(--hp-border,2px) solid var(--hp-color,#1f5f52);min-height:150px;display:grid;grid-template-columns:200px 1fr 270px;direction:ltr;background:#fff}
+    .hp-logo{border-right:1px solid #cbd7d3;display:grid;place-items:center;padding:10px}.hp-logo img{max-width:var(--hp-logo-width,130px);max-height:100px;object-fit:contain}
+    .hp-center{padding:14px;text-align:center;direction:rtl;display:flex;flex-direction:column;justify-content:center}.hp-center .ar{font-weight:800;font-size:20px}.hp-center .en{font-weight:700;font-size:15px;margin-top:5px;direction:ltr}.hp-center .title{font-size:16px;font-weight:800;margin-top:15px;color:var(--hp-color,#1f5f52)}
+    .hp-meta{border-left:1px solid #cbd7d3;direction:ltr;display:grid;grid-template-rows:repeat(5,1fr)}.hp-meta div{display:grid;grid-template-columns:105px 1fr;border-bottom:1px solid #d8e0de;font-size:12px}.hp-meta div:last-child{border-bottom:0}.hp-meta b,.hp-meta span{padding:8px}.hp-meta b{background:#f5f8f7;border-right:1px solid #d8e0de}
+    .dummy-drawing{display:grid;place-items:center;height:480px;border:1px solid #dbe3e1;border-top:0;color:#81908c;background:repeating-linear-gradient(0deg,#fff,#fff 39px,#f5f8f7 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,#f5f8f7 40px)}
+    .dummy-tank{position:relative;width:660px;height:220px;border:3px solid #344844;border-radius:110px;background:rgba(31,95,82,.03)}
+    .dummy-tank:before{content:"SIDE VIEW - سيتم بناء محرك الرسم في المرحلة التالية";position:absolute;top:-42px;width:100%;text-align:center;font-weight:700;color:#4a5e58}
+    .dummy-tank:after{content:"Ø 2000 mm     |     L = 5150 mm";position:absolute;bottom:-45px;width:100%;text-align:center;font-weight:700;color:#4a5e58}
+    .toast{position:fixed;left:24px;bottom:24px;background:#183d35;color:#fff;padding:12px 16px;border-radius:11px;box-shadow:var(--shadow);z-index:99;display:none;max-width:340px;direction:rtl}.toast.show{display:block}
+    .badge{display:inline-flex;padding:5px 8px;border-radius:999px;background:#e8f4f0;color:#246451;font-size:11px;font-weight:700}
+    @media(max-width:1000px){.app{grid-template-columns:76px 1fr}.sidebar{padding:14px 8px}.brand strong,.brand span,.nav button span,.user-email{display:none}.nav button{text-align:center;padding:12px 8px}.cards{grid-template-columns:repeat(2,1fr)}.designer{grid-template-columns:1fr}.grid-2,.grid-3{grid-template-columns:1fr}}
+    @media(max-width:650px){main{padding:16px}.cards{grid-template-columns:1fr}.topbar{padding:0 16px}.drawing-sheet{transform-origin:top right;transform:scale(.62);margin-bottom:-270px}}
+
+    /* ===== Phase 2: Tank input + SVG drawing engine ===== */
+    .drawing-workspace{display:grid;grid-template-columns:430px minmax(0,1fr);gap:18px;align-items:start}
+    .form-stack{display:grid;gap:14px}
+    .form-section{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+    .form-section h3{font-size:15px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+    .form-section h3 small{font-weight:400;color:var(--muted);font-size:11px}
+    .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .mini-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .inline-help{margin-top:-8px;margin-bottom:10px;font-size:11px;color:var(--muted);line-height:1.65}
+    .workspace-preview{position:sticky;top:90px;min-width:0}
+    .report-toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:10px}
+    .report-toolbar .spacer{flex:1}
+    .report-shell{background:#dfe5e3;border-radius:16px;padding:18px;overflow:auto;max-height:calc(100vh - 170px)}
+    .report-sheet{width:1120px;min-height:790px;background:#fff;margin:auto;border:1px solid #aebbb7;box-shadow:0 10px 30px rgba(0,0,0,.12);padding:14px;direction:ltr;color:#172825;overflow:hidden}
+    .report-header{border:2px solid var(--brand);min-height:126px;display:grid;grid-template-columns:180px minmax(0,1fr) 290px;background:#fff}
+    .report-logo{display:grid;place-items:center;padding:8px;border-right:1px solid #bfcac7;overflow:hidden}.report-logo img{max-width:145px;max-height:92px;object-fit:contain}.report-logo .fallback{font-weight:800;color:#78908a}
+    .report-company{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:10px}.report-company .ar{font-weight:800;font-size:18px;direction:rtl}.report-company .en{font-weight:700;font-size:13px;margin-top:3px}.report-company .title{font-size:15px;font-weight:800;margin-top:10px;color:var(--brand)}
+    .report-meta{display:grid;grid-template-rows:repeat(5,1fr);font-size:11px}.report-meta>div{display:grid;grid-template-columns:105px 1fr;border-bottom:1px solid #d1dad7}.report-meta>div:last-child{border-bottom:0}.report-meta b{padding:7px;background:#f5f8f7;border-right:1px solid #d1dad7}.report-meta span{padding:7px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .drawing-stage{border:1px solid #cbd5d2;border-top:0;background:#fff;padding:8px;height:485px;overflow:hidden}
+    #tankSvg{width:100%;height:100%;display:block;background:#fff}
+    .report-bottom{display:grid;grid-template-columns:.95fr 1.15fr 1.3fr;gap:8px;margin-top:8px;direction:ltr}
+    .report-table{border:1px solid #9eaaa6;font-size:9.6px;min-width:0}.report-table h4{margin:0;padding:6px 8px;background:#eef3f1;border-bottom:1px solid #9eaaa6;text-align:center;font-size:9.6px;letter-spacing:.15px;line-height:1.2}.report-table table{width:100%;border-collapse:collapse;table-layout:fixed}.report-table th,.report-table td{border:1px solid #cbd4d1;padding:4px 5px;text-align:left;vertical-align:middle;word-break:break-word;overflow-wrap:anywhere;line-height:1.2}.report-table th{background:#f7f9f8;font-weight:700}.report-table td.value{text-align:right;font-weight:700}.report-table .rtl{text-align:right;direction:rtl}
+    .fittings-editor{display:grid;gap:8px}.fitting-row{border:1px solid var(--line);border-radius:11px;padding:10px;background:#fbfdfc}.fitting-row-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.fitting-id{font-weight:800;color:var(--brand);font-size:12px}.fitting-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.fitting-fields .field{margin:0}.fitting-fields label{font-size:10px;margin-bottom:4px}.fitting-fields input,.fitting-fields select{padding:8px;font-size:12px}
+    .icon-btn{border:1px solid #e5caca;background:#fff7f7;color:#9d3434;border-radius:8px;padding:5px 8px;font-weight:700}
+    .validation{display:none;border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.65;margin-bottom:10px}.validation.show{display:block}.validation.warn{background:#fff9e8;border:1px solid #eadcae;color:#7e6517}.validation.ok{background:#eff8f4;border:1px solid #cde4d9;color:#27614f}
+    .metric-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}.metric{background:#f6faf8;border:1px solid #dce9e4;border-radius:10px;padding:8px;text-align:center}.metric b{display:block;font-size:14px;color:var(--brand)}.metric span{font-size:9px;color:var(--muted)}
+    .project-table{width:100%;border-collapse:collapse}.project-table th,.project-table td{padding:10px;border-bottom:1px solid var(--line);text-align:right;font-size:12px}.project-table th{background:#f6f8f7;color:#47605a}.project-table .ltr{direction:ltr;text-align:left}.project-actions{display:flex;gap:6px}.small-btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 9px;font-size:11px;font-weight:700}
+    .status{display:inline-flex;padding:4px 7px;border-radius:999px;font-size:10px;font-weight:700}.status-draft{background:#eef1f0;color:#586662}.status-review{background:#fff5da;color:#7d641b}.status-approved{background:#e9f6ef;color:#21634d}.status-issued{background:#e8eff9;color:#284f7d}
+    .empty-state{padding:36px;text-align:center;color:var(--muted);border:1px dashed #cdd9d5;border-radius:12px}
+    .ltr{direction:ltr}
+    @media(max-width:1180px){.drawing-workspace{grid-template-columns:1fr}.workspace-preview{position:static}.report-shell{max-height:none}.report-sheet{transform-origin:top right;transform:scale(.78);margin-bottom:-165px}}
+    @media(max-width:760px){.mini-grid,.mini-grid-3{grid-template-columns:1fr}.fitting-fields{grid-template-columns:1fr}.report-sheet{transform:scale(.55);margin-bottom:-355px}.metric-strip{grid-template-columns:1fr}}
+    .hook-row{border:1px solid #dbe6e2;border-radius:11px;padding:10px;background:#fbfcfc;margin-bottom:10px}.hook-row-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.hook-id{font-weight:800;font-size:12px;color:var(--brand)}.support-hint{font-size:11px;color:var(--muted);line-height:1.65;margin-top:6px}
+
+    /* ===== Enterprise Engineering Platform ===== */
+    .nav-sep{height:1px;background:rgba(255,255,255,.10);margin:7px 8px}
+    .enterprise-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}
+    .quick-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .toolbar-group{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+    .btn-xs{padding:7px 10px;border-radius:8px;font-size:11px}
+    .btn-success{background:#eaf7f1;border:1px solid #c5e2d5;color:#1f6049}
+    .btn-warning{background:#fff8e8;border:1px solid #ecdca8;color:#725b11}
+    .btn-dark{background:#263f39;color:#fff;border:0}
+    .form-note{font-size:11px;color:var(--muted);line-height:1.6;margin-top:6px}
+    .subcard{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fbfdfc}
+    .master-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .master-form .field{margin:0}
+    .master-toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+    .master-toolbar input,.master-toolbar select{width:auto;min-width:180px}
+    .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}
+    .data-table{width:100%;border-collapse:collapse;min-width:760px}.data-table th,.data-table td{padding:10px;border-bottom:1px solid var(--line);font-size:12px;text-align:right;vertical-align:middle}.data-table th{background:#f1f6f4;color:#37564f;position:sticky;top:0}.data-table tr:last-child td{border-bottom:0}
+    .empty-mini{padding:24px;text-align:center;color:var(--muted);font-size:12px}
+    .report-footer{margin-top:8px;display:grid;grid-template-columns:1.45fr 1fr;gap:8px;direction:ltr}
+    .notes-box,.approval-box{border:1px solid #9eaaa6;min-height:74px;font-size:9px}.notes-box h4,.approval-box h4{margin:0;padding:5px 7px;background:#eef3f1;border-bottom:1px solid #9eaaa6;text-align:center;font-size:9.5px}.notes-body{padding:6px;white-space:pre-wrap;line-height:1.35;direction:ltr}.approval-grid{display:grid;grid-template-columns:repeat(3,1fr);min-height:48px}.approval-cell{border-right:1px solid #cbd4d1;padding:5px;text-align:center;display:flex;flex-direction:column;justify-content:center;gap:2px}.approval-cell:last-child{border-right:0}.approval-cell b{font-size:8.5px;color:#536660}.approval-cell span{font-weight:700;min-height:13px}
+    .drawing-status-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;background:#6d7d78}.status-dot.live{background:#2f8b65}.status-dot.locked{background:#bd7a26}
+    .drag-help{font-size:10px;color:#63746f;display:flex;align-items:center;gap:5px}
+    .pill{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;border:1px solid #d8e4e0;background:#f8fbfa;font-size:10px;color:#45605a}
+    dialog{border:0;border-radius:16px;padding:0;box-shadow:0 25px 70px rgba(0,0,0,.25);max-width:min(920px,94vw);width:100%}dialog::backdrop{background:rgba(13,32,27,.52)}.dialog-head{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line)}.dialog-body{padding:16px;max-height:70vh;overflow:auto}.dialog-close{border:1px solid var(--line);background:#fff;border-radius:9px;padding:6px 10px}
+    .revision-item{border:1px solid var(--line);border-radius:11px;padding:11px;margin-bottom:8px;display:grid;grid-template-columns:80px 1fr auto;gap:10px;align-items:center}.revision-code{font-weight:800;color:var(--brand);direction:ltr}.revision-meta{font-size:11px;color:var(--muted);line-height:1.6}
+    .danger-note{background:#fff4f4;border:1px solid #eccfcf;color:#833333;padding:10px;border-radius:10px;font-size:11px;line-height:1.55}
+    .locked-banner{display:none;background:#fff7e8;border:1px solid #ead9a7;color:#725b16;border-radius:11px;padding:10px 12px;font-size:12px;margin-bottom:10px}.locked-banner.show{display:block}
+    .recent-list{display:grid;gap:8px}.recent-row{display:grid;grid-template-columns:110px 1fr 130px;gap:10px;align-items:center;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:#fbfdfc;font-size:11px}.recent-row b{direction:ltr}.recent-row span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .settings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.settings-grid .field{margin:0}
+    .template-card{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff}.template-card h4{margin:0 0 7px;font-size:13px}.template-meta{font-size:10px;color:var(--muted);line-height:1.5}.template-actions{display:flex;gap:6px;margin-top:9px}
+    .templates-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .drag-handle-ui{cursor:ew-resize}.drag-handle-ui.vertical{cursor:ns-resize}
+    @media(max-width:1000px){.enterprise-grid{grid-template-columns:1fr}.master-form,.settings-grid,.templates-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:650px){.master-form,.settings-grid,.templates-grid{grid-template-columns:1fr}.report-footer{grid-template-columns:1fr}.revision-item{grid-template-columns:1fr}.recent-row{grid-template-columns:1fr}}
+
+    @media print{
+      body *{visibility:hidden!important}
+      #printArea,#printArea *{visibility:visible!important}
+      #printArea{position:absolute;left:0;top:0;width:100%;margin:0!important;padding:0!important;box-shadow:none!important;border:0!important;transform:none!important}
+      .report-sheet{width:100%!important;min-height:0!important;box-shadow:none!important;border:0!important;padding:0!important}
+      .drawing-stage{height:390px!important}
+    }
+
+
+    .option-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.option-check{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:9px;padding:9px 10px;background:#fbfdfc;font-size:12px}.option-check input{width:auto}.advanced-badge{display:inline-flex;padding:3px 7px;border-radius:999px;background:#e9f4ef;color:#1f5f52;font-size:10px;font-weight:800}.derived{background:#f3f7f6!important;color:#46605a}.detail-note{font-size:10px;color:var(--muted);line-height:1.55;margin-top:5px}
+    @media(max-width:760px){.option-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+<section id="loginView" class="login-wrap">
+  <div class="login-card">
+    <div class="logo-mark">JK</div>
+    <h1>نظام مخططات خزانات الفايبر</h1>
+    <div class="sub">Jar Al Khaleej Engineering Drawing System</div>
+    <form id="loginForm">
+      <div class="field"><label>البريد الإلكتروني</label><input id="loginEmail" type="email" autocomplete="username" required /></div>
+      <div class="field"><label>كلمة المرور</label><input id="loginPassword" type="password" autocomplete="current-password" required /></div>
+      <button class="btn btn-primary" style="width:100%" type="submit">تسجيل الدخول</button>
+      <div id="loginMsg" class="msg"></div>
+    </form>
+    <p class="hint" style="margin-top:16px;text-align:center">يتم إنشاء المستخدمين من Firebase Authentication. لا يوجد تسجيل عام داخل النظام.</p>
+  </div>
+</section>
+
+<section id="appView" class="app hidden">
+  <aside class="sidebar">
+    <div class="brand"><strong>JK TANKS</strong><span>ENGINEERING SYSTEM</span></div>
+    <nav class="nav">
+      <button data-page="dashboard" class="active">▦ <span>لوحة التحكم</span></button>
+      <button data-page="newDrawing">＋ <span>مخطط جديد</span></button>
+      <button data-page="projects">▤ <span>المشاريع والمخططات</span></button>
+      <div class="nav-sep"></div>
+      <button data-page="clients">◎ <span>العملاء</span></button>
+      <button data-page="templates">▧ <span>قوالب الخزانات</span></button>
+      <div class="nav-sep"></div>
+      <button data-page="company">◈ <span>بيانات الشركة</span></button>
+      <button data-page="headerDesigner">▱ <span>تصميم الترويسة</span></button>
+      <button data-page="settings">⚙ <span>إعدادات النظام</span></button>
+    </nav>
+    <div class="side-bottom">
+      <div id="userEmail" class="user-email"></div>
+      <button id="logoutBtn" class="btn btn-danger" style="width:100%">تسجيل الخروج</button>
+    </div>
+  </aside>
+  <div class="content">
+    <header class="topbar"><h2 id="topTitle">لوحة التحكم</h2><div class="top-actions"><span class="badge">Firebase Connected</span></div></header>
+    <main>
+      <section id="page-dashboard" class="page active">
+        <div class="page-title"><h2>لوحة التحكم</h2><p>المرحلة الأولى من نظام مخططات خزانات شركة جار الخليج للصناعة.</p></div>
+        <div class="cards">
+          <div class="card stat"><div class="label">المشاريع</div><div class="num">0</div></div>
+          <div class="card stat"><div class="label">المخططات</div><div class="num">0</div></div>
+          <div class="card stat"><div class="label">قيد المراجعة</div><div class="num">0</div></div>
+          <div class="card stat"><div class="label">معتمدة</div><div class="num">0</div></div>
+        </div>
+        <div class="enterprise-grid" style="margin-top:18px">
+          <div class="card"><h3 class="section-title">آخر المخططات</h3><div id="recentDrawings" class="recent-list"><div class="empty-mini">لا توجد بيانات بعد.</div></div></div>
+          <div class="card"><h3 class="section-title">مركز العمل السريع</h3><p class="hint">نسخة مؤسسية: رسم SVG تلقائي، Firebase حي، Revision Control، قوالب، عملاء، سحب مباشر للعناصر، تحقق هندسي وطباعة A3/A4.</p><div class="quick-actions"><button class="btn btn-primary" type="button" id="dashNewDrawing">+ مخطط جديد</button><button class="btn btn-ghost" type="button" id="dashClients">العملاء</button><button class="btn btn-ghost" type="button" id="dashTemplates">القوالب</button></div></div>
+        </div>
+      </section>
+
+
+      <section id="page-newDrawing" class="page">
+        <div class="page-title"><h2>مخطط جديد</h2><p>أدخل بيانات الخزان فقط. البرنامج يتولى الرسم، الأبعاد، الجداول والترويسة تلقائيًا.</p></div>
+        <div class="drawing-workspace">
+          <div class="form-stack">
+            <div class="form-section">
+              <h3>1. بيانات المشروع <small>PROJECT DATA</small></h3>
+              <div class="mini-grid">
+                <div class="field"><label>العميل / Client</label><input id="drawClient" list="clientDatalist" placeholder="اسم العميل" /><datalist id="clientDatalist"></datalist></div>
+                <div class="field"><label>المشروع / Project</label><input id="drawProject" placeholder="اسم المشروع" /></div>
+                <div class="field"><label>رقم المخطط / Drawing No.</label><input id="drawNo" value="JAK-FRP-0001" dir="ltr" /></div>
+                <div class="field"><label>الإصدار / Revision</label><input id="drawRevision" value="00" dir="ltr" /></div>
+                <div class="field"><label>التاريخ / Date</label><input id="drawDate" type="date" /></div>
+                <div class="field"><label>الحالة / Status</label><select id="drawStatus"><option value="draft">مسودة - DRAFT</option><option value="review">قيد المراجعة - UNDER REVIEW</option><option value="approved">معتمد - APPROVED</option><option value="issued">صادر - ISSUED</option></select></div>
+                <div class="field"><label>كود المشروع / Project Code</label><input id="projectCode" dir="ltr" placeholder="PRJ-0001" /></div>
+                <div class="field"><label>مرجع العميل / Client Ref.</label><input id="clientRef" dir="ltr" placeholder="PO / RFQ / REF" /></div>
+                <div class="field"><label>رسم بواسطة / Drawn By</label><input id="drawnBy" placeholder="اسم المهندس / الرسام" /></div>
+                <div class="field"><label>مراجعة / Checked By</label><input id="checkedBy" placeholder="اسم المراجع" /></div>
+                <div class="field"><label>اعتماد / Approved By</label><input id="approvedBy" placeholder="اسم المعتمد" /></div>
+                <div class="field"><label>وصف التعديل / Revision Description</label><input id="revisionDescription" placeholder="Initial issue / تعديل مواقع الفتحات" /></div>
+              </div>
+              <div class="field" style="margin-top:10px"><label>ملاحظات المخطط / Drawing Notes</label><textarea id="drawingNotes" placeholder="General notes / special requirements"></textarea></div>
+              <div id="approvedLockBanner" class="locked-banner">هذا المخطط معتمد/صادر ومحمي من التعديل المباشر حسب إعدادات النظام. أنشئ Revision جديد قبل تعديل النسخة المعتمدة.</div>
+            </div>
+
+            <div class="form-section">
+              <h3>2. بيانات الخزان <small>TANK DATA</small></h3>
+              <div class="mini-grid">
+                <div class="field"><label>الاتجاه / Orientation</label><select id="tankOrientation"><option value="horizontal">أفقي - Horizontal</option><option value="vertical">رأسي - Vertical</option></select></div>
+                <div class="field"><label>التركيب / Installation</label><select id="tankInstallation"><option value="above">فوق الأرض - Above Ground</option><option value="underground">مدفون - Underground</option></select></div>
+                <div class="field"><label>الاستخدام / Application</label><select id="tankUse"><option value="water">مياه - Water</option><option value="diesel">ديزل - Diesel</option><option value="gasoline">بنزين - Gasoline</option><option value="sewage">صرف صحي - Sewage</option><option value="chemical">كيميائي - Chemical</option></select></div>
+                <div class="field"><label>السعة / Capacity (L)</label><input id="tankCapacity" type="number" min="1" value="15000" dir="ltr" /></div>
+                <div class="field"><label>القطر / Diameter (mm)</label><input id="tankDiameter" type="number" min="100" value="2000" dir="ltr" /></div>
+                <div class="field"><label id="tankLengthLabel">الطول الكلي / Overall Length (mm)</label><input id="tankLength" type="number" min="100" value="5150" dir="ltr" /></div>
+                <div class="field"><label>السماكة / Thickness (mm)</label><input id="tankThickness" type="number" min="1" step="0.1" value="10" dir="ltr" /></div>
+                <div class="field"><label>الوزن التقريبي / Approx. Weight (kg)</label><input id="tankWeight" type="number" min="0" step="0.1" value="0" dir="ltr" /></div>
+                <div class="field"><label>درجة التصميم / Design Temp. °C</label><input id="designTemp" type="number" step="0.1" value="40" dir="ltr" /></div>
+                <div class="field"><label>ضغط التصميم / Design Pressure (bar)</label><input id="designPressure" type="number" step="0.1" value="0" dir="ltr" /></div>
+                <div class="field"><label>الكثافة النوعية / Specific Gravity</label><input id="specificGravity" type="number" step="0.01" value="1.00" dir="ltr" /></div>
+                <div class="field"><label>المعيار / Design Standard</label><input id="designStandard" value="Manufacturer Standard / Approved Specification" dir="ltr" /></div>
+                <div class="field"><label>عمق الدفن / Burial Depth (mm)</label><input id="burialDepth" type="number" min="0" value="0" dir="ltr" /></div>
+                <div class="field"><label>الخدمة / Service Medium</label><input id="serviceMedium" placeholder="Water / Diesel / HCL / NaOH ..." dir="ltr" /></div>
+                <div class="field"><label>شكل النهايات / Head Type</label><select id="tankHeadType"><option value="elliptical">2:1 Elliptical / بيضاوي</option><option value="torispherical">Torispherical / عدسي</option><option value="hemispherical">Hemispherical / نصف كروي</option><option value="flat">Flat / مسطح</option></select></div>
+                <div class="field"><label>عمق النهاية / Head Depth mm</label><input id="tankHeadDepth" type="number" min="0" value="0" dir="ltr" /><div class="form-note">0 = Auto حسب النوع</div></div>
+                <div class="field"><label>طول الجزء المستقيم / Straight Shell mm</label><input id="tankStraightLength" class="derived" type="number" value="0" readonly dir="ltr" /></div>
+                <div class="field"><label>كثافة FRP kg/m³</label><input id="frpDensity" type="number" min="100" value="1850" dir="ltr" /></div>
+              </div>
+              <div class="btn-row"><button id="calcLengthBtn" class="btn btn-ghost" type="button">حساب الطول من السعة</button><button id="calcWeightBtn" class="btn btn-ghost" type="button">حساب الوزن التقريبي</button></div>
+              <p class="inline-help">الحساب يأخذ شكل النهايات المختار في الاعتبار بصورة هندسية تقريبية. الطول النهائي والسماكة ومسافات الملحقات تبقى خاضعة للاعتماد الهندسي.</p>
+              <div class="metric-strip"><div class="metric"><b id="metricCalcVol">--</b><span>الحجم الأسطواني التقريبي / L</span></div><div class="metric"><b id="metricArea">--</b><span>مساحة الغلاف التقريبية / m²</span></div><div class="metric"><b id="metricRatio">--</b><span>Length / Diameter</span></div></div>
+            </div>
+
+            <div class="form-section">
+              <h3>3. المواد والتشطيب <small>MATERIALS</small></h3>
+              <div class="mini-grid">
+                <div class="field"><label>نوع الراتنج / Resin</label><input id="tankResin" value="Unsaturated Polyester Resin GP 710" dir="ltr" /></div>
+                <div class="field"><label>التدعيم / Reinforcement</label><input id="tankGlass" value="E-Glass CSM + Woven Roving" dir="ltr" /></div>
+                <div class="field"><label>الطبقة الداخلية / Inner Layer</label><input id="tankInner" value="Gelcoat / Resin-rich barrier" dir="ltr" /></div>
+                <div class="field"><label>اللون / Color</label><input id="tankColorText" value="White" dir="ltr" /></div>
+                <div class="field"><label>الجيلكوت / Gelcoat</label><input id="tankGelcoat" value="Isophthalic Gelcoat" dir="ltr" /></div>
+                <div class="field"><label>نوع الزجاج / Glass Type</label><input id="tankGlassType" value="E-Glass" dir="ltr" /></div>
+                <div class="field"><label>طبقة الحماية / Corrosion Barrier</label><input id="tankBarrier" value="Resin-rich corrosion barrier" dir="ltr" /></div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3>4. المانهول والدعامات وهوكات الرفع <small>MANHOLE / SUPPORTS / LIFTING HOOKS</small></h3>
+              <div class="mini-grid-3">
+                <div class="field"><label>قطر المانهول mm</label><input id="manholeDia" type="number" value="600" min="0" dir="ltr" /></div>
+                <div class="field"><label>موقع المانهول</label><select id="manholePosMode"><option value="center">الوسط</option><option value="left">يسار</option><option value="right">يمين</option><option value="custom">مخصص</option></select></div>
+                <div class="field"><label>X من بداية الخزان mm</label><input id="manholeX" type="number" value="2575" min="0" dir="ltr" /></div>
+                <div class="field"><label>عدد Supports</label><input id="supportCount" type="number" value="3" min="0" max="10" /></div>
+                <div class="field"><label>ارتفاع Support mm</label><input id="supportHeight" type="number" value="250" min="0" /></div>
+                <div class="field"><label>نوع Support</label><select id="supportType"><option value="steel">حديد - Steel</option><option value="frp">فايبر جلاس - FRP</option><option value="steel-frp">حديد مدعم بالفايبر - Steel + FRP</option></select></div>
+                <div class="field"><label>عرض أعلى القاعدة mm</label><input id="supportTopWidth" type="number" min="0" value="0" dir="ltr" /><div class="form-note">0 = Auto</div></div>
+                <div class="field"><label>عرض أسفل القاعدة mm</label><input id="supportBaseWidth" type="number" min="0" value="0" dir="ltr" /><div class="form-note">0 = Auto</div></div>
+                <div class="field"><label>توزيع القواعد</label><select id="supportMode"><option value="auto">تلقائي - Auto</option><option value="manual">يدوي - Manual Position</option></select></div>
+                <div class="field"><label>عدد Hooks</label><input id="hookCount" type="number" value="2" min="0" max="8" /></div>
+                <div class="field"><label>ارتفاع رقبة المانهول mm</label><input id="manholeNeckHeight" type="number" min="0" value="180" dir="ltr" /></div>
+                <div class="field"><label>نوع غطاء المانهول</label><select id="manholeCoverType"><option value="bolted">Bolted Flanged Cover</option><option value="frp">FRP Cover</option><option value="hinged">Hinged Cover</option></select></div>
+                <div class="field"><label>زاوية احتضان Saddle °</label><input id="supportContactAngle" type="number" min="60" max="180" value="120" dir="ltr" /></div>
+                <div class="field"><label>سماكة Base Plate mm</label><input id="supportBaseThickness" type="number" min="0" value="10" dir="ltr" /></div>
+                <div class="field"><label>Anchor Bolts / قاعدة</label><select id="supportAnchorQty"><option value="0">0</option><option value="2" selected>2</option><option value="4">4</option></select></div>
+                <div class="field"><label>حلقات التقوية الخارجية / Stiffener Rings</label><input id="stiffenerCount" type="number" min="0" max="20" value="0" dir="ltr" /><div class="form-note">0 = Auto للخزان المدفون</div></div>
+                <div class="field"><label>عرض الحلقة / Ring Width mm</label><input id="stiffenerWidth" type="number" min="10" value="90" dir="ltr" /></div>
+                <div class="field"><label>بروز الحلقة / Ring Projection mm</label><input id="stiffenerProjection" type="number" min="0" value="45" dir="ltr" /></div>
+              </div>
+              <div class="support-hint">في الوضع Auto يقوم البرنامج بتوزيع القواعد على طول الخزان تلقائيًا. في Manual يمكنك تحديد X لكل قاعدة. إذا كان عرض القاعدة = 0 يتم حسابه تلقائيًا من قطر الخزان.</div>
+              <div id="supportsEditor" class="fittings-editor" style="margin-top:10px"></div>
+              <div class="hr"></div><div class="support-hint">هوكات الرفع:</div>
+              <div id="hooksEditor" class="fittings-editor" style="margin-top:10px"></div>
+            </div>
+
+            <div class="form-section">
+              <h3>5. الفتحات والأنابيب <small>NOZZLES / FITTINGS</small></h3>
+              <div id="fittingsEditor" class="fittings-editor"></div>
+              <button id="addFittingBtn" class="btn btn-ghost" type="button" style="margin-top:10px">+ إضافة فتحة / Add Fitting</button>
+            </div>
+
+            <div class="form-section">
+              <h3>6. التحكم بالمستند <small>DOCUMENT CONTROL</small></h3>
+              <div class="mini-grid-3">
+                <div class="field"><label>لغة التقرير</label><select id="reportLanguage"><option value="bilingual">عربي / English</option><option value="en">English</option><option value="ar">العربية</option></select></div>
+                <div class="field"><label>مقياس الرسم</label><select id="drawingScale"><option value="NTS">NTS - Not To Scale</option><option value="AUTO">AUTO FIT</option></select></div>
+                <div class="field"><label>وحدة الأبعاد</label><select id="drawingUnit"><option value="mm">mm</option></select></div>
+              </div>
+              <div class="hr"></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b style="font-size:12px">خيارات الرسم الاحترافي</b><span class="advanced-badge">FULL OPTIONS</span></div>
+              <div class="option-grid">
+                <label class="option-check"><span>الجدار الداخلي / Inner Wall</span><input id="optInnerWall" type="checkbox" checked></label>
+                <label class="option-check"><span>Center Lines</span><input id="optCenterLines" type="checkbox" checked></label>
+                <label class="option-check"><span>Dimensions</span><input id="optDimensions" type="checkbox" checked></label>
+                <label class="option-check"><span>Nozzle Tags</span><input id="optTags" type="checkbox" checked></label>
+                <label class="option-check"><span>Nozzle Detail</span><input id="optNozzleDetail" type="checkbox" checked></label>
+                <label class="option-check"><span>Saddle Detail</span><input id="optSupportDetail" type="checkbox" checked></label>
+                <label class="option-check"><span>Section Hatching</span><input id="optSectionHatch" type="checkbox" checked></label>
+                <label class="option-check"><span>Position Dimensions</span><input id="optPositionDims" type="checkbox" checked></label>
+                <label class="option-check"><span>Top View</span><input id="optTopView" type="checkbox" checked></label>
+              </div>
+              <div class="drawing-status-bar"><span class="pill"><span class="status-dot live"></span> Firebase Live</span><span class="pill">SVG Vector</span><span class="pill">Revision Controlled</span><span class="drag-help">↔ اسحب N / H / MH مباشرة داخل الرسم لتغيير الموقع</span></div>
+            </div>
+            <div id="drawValidation" class="validation"></div>
+            <div class="btn-row">
+              <button id="saveDrawingBtn" class="btn btn-primary" type="button">حفظ المخطط</button>
+              <button id="newRevisionBtn" class="btn btn-warning" type="button">إنشاء Revision جديد</button>
+              <button id="duplicateDrawingBtn" class="btn btn-ghost" type="button">نسخ كمخطط جديد</button>
+              <button id="newDrawingResetBtn" class="btn btn-ghost" type="button">مخطط جديد فارغ</button>
+            </div>
+          </div>
+
+          <div class="workspace-preview">
+            <div class="report-toolbar">
+              <span class="badge">LIVE SVG</span>
+              <select id="paperSize" style="width:auto"><option value="A1">A1 Landscape</option><option value="A2">A2 Landscape</option><option value="A3" selected>A3 Landscape</option><option value="A4">A4 Landscape</option></select>
+              <button id="downloadPngBtn" class="btn btn-ghost" type="button">PNG للرسم</button>
+              <button id="downloadSvgBtn" class="btn btn-ghost" type="button">SVG</button>
+              <button id="downloadDxfBtn" class="btn btn-ghost" type="button">DXF 2D</button>
+              <button id="exportJsonBtn" class="btn btn-ghost" type="button">نسخة JSON</button>
+              <button id="importJsonBtn" class="btn btn-ghost" type="button">استيراد JSON</button><input id="importJsonInput" type="file" accept="application/json,.json" class="hidden" />
+              <button id="printReportBtn" class="btn btn-primary" type="button">طباعة / PDF</button>
+              <span class="spacer"></span>
+              <span id="saveStateText" class="hint">غير محفوظ</span>
+            </div>
+            <div class="report-shell">
+              <div id="printArea" class="report-sheet">
+                <div id="actualReportHeader" class="report-header">
+                  <div id="reportLogo" class="report-logo"><span class="fallback">LOGO</span></div>
+                  <div class="report-company"><div id="reportCompanyAr" class="ar">شركة جار الخليج للصناعة</div><div id="reportCompanyEn" class="en">Jar Al Khaleej Industrial Company</div><div id="reportDrawingTitle" class="title">HORIZONTAL FRP TANK - ENGINEERING DRAWING</div></div>
+                  <div class="report-meta"><div><b>Drawing No.</b><span id="reportDrawNo">--</span></div><div><b>Revision</b><span id="reportRev">--</span></div><div><b>Date</b><span id="reportDate">--</span></div><div><b>Client</b><span id="reportClient">--</span></div><div><b>Project</b><span id="reportProject">--</span></div></div>
+                </div>
+                <div class="drawing-stage"><svg id="tankSvg" viewBox="0 0 1200 500" xmlns="http://www.w3.org/2000/svg" aria-label="FRP tank engineering drawing"></svg></div>
+                <div class="report-bottom">
+                  <div class="report-table"><h4>PROJECT DATA / بيانات المشروع</h4><table><tbody id="projectDataBody"></tbody></table></div>
+                  <div class="report-table"><h4>TANK & MATERIAL DATA / بيانات الخزان والمواد</h4><table><tbody id="tankDataBody"></tbody></table></div>
+                  <div class="report-table"><h4>FITTINGS / الفتحات والملحقات</h4><table><thead><tr><th>No.</th><th>Description</th><th>Size</th><th>Connection</th><th>Qty</th><th>Position</th></tr></thead><tbody id="fittingsDataBody"></tbody></table></div>
+                </div>
+                <div class="report-footer">
+                  <div class="notes-box"><h4>GENERAL NOTES / ملاحظات عامة</h4><div id="reportNotes" class="notes-body">--</div></div>
+                  <div class="approval-box"><h4>DOCUMENT CONTROL / اعتماد ومراجعة</h4><div class="approval-grid"><div class="approval-cell"><b>DRAWN BY</b><span id="reportDrawnBy">--</span></div><div class="approval-cell"><b>CHECKED BY</b><span id="reportCheckedBy">--</span></div><div class="approval-cell"><b>APPROVED BY</b><span id="reportApprovedBy">--</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-projects" class="page">
+        <div class="page-title"><h2>المشاريع والمخططات</h2><p>سجل مركزي حي للمخططات مع البحث، التصفية، النسخ وسجل الإصدارات.</p></div>
+        <div class="card">
+          <div class="master-toolbar"><input id="drawingSearch" placeholder="بحث برقم المخطط / العميل / المشروع" /><select id="drawingStatusFilter"><option value="">كل الحالات</option><option value="draft">DRAFT</option><option value="review">UNDER REVIEW</option><option value="approved">APPROVED</option><option value="issued">ISSUED</option></select><span class="spacer"></span><button class="btn btn-primary btn-xs" id="projectsNewDrawing">+ مخطط جديد</button></div>
+          <div style="overflow:auto"><table class="project-table"><thead><tr><th>Drawing No.</th><th>العميل</th><th>المشروع</th><th>السعة</th><th>النوع</th><th>الحالة</th><th>Rev.</th><th>الإجراء</th></tr></thead><tbody id="drawingsListBody"></tbody></table></div>
+          <div id="drawingsEmpty" class="empty-state">لا توجد مخططات محفوظة حتى الآن.</div>
+        </div>
+      </section>
+
+      <section id="page-clients" class="page">
+        <div class="page-title"><h2>قاعدة العملاء</h2><p>بيانات العملاء الرئيسية لاستخدامها في المشاريع والترويسة بدون إعادة الإدخال.</p></div>
+        <div class="card">
+          <h3 class="section-title">إضافة / تعديل عميل</h3>
+          <div class="master-form"><div class="field"><label>كود العميل</label><input id="clientCode" dir="ltr" placeholder="CLI-001" /></div><div class="field"><label>اسم العميل بالعربية</label><input id="clientNameAr" /></div><div class="field"><label>Client Name</label><input id="clientNameEn" dir="ltr" /></div><div class="field"><label>جهة الاتصال</label><input id="clientContact" /></div><div class="field"><label>الهاتف</label><input id="clientPhone" dir="ltr" /></div><div class="field"><label>البريد</label><input id="clientEmail" type="email" dir="ltr" /></div></div>
+          <div class="field" style="margin-top:10px"><label>العنوان / Address</label><input id="clientAddress" /></div>
+          <div class="btn-row"><button class="btn btn-primary" id="saveClientBtn" type="button">حفظ العميل</button><button class="btn btn-ghost" id="clearClientBtn" type="button">جديد</button></div>
+        </div>
+        <div class="card" style="margin-top:14px"><div class="master-toolbar"><input id="clientSearch" placeholder="بحث في العملاء" /></div><div class="table-wrap"><table class="data-table"><thead><tr><th>الكود</th><th>الاسم</th><th>Contact</th><th>الهاتف</th><th>البريد</th><th>إجراء</th></tr></thead><tbody id="clientsTableBody"></tbody></table></div><div id="clientsEmpty" class="empty-mini">لا يوجد عملاء مسجلون.</div></div>
+      </section>
+
+      <section id="page-templates" class="page">
+        <div class="page-title"><h2>قوالب الخزانات</h2><p>قوالب جاهزة حسب الاستخدام والمقاس لتسريع إنشاء المخططات المتكررة.</p></div>
+        <div class="card"><div class="master-toolbar"><input id="templateName" placeholder="اسم القالب - مثال: 50K Diesel Ø2500" /><button class="btn btn-primary" id="saveTemplateBtn" type="button">حفظ الخزان الحالي كقالب</button></div><p class="hint">القالب يحفظ بيانات الخزان والمواد والمانهول والفتحات والهوكات والقواعد فقط، ولا يحفظ بيانات العميل أو المشروع.</p></div>
+        <div class="templates-grid" id="templatesGrid" style="margin-top:14px"><div class="empty-mini">لا توجد قوالب بعد.</div></div>
+      </section>
+      <section id="page-company" class="page">
+        <div class="page-title"><h2>بيانات الشركة</h2><p>يتم حفظ هذه البيانات مرة واحدة واستخدامها تلقائيًا داخل الترويسة.</p></div>
+        <div class="card">
+          <div class="grid-2">
+            <div class="field"><label>اسم الشركة بالعربية</label><input id="companyNameAr" value="شركة جار الخليج للصناعة" /></div>
+            <div class="field"><label>Company Name</label><input id="companyNameEn" value="Jar Al Khaleej Industrial Company" dir="ltr" /></div>
+            <div class="field"><label>السجل التجاري</label><input id="crNumber" /></div>
+            <div class="field"><label>الرقم الضريبي</label><input id="vatNumber" /></div>
+            <div class="field"><label>الترخيص الصناعي</label><input id="industrialLicense" /></div>
+            <div class="field"><label>الهاتف</label><input id="phone" dir="ltr" /></div>
+            <div class="field"><label>البريد الإلكتروني</label><input id="email" type="email" dir="ltr" /></div>
+            <div class="field"><label>الموقع الإلكتروني</label><input id="website" value="jalkhaleejsa.com" dir="ltr" /></div>
+            <div class="field"><label>المدينة</label><input id="city" value="جدة" /></div>
+            <div class="field"><label>الدولة</label><input id="country" value="المملكة العربية السعودية" /></div>
+          </div>
+          <div class="field"><label>العنوان بالعربية</label><textarea id="addressAr"></textarea></div>
+          <div class="field"><label>Address in English</label><textarea id="addressEn" dir="ltr"></textarea></div>
+          <div class="hr"></div>
+          <h3 class="section-title">شعار الشركة</h3>
+          <div class="logo-box">
+            <div id="companyLogoPreview" class="logo-preview">لم يتم رفع شعار</div>
+            <div style="flex:1;min-width:260px">
+              <input id="logoInput" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" />
+              <p class="hint">سيتم تصغير الصورة داخل المتصفح وحفظها كنص Data URL داخل Firestore، بدون Firebase Storage. الحد المقترح بعد المعالجة 250KB.</p>
+              <button id="removeLogoBtn" class="btn btn-ghost" type="button">إزالة الشعار</button>
+            </div>
+          </div>
+          <div class="hr"></div>
+          <div class="btn-row"><button id="saveCompanyBtn" class="btn btn-primary" type="button">حفظ بيانات الشركة</button><button id="reloadCompanyBtn" class="btn btn-ghost" type="button">إعادة تحميل البيانات</button></div>
+        </div>
+      </section>
+
+      <section id="page-headerDesigner" class="page">
+        <div class="page-title"><h2>مصمم الترويسة</h2><p>تحكم في شكل الترويسة دون تعديل الكود. المعاينة تتحدث مباشرة.</p></div>
+        <div class="designer">
+          <div class="card">
+            <h3 class="section-title">إعدادات الترويسة</h3>
+            <div class="switch-row"><span>إظهار الشعار</span><input id="showLogo" type="checkbox" checked /></div>
+            <div class="switch-row"><span>اسم الشركة بالعربية</span><input id="showArName" type="checkbox" checked /></div>
+            <div class="switch-row"><span>Company Name</span><input id="showEnName" type="checkbox" checked /></div>
+            <div class="field"><label>عنوان المخطط الافتراضي</label><input id="drawingTitle" value="FRP TANK - ENGINEERING DRAWING" dir="ltr" /></div>
+            <div class="field"><label>لون الترويسة</label><input id="headerColor" type="color" value="#1f5f52" /></div>
+            <div class="field"><label>سماكة الإطار</label><select id="headerBorder"><option value="1">1 px</option><option value="2" selected>2 px</option><option value="3">3 px</option><option value="4">4 px</option></select></div>
+            <div class="field"><label>حجم الشعار</label><input id="logoWidth" type="range" min="70" max="175" value="130" /></div>
+            <div class="hr"></div>
+            <div class="switch-row"><span>Drawing No.</span><input id="showDrawingNo" type="checkbox" checked /></div>
+            <div class="switch-row"><span>Revision</span><input id="showRevision" type="checkbox" checked /></div>
+            <div class="switch-row"><span>Date</span><input id="showDate" type="checkbox" checked /></div>
+            <div class="switch-row"><span>Client</span><input id="showClient" type="checkbox" checked /></div>
+            <div class="switch-row"><span>Project</span><input id="showProject" type="checkbox" checked /></div>
+            <div class="btn-row" style="margin-top:16px"><button id="saveHeaderBtn" class="btn btn-primary" type="button">حفظ الترويسة</button><button id="reloadHeaderBtn" class="btn btn-ghost" type="button">إعادة تحميل</button></div>
+          </div>
+          <div class="preview-wrap">
+            <div class="drawing-sheet">
+              <div id="headerPreview" class="header-preview">
+                <div id="hpLogoBox" class="hp-logo"><span id="hpNoLogo">LOGO</span><img id="hpLogo" class="hidden" alt="Company logo" /></div>
+                <div class="hp-center"><div id="hpArName" class="ar">شركة جار الخليج للصناعة</div><div id="hpEnName" class="en">Jar Al Khaleej Industrial Company</div><div id="hpDrawingTitle" class="title">FRP TANK - ENGINEERING DRAWING</div></div>
+                <div class="hp-meta">
+                  <div id="rowDrawingNo"><b>Drawing No.</b><span>JAK-FRP-0001</span></div>
+                  <div id="rowRev"><b>Revision</b><span>00</span></div>
+                  <div id="rowDate"><b>Date</b><span id="todayText">--</span></div>
+                  <div id="rowClient"><b>Client</b><span>CLIENT NAME</span></div>
+                  <div id="rowProject"><b>Project</b><span>PROJECT NAME</span></div>
+                </div>
+              </div>
+              <div class="dummy-drawing"><div class="dummy-tank"></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-settings" class="page">
+        <div class="page-title"><h2>إعدادات النظام</h2><p>إعدادات عامة تؤثر على إنشاء المخططات الجديدة وسير الاعتماد.</p></div>
+        <div class="card">
+          <div class="settings-grid">
+            <div class="field"><label>بادئة رقم المخطط</label><input id="settingPrefix" value="JAK-FRP-" dir="ltr" /></div>
+            <div class="field"><label>مقاس الورق الافتراضي</label><select id="settingDefaultPaper"><option>A3</option><option>A4</option></select></div>
+            <div class="field"><label>لغة التقرير الافتراضية</label><select id="settingDefaultLanguage"><option value="bilingual">عربي / English</option><option value="en">English</option><option value="ar">العربية</option></select></div>
+            <div class="field"><label>مقياس الرسم الافتراضي</label><select id="settingDefaultScale"><option value="NTS">NTS</option><option value="AUTO">AUTO FIT</option></select></div>
+            <div class="field"><label>الحفظ التلقائي للمخططات المحفوظة</label><select id="settingAutoSave"><option value="off">Off</option><option value="on">On</option></select></div>
+            <div class="field"><label>قفل النسخة المعتمدة</label><select id="settingStrictApproval"><option value="on">On - يتطلب Revision جديد</option><option value="off">Off</option></select></div>
+          </div>
+          <div class="hr"></div><div class="btn-row"><button class="btn btn-primary" id="saveSystemSettings" type="button">حفظ إعدادات النظام</button></div>
+        </div>
+        <div class="card" style="margin-top:14px"><h3 class="section-title">سياسة النظام الهندسي</h3><div class="danger-note">محرك الرسم يولد المخطط تلقائيًا من المدخلات، لكنه لا يغني عن المراجعة الهندسية للمقاسات والسماكات والمواد ومتطلبات الموقع قبل الاعتماد أو التصنيع.</div></div>
+      </section>
+    </main>
+  </div>
+</section>
+<div id="toast" class="toast"></div>
+<dialog id="revisionDialog"><div class="dialog-head"><div><h3>Revision History</h3><div id="revisionDialogTitle" class="hint"></div></div><button class="dialog-close" id="closeRevisionDialog" type="button">إغلاق</button></div><div class="dialog-body"><div id="revisionList"></div></div></dialog>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+  import { getAnalytics, isSupported } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
+  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, setDoc, serverTimestamp, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCMk43-THABDVQzpyZTl6wVuYGkQW1tPrk",
+    authDomain: "jktanks-7a831.firebaseapp.com",
+    projectId: "jktanks-7a831",
+    storageBucket: "jktanks-7a831.firebasestorage.app",
+    messagingSenderId: "359855456582",
+    appId: "1:359855456582:web:4ccb5faf0173bf4ba7a547",
+    measurementId: "G-6SRC1GGT5F"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  isSupported().then(ok => { if(ok) getAnalytics(app); }).catch(()=>{});
+
+  const $ = id => document.getElementById(id);
+  const loginView = $("loginView"), appView = $("appView"), loginMsg = $("loginMsg");
+  let companyLogoData = "";
+  let companyCache = {};
+  let currentDrawingId = null;
+  let drawingsCache = new Map();
+  let fittings = [];
+  let drawingUnsubscribe = null;
+  let clientsCache = new Map();
+  let templatesCache = new Map();
+  let revisionsCache = [];
+  let drawingsArray = [];
+  let clientsUnsubscribe = null, templatesUnsubscribe = null, revisionsUnsubscribe = null, settingsUnsubscribe = null;
+  let currentClientId = null;
+  let systemSettings = {prefix:'JAK-FRP-',defaultPaper:'A3',defaultLanguage:'bilingual',defaultScale:'NTS',autoSave:'off',strictApproval:'on'};
+  let loadedOriginalStatus = null;
+  let autoSaveTimer = null;
+  let dragGeometry = null;
+  let activeDrag = null;
+
+  function toast(msg){ const el=$("toast"); el.textContent=msg; el.classList.add("show"); clearTimeout(window.__toastTimer); window.__toastTimer=setTimeout(()=>el.classList.remove("show"),2600); }
+  function showLoginError(msg){ loginMsg.textContent=msg; loginMsg.className="msg error"; }
+  function clearLoginError(){ loginMsg.textContent=""; loginMsg.className="msg"; }
+
+  $("loginForm").addEventListener("submit", async e=>{
+    e.preventDefault(); clearLoginError();
+    try{ await signInWithEmailAndPassword(auth,$("loginEmail").value.trim(),$("loginPassword").value); }
+    catch(err){ showLoginError("تعذر تسجيل الدخول. تحقق من البريد وكلمة المرور وأن Email/Password مفعّل في Firebase."); console.error(err); }
+  });
+  $("logoutBtn").addEventListener("click",()=>signOut(auth));
+
+  onAuthStateChanged(auth, async user=>{
+    if(user){
+      loginView.classList.add("hidden"); appView.classList.remove("hidden"); $("userEmail").textContent=user.email || "";
+      await Promise.all([loadCompany(),loadHeader()]); updateHeaderPreview();
+    }else{
+      appView.classList.add("hidden"); loginView.classList.remove("hidden");
+    }
+  });
+
+  const pageTitles={dashboard:"لوحة التحكم",newDrawing:"مخطط جديد",projects:"المشاريع والمخططات",clients:"العملاء",templates:"قوالب الخزانات",company:"بيانات الشركة",headerDesigner:"تصميم الترويسة",settings:"إعدادات النظام"};
+  document.querySelectorAll(".nav button[data-page]").forEach(btn=>btn.addEventListener("click",()=>{
+    document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active")); btn.classList.add("active");
+    document.querySelectorAll(".page").forEach(p=>p.classList.remove("active")); $("page-"+btn.dataset.page).classList.add("active");
+    $("topTitle").textContent=pageTitles[btn.dataset.page]||"";
+    if(btn.dataset.page==="newDrawing") setTimeout(renderTankDrawing,0);
+  }));
+
+  function goPage(page){
+    const btn=document.querySelector(`.nav button[data-page="${page}"]`); if(btn) btn.click();
+  }
+  $("dashNewDrawing")?.addEventListener('click',()=>{resetDrawing();goPage('newDrawing');});
+  $("dashClients")?.addEventListener('click',()=>goPage('clients'));
+  $("dashTemplates")?.addEventListener('click',()=>goPage('templates'));
+  $("projectsNewDrawing")?.addEventListener('click',()=>{resetDrawing();goPage('newDrawing');});
+
+
+  function companyFormData(){
+    return {
+      companyNameAr:$("companyNameAr").value.trim(), companyNameEn:$("companyNameEn").value.trim(),
+      crNumber:$("crNumber").value.trim(), vatNumber:$("vatNumber").value.trim(), industrialLicense:$("industrialLicense").value.trim(),
+      phone:$("phone").value.trim(), email:$("email").value.trim(), website:$("website").value.trim(), city:$("city").value.trim(), country:$("country").value.trim(),
+      addressAr:$("addressAr").value.trim(), addressEn:$("addressEn").value.trim(), logoDataUrl:companyLogoData || "", updatedAt:serverTimestamp(), updatedBy:auth.currentUser?.uid || null
+    };
+  }
+  function fillCompany(d={}){
+    const ids=["companyNameAr","companyNameEn","crNumber","vatNumber","industrialLicense","phone","email","website","city","country","addressAr","addressEn"];
+    ids.forEach(id=>{ if(d[id]!==undefined && d[id]!==null) $(id).value=d[id]; });
+    companyLogoData=d.logoDataUrl||""; renderCompanyLogo(); companyCache={...d};
+  }
+  function renderCompanyLogo(){
+    const box=$("companyLogoPreview");
+    if(companyLogoData){ box.innerHTML=`<img src="${companyLogoData}" alt="Logo">`; }
+    else box.textContent="لم يتم رفع شعار";
+  }
+  async function loadCompany(){
+    try{ const snap=await getDoc(doc(db,"companies","main")); if(snap.exists()) fillCompany(snap.data()); else fillCompany({}); }
+    catch(err){ console.error(err); toast("تعذر تحميل بيانات الشركة - راجع Firestore Rules"); }
+  }
+  $("saveCompanyBtn").addEventListener("click", async()=>{
+    try{ const data=companyFormData(); await setDoc(doc(db,"companies","main"),data,{merge:true}); companyCache={...companyCache,...data,logoDataUrl:companyLogoData}; updateHeaderPreview(); toast("تم حفظ بيانات الشركة"); }
+    catch(err){ console.error(err); toast("تعذر الحفظ. راجع صلاحيات Firestore"); }
+  });
+  $("reloadCompanyBtn").addEventListener("click",loadCompany);
+  $("removeLogoBtn").addEventListener("click",()=>{companyLogoData="";renderCompanyLogo();updateHeaderPreview();});
+
+  $("logoInput").addEventListener("change", async e=>{
+    const file=e.target.files?.[0]; if(!file) return;
+    try{
+      companyLogoData=await compressImage(file,700,250*1024);
+      renderCompanyLogo(); updateHeaderPreview(); toast("تم تجهيز الشعار. اضغط حفظ بيانات الشركة.");
+    }catch(err){ console.error(err); toast(err.message||"تعذر معالجة الشعار"); }
+  });
+
+  function compressImage(file,maxWidth,maxBytes){
+    return new Promise((resolve,reject)=>{
+      if(file.type==="image/svg+xml"){
+        const r=new FileReader(); r.onload=()=>{ const data=String(r.result); if(data.length>maxBytes*1.35) reject(new Error("ملف SVG كبير جدًا")); else resolve(data); }; r.onerror=reject; r.readAsDataURL(file); return;
+      }
+      const reader=new FileReader(); reader.onload=()=>{
+        const img=new Image(); img.onload=()=>{
+          const scale=Math.min(1,maxWidth/img.width); const w=Math.max(1,Math.round(img.width*scale)); const h=Math.max(1,Math.round(img.height*scale));
+          const c=document.createElement("canvas"); c.width=w; c.height=h; const ctx=c.getContext("2d"); ctx.clearRect(0,0,w,h); ctx.drawImage(img,0,0,w,h);
+          let q=.9; let data=c.toDataURL("image/webp",q);
+          while(data.length*0.75>maxBytes && q>.35){ q-=.08; data=c.toDataURL("image/webp",q); }
+          if(data.length*0.75>maxBytes) reject(new Error("الشعار ما زال كبيرًا بعد الضغط. استخدم صورة أصغر.")); else resolve(data);
+        }; img.onerror=()=>reject(new Error("صيغة الصورة غير مدعومة")); img.src=String(reader.result);
+      }; reader.onerror=reject; reader.readAsDataURL(file);
+    });
+  }
+
+  function headerFormData(){
+    return {
+      showLogo:$("showLogo").checked, showArName:$("showArName").checked, showEnName:$("showEnName").checked,
+      drawingTitle:$("drawingTitle").value.trim(), headerColor:$("headerColor").value, headerBorder:Number($("headerBorder").value), logoWidth:Number($("logoWidth").value),
+      showDrawingNo:$("showDrawingNo").checked, showRevision:$("showRevision").checked, showDate:$("showDate").checked, showClient:$("showClient").checked, showProject:$("showProject").checked,
+      updatedAt:serverTimestamp(), updatedBy:auth.currentUser?.uid || null
+    };
+  }
+  function fillHeader(d={}){
+    const checks=["showLogo","showArName","showEnName","showDrawingNo","showRevision","showDate","showClient","showProject"];
+    checks.forEach(id=>{ if(d[id]!==undefined) $(id).checked=!!d[id]; });
+    if(d.drawingTitle!==undefined) $("drawingTitle").value=d.drawingTitle;
+    if(d.headerColor) $("headerColor").value=d.headerColor;
+    if(d.headerBorder) $("headerBorder").value=String(d.headerBorder);
+    if(d.logoWidth) $("logoWidth").value=String(d.logoWidth);
+    updateHeaderPreview();
+  }
+  async function loadHeader(){
+    try{ const snap=await getDoc(doc(db,"headerTemplates","default")); if(snap.exists()) fillHeader(snap.data()); else updateHeaderPreview(); }
+    catch(err){ console.error(err); toast("تعذر تحميل إعدادات الترويسة"); }
+  }
+  $("saveHeaderBtn").addEventListener("click",async()=>{
+    try{ await setDoc(doc(db,"headerTemplates","default"),headerFormData(),{merge:true}); toast("تم حفظ تصميم الترويسة"); }
+    catch(err){ console.error(err); toast("تعذر حفظ الترويسة"); }
+  });
+  $("reloadHeaderBtn").addEventListener("click",loadHeader);
+  ["showLogo","showArName","showEnName","drawingTitle","headerColor","headerBorder","logoWidth","showDrawingNo","showRevision","showDate","showClient","showProject"].forEach(id=>$(id).addEventListener("input",updateHeaderPreview));
+  ["companyNameAr","companyNameEn","website"].forEach(id=>$(id).addEventListener("input",updateHeaderPreview));
+
+  function updateHeaderPreview(){
+    const c=companyFormData ? {
+      companyNameAr:$("companyNameAr").value || companyCache.companyNameAr || "شركة جار الخليج للصناعة",
+      companyNameEn:$("companyNameEn").value || companyCache.companyNameEn || "Jar Al Khaleej Industrial Company"
+    }:companyCache;
+    $("hpArName").textContent=c.companyNameAr||""; $("hpEnName").textContent=c.companyNameEn||""; $("hpDrawingTitle").textContent=$("drawingTitle").value||"FRP TANK - ENGINEERING DRAWING";
+    $("hpArName").classList.toggle("hidden",!$("showArName").checked); $("hpEnName").classList.toggle("hidden",!$("showEnName").checked);
+    $("hpLogoBox").classList.toggle("hidden",!$("showLogo").checked);
+    if(companyLogoData){ $("hpLogo").src=companyLogoData; $("hpLogo").classList.remove("hidden"); $("hpNoLogo").classList.add("hidden"); }
+    else{ $("hpLogo").classList.add("hidden"); $("hpNoLogo").classList.remove("hidden"); }
+    $("headerPreview").style.setProperty("--hp-color",$("headerColor").value); $("headerPreview").style.setProperty("--hp-border",$("headerBorder").value+"px"); $("headerPreview").style.setProperty("--hp-logo-width",$("logoWidth").value+"px");
+    $("rowDrawingNo").classList.toggle("hidden",!$("showDrawingNo").checked); $("rowRev").classList.toggle("hidden",!$("showRevision").checked); $("rowDate").classList.toggle("hidden",!$("showDate").checked); $("rowClient").classList.toggle("hidden",!$("showClient").checked); $("rowProject").classList.toggle("hidden",!$("showProject").checked);
+    if($("tankSvg")) renderTankDrawing();
+  }
+
+
+  // ===== Phase 2: automatic tank drawing =====
+  const tankInputIds=["drawClient","drawProject","drawNo","drawRevision","drawDate","drawStatus","projectCode","clientRef","drawnBy","checkedBy","approvedBy","revisionDescription","drawingNotes","reportLanguage","drawingScale","drawingUnit","tankOrientation","tankInstallation","tankUse","tankCapacity","tankDiameter","tankLength","tankThickness","tankWeight","designTemp","designPressure","specificGravity","designStandard","burialDepth","serviceMedium","tankHeadType","tankHeadDepth","frpDensity","tankResin","tankGlass","tankInner","tankColorText","tankGelcoat","tankGlassType","tankBarrier","manholeDia","manholePosMode","manholeX","manholeNeckHeight","manholeCoverType","hookCount","supportCount","supportHeight","supportType","supportTopWidth","supportBaseWidth","supportMode","supportContactAngle","supportBaseThickness","supportAnchorQty","stiffenerCount","stiffenerWidth","stiffenerProjection","optInnerWall","optCenterLines","optDimensions","optTags","optNozzleDetail","optSupportDetail","optSectionHatch","optPositionDims","optTopView","paperSize"];
+  function n(id, fallback=0){ const v=Number($(id)?.value); return Number.isFinite(v)?v:fallback; }
+  function esc(v){ return String(v??"").replace(/[&<>\"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c])); }
+  function todayISO(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
+  if($("drawDate")) $("drawDate").value=todayISO();
+
+  function defaultFittings(){
+    const L=Math.max(100,n("tankLength",5150));
+    return [
+      {id:crypto.randomUUID(),type:"INLET",size:'2"',connection:"FRP FLANGE",material:"FRP",note:"",angle:0,neckLength:150,flangeOD:0,x:Math.round(L*.78),orientation:"top",qty:1},
+      {id:crypto.randomUUID(),type:"OUTLET",size:'2"',connection:"FRP FLANGE",material:"FRP",note:"",angle:0,neckLength:150,flangeOD:0,x:Math.round(L*.18),orientation:"top",qty:1},
+      {id:crypto.randomUUID(),type:"VENT",size:'4"',connection:"FRP FLANGE",material:"FRP",note:"",angle:0,neckLength:180,flangeOD:0,x:Math.round(L*.62),orientation:"top",qty:1}
+    ];
+  }
+  fittings=defaultFittings();
+  function defaultHooks(){
+    const L=Math.max(100,n("tankLength",5150));
+    const count=Math.max(0,Math.round(n("hookCount",2)));
+    const arr=[];
+    for(let i=0;i<count;i++){ arr.push({id:crypto.randomUUID(),type:'steel-frp',x:Math.round(L*(i+1)/(count+1))}); }
+    return arr;
+  }
+  let hooks=defaultHooks();
+  function defaultSupports(){
+    const L=Math.max(100,n("tankLength",5150)), count=Math.max(0,Math.round(n("supportCount",3))); const arr=[];
+    for(let i=0;i<count;i++) arr.push({id:crypto.randomUUID(),x:Math.round(L*(i+1)/(count+1))}); return arr;
+  }
+  let supportItems=defaultSupports();
+  function syncSupportsToCount(){
+    const count=Math.max(0,Math.round(n('supportCount',0))),L=Math.max(100,n('tankLength',5150));
+    while(supportItems.length<count) supportItems.push({id:crypto.randomUUID(),x:Math.round(L*(supportItems.length+1)/(count+1))});
+    while(supportItems.length>count) supportItems.pop();
+    if($("supportMode")?.value==='auto') supportItems.forEach((x,i)=>x.x=Math.round(L*(i+1)/(count+1)));
+  }
+  function renderSupportsEditor(){
+    const box=$("supportsEditor"); if(!box)return; syncSupportsToCount(); const manual=$("supportMode").value==='manual';
+    box.classList.toggle('hidden',!manual); if(!manual){box.innerHTML='';return;}
+    box.innerHTML=supportItems.map((sp,i)=>`<div class="hook-row" data-support-id="${sp.id}"><div class="hook-row-head"><span class="hook-id">S${i+1}</span></div><div class="fitting-fields"><div class="field"><label>X mm</label><input data-k="x" type="number" min="0" value="${Number(sp.x)||0}" dir="ltr" /></div></div></div>`).join('');
+    box.querySelectorAll('[data-support-id]').forEach(row=>{const id=row.dataset.supportId;row.querySelector('[data-k="x"]').addEventListener('input',e=>{const sp=supportItems.find(x=>x.id===id);if(sp){sp.x=Number(e.target.value)||0;renderTankDrawing();scheduleAutoSave();}});});
+  }
+
+  function syncHooksToCount(){
+    const count=Math.max(0,Math.round(n('hookCount',0)));
+    const L=Math.max(100,n('tankLength',5150));
+    while(hooks.length<count){ hooks.push({id:crypto.randomUUID(),type:'steel-frp',x:Math.round(L*(hooks.length+1)/(count+1))}); }
+    while(hooks.length>count){ hooks.pop(); }
+    if(count>0){ hooks.forEach((h,i)=>{ if(!(Number(h.x)>=0)) h.x=Math.round(L*(i+1)/(count+1)); }); }
+  }
+
+  function renderHooksEditor(){
+    const box=$("hooksEditor"); if(!box) return;
+    syncHooksToCount();
+    box.innerHTML=hooks.map((h,i)=>`<div class="hook-row" data-hook-id="${h.id}">
+      <div class="hook-row-head"><span class="hook-id">H${i+1}</span></div>
+      <div class="fitting-fields">
+        <div class="field"><label>النوع / Type</label><select data-k="type"><option value="steel" ${h.type==='steel'?'selected':''}>Steel</option><option value="frp" ${h.type==='frp'?'selected':''}>FRP</option><option value="steel-frp" ${h.type==='steel-frp'?'selected':''}>Steel + FRP</option></select></div>
+        <div class="field"><label>موقع سريع / Preset</label><select data-k="preset"><option value="custom">مخصص</option><option value="leftEnd">طرف يسار</option><option value="left">يسار</option><option value="center">الوسط</option><option value="right">يمين</option><option value="rightEnd">طرف يمين</option></select></div>
+        <div class="field"><label>X mm من بداية الخزان</label><input data-k="x" type="number" value="${Number(h.x)||0}" min="0" dir="ltr" /></div>
+      </div>
+    </div>`).join('');
+    box.querySelectorAll('.hook-row').forEach(row=>{
+      const id=row.dataset.hookId;
+      row.querySelectorAll('[data-k]').forEach(inp=>inp.addEventListener('input',()=>{
+        const h=hooks.find(x=>x.id===id); if(!h) return;
+        const k=inp.dataset.k;
+        if(k==='preset'){
+          const L=Math.max(100,n('tankLength',5150));
+          const map={leftEnd:.08,left:.25,center:.5,right:.75,rightEnd:.92};
+          if(inp.value!=='custom' && map[inp.value]!=null) h.x=Math.round(L*map[inp.value]);
+          renderHooksEditor();
+        }else h[k]=(k==='x')?Number(inp.value):inp.value;
+        renderTankDrawing();
+      }));
+    });
+  }
+
+  function renderFittingsEditor(){
+    const box=$("fittingsEditor"); if(!box) return;
+    box.innerHTML=fittings.map((f,i)=>`<div class="fitting-row" data-fit-id="${f.id}">
+      <div class="fitting-row-head"><span class="fitting-id">N${i+1}</span><button class="icon-btn remove-fitting" type="button" data-id="${f.id}">حذف</button></div>
+      <div class="fitting-fields">
+        <div class="field"><label>النوع / Type</label><select data-k="type"><option ${f.type==='INLET'?'selected':''}>INLET</option><option ${f.type==='OUTLET'?'selected':''}>OUTLET</option><option ${f.type==='VENT'?'selected':''}>VENT</option><option ${f.type==='DRAIN'?'selected':''}>DRAIN</option><option ${f.type==='OVERFLOW'?'selected':''}>OVERFLOW</option><option ${f.type==='NOZZLE'?'selected':''}>NOZZLE</option><option ${f.type==='LEVEL'?'selected':''}>LEVEL</option><option ${f.type==='DIP PIPE'?'selected':''}>DIP PIPE</option><option ${f.type==='SPARE'?'selected':''}>SPARE</option></select></div>
+        <div class="field"><label>المقاس / Size</label><input data-k="size" value="${esc(f.size)}" dir="ltr" /></div>
+        <div class="field"><label>X mm</label><input data-k="x" type="number" value="${Number(f.x)||0}" min="0" dir="ltr" /></div>
+        <div class="field"><label>الاتجاه / Orientation</label><select data-k="orientation"><option value="top" ${f.orientation==='top'?'selected':''}>TOP</option><option value="right" ${f.orientation==='right'?'selected':''}>RIGHT</option><option value="left" ${f.orientation==='left'?'selected':''}>LEFT</option><option value="bottom" ${f.orientation==='bottom'?'selected':''}>BOTTOM</option></select></div>
+        <div class="field"><label>الكمية / Qty</label><input data-k="qty" type="number" min="1" value="${Number(f.qty)||1}" /></div>
+        <div class="field"><label>التوصيل / Connection</label><input data-k="connection" value="${esc(f.connection||'FRP FLANGE')}" dir="ltr" /></div>
+        <div class="field"><label>المادة / Material</label><input data-k="material" value="${esc(f.material||'FRP')}" dir="ltr" /></div>
+        <div class="field"><label>زاوية محيطية / Angle °</label><input data-k="angle" type="number" step="1" value="${Number(f.angle??0)}" dir="ltr" /></div>
+        <div class="field"><label>Neck Projection mm</label><input data-k="neckLength" type="number" min="0" value="${Number(f.neckLength??150)}" dir="ltr" /></div>
+        <div class="field"><label>Flange OD mm</label><input data-k="flangeOD" type="number" min="0" value="${Number(f.flangeOD??0)}" dir="ltr" /><div class="form-note">0 = Auto</div></div>
+        <div class="field"><label>ملاحظة / Note</label><input data-k="note" value="${esc(f.note||'')}" /></div>
+      </div>
+    </div>`).join('');
+    box.querySelectorAll('.fitting-row').forEach(row=>{
+      const id=row.dataset.fitId;
+      row.querySelectorAll('[data-k]').forEach(inp=>inp.addEventListener('input',()=>{
+        const f=fittings.find(x=>x.id===id); if(!f) return; const k=inp.dataset.k; f[k]=(['x','qty','angle','neckLength','flangeOD'].includes(k))?Number(inp.value):inp.value; renderTankDrawing(); scheduleAutoSave();
+      }));
+    });
+    box.querySelectorAll('.remove-fitting').forEach(b=>b.addEventListener('click',()=>{ fittings=fittings.filter(x=>x.id!==b.dataset.id); renderFittingsEditor(); renderTankDrawing(); }));
+  }
+  $("addFittingBtn")?.addEventListener("click",()=>{ fittings.push({id:crypto.randomUUID(),type:"NOZZLE",size:'2"',connection:"FRP FLANGE",material:"FRP",note:"",angle:0,neckLength:150,flangeOD:0,x:Math.round(n("tankLength",5000)/2),orientation:"top",qty:1}); renderFittingsEditor(); renderTankDrawing(); });
+
+  function syncManholeX(){
+    const mode=$("manholePosMode")?.value, L=Math.max(100,n("tankLength",5000));
+    if(mode==='center') $("manholeX").value=Math.round(L/2);
+    if(mode==='left') $("manholeX").value=Math.round(L*.25);
+    if(mode==='right') $("manholeX").value=Math.round(L*.75);
+    $("manholeX").disabled=mode!=='custom';
+  }
+  $("manholePosMode")?.addEventListener("change",()=>{syncManholeX();renderTankDrawing();});
+  $("tankLength")?.addEventListener("input",()=>{ if($("manholePosMode").value!=='custom') syncManholeX(); syncHooksToCount(); renderHooksEditor(); });
+  syncManholeX(); renderFittingsEditor(); renderHooksEditor(); renderSupportsEditor();
+  $("hookCount")?.addEventListener("input",()=>{ syncHooksToCount(); renderHooksEditor(); renderTankDrawing(); });
+  $("supportCount")?.addEventListener("input",()=>{ syncSupportsToCount(); renderSupportsEditor(); renderTankDrawing(); });
+  $("supportMode")?.addEventListener("change",()=>{ syncSupportsToCount(); renderSupportsEditor(); renderTankDrawing(); });
+  $("tankLength")?.addEventListener("input",()=>{ hooks=hooks.map((h,i)=>({ ...h, x: Math.max(0, Math.min(n("tankLength",5150), Number(h.x)||Math.round(n("tankLength",5150)*(i+1)/(hooks.length+1)))) })); syncSupportsToCount(); renderHooksEditor(); renderSupportsEditor(); });
+
+  tankInputIds.forEach(id=>$(id)?.addEventListener("input",renderTankDrawing));
+  function autoHeadDepth(D,type){ if(type==='hemispherical')return D/2; if(type==='elliptical')return D/4; if(type==='torispherical')return D*.1935; return 0; }
+  function headPairVolume(D,depth,type){ const r=D/2; if(type==='flat'||depth<=0)return 0; return (4/3)*Math.PI*r*r*depth; }
+  $("calcLengthBtn")?.addEventListener("click",()=>{
+    const V=n("tankCapacity")*1e6,D=n("tankDiameter"); if(D<=0||V<=0) return toast("أدخل السعة والقطر أولًا");
+    const type=$("tankHeadType").value, hd=n("tankHeadDepth")||autoHeadDepth(D,type), headV=headPairVolume(D,hd,type), area=Math.PI*Math.pow(D/2,2);
+    const straight=Math.max(0,(V-headV)/area); const overall=straight+2*hd; $("tankLength").value=Math.round(overall); $("tankStraightLength").value=Math.round(straight); syncManholeX(); renderTankDrawing(); toast("تم حساب الطول مع تعويض حجم النهايات بصورة تقريبية");
+  });
+  $("calcWeightBtn")?.addEventListener("click",()=>{
+    const D=n("tankDiameter"),L=n("tankLength"),th=n("tankThickness"),rho=n("frpDensity",1850);if(D<=0||L<=0||th<=0)return toast("أدخل القطر والطول والسماكة أولًا");
+    const type=$("tankHeadType").value,hd=n("tankHeadDepth")||autoHeadDepth(D,type),straight=Math.max(0,L-2*hd);
+    const shellArea=(Math.PI*D*straight + Math.PI*D*D/2)/1e6; const kg=shellArea*(th/1000)*rho; $("tankWeight").value=Math.round(kg*10)/10; renderTankDrawing(); toast("تم حساب وزن جسم الخزان تقريبياً - Shell only");
+  });
+
+  function collectDrawingData(){
+    return {
+      project:{client:$("drawClient").value.trim(),projectName:$("drawProject").value.trim(),drawingNo:$("drawNo").value.trim(),revision:$("drawRevision").value.trim(),date:$("drawDate").value,status:$("drawStatus").value,projectCode:$("projectCode").value.trim(),clientRef:$("clientRef").value.trim(),drawnBy:$("drawnBy").value.trim(),checkedBy:$("checkedBy").value.trim(),approvedBy:$("approvedBy").value.trim(),revisionDescription:$("revisionDescription").value.trim(),notes:$("drawingNotes").value.trim()},
+      tank:{orientation:$("tankOrientation").value,installation:$("tankInstallation").value,use:$("tankUse").value,capacity:n("tankCapacity"),diameter:n("tankDiameter"),length:n("tankLength"),thickness:n("tankThickness"),weight:n("tankWeight"),designTemp:n("designTemp"),designPressure:n("designPressure"),specificGravity:n("specificGravity",1),designStandard:$("designStandard").value.trim(),burialDepth:n("burialDepth"),serviceMedium:$("serviceMedium").value.trim(),resin:$("tankResin").value.trim(),glass:$("tankGlass").value.trim(),inner:$("tankInner").value.trim(),color:$("tankColorText").value.trim(),gelcoat:$("tankGelcoat").value.trim(),glassType:$("tankGlassType").value.trim(),barrier:$("tankBarrier").value.trim(),headType:$("tankHeadType").value,headDepth:n("tankHeadDepth"),straightLength:n("tankStraightLength"),frpDensity:n("frpDensity",1850)},
+      manhole:{diameter:n("manholeDia"),x:n("manholeX"),neckHeight:n("manholeNeckHeight"),coverType:$("manholeCoverType").value},hooks:{count:n("hookCount"),items:hooks.map(h=>({...h}))},supports:{count:n("supportCount"),height:n("supportHeight"),type:$("supportType").value,topWidth:n("supportTopWidth"),baseWidth:n("supportBaseWidth"),mode:$("supportMode").value,contactAngle:n("supportContactAngle",120),baseThickness:n("supportBaseThickness",10),anchorQty:n("supportAnchorQty",2),stiffenerCount:n("stiffenerCount",0),stiffenerWidth:n("stiffenerWidth",90),stiffenerProjection:n("stiffenerProjection",45),items:supportItems.map(x=>({...x}))},fittings:fittings.map(f=>({...f})),
+      documentControl:{language:$("reportLanguage").value,scale:$("drawingScale").value,unit:$("drawingUnit").value,drawingOptions:{innerWall:$("optInnerWall").checked,centerLines:$("optCenterLines").checked,dimensions:$("optDimensions").checked,tags:$("optTags").checked,nozzleDetail:$("optNozzleDetail").checked,supportDetail:$("optSupportDetail").checked,sectionHatch:$("optSectionHatch").checked,positionDims:$("optPositionDims").checked,topView:$("optTopView").checked}},
+      headerSnapshot:{companyNameAr:$("companyNameAr").value.trim(),companyNameEn:$("companyNameEn").value.trim(),logoDataUrl:companyLogoData||"",drawingTitle:$("drawingTitle").value.trim(),headerColor:$("headerColor").value,headerBorder:n("headerBorder",2),logoWidth:n("logoWidth",130),showLogo:$("showLogo").checked,showArName:$("showArName").checked,showEnName:$("showEnName").checked},
+      paperSize:$("paperSize").value,
+      updatedAt:serverTimestamp(),updatedBy:auth.currentUser?.uid||null
+    };
+  }
+
+  function useLabel(v){ return ({water:"WATER",diesel:"DIESEL",gasoline:"GASOLINE",sewage:"SEWAGE",chemical:"CHEMICAL"})[v]||String(v).toUpperCase(); }
+  function installLabel(v){ return v==='underground'?'UNDERGROUND':'ABOVE GROUND'; }
+  function fmt(v,d=0){ const num=Number(v); return Number.isFinite(num)?num.toLocaleString('en-US',{maximumFractionDigits:d,minimumFractionDigits:d}):'--'; }
+
+  function line(x1,y1,x2,y2,extra=''){ return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" ${extra}/>`; }
+  function textEl(x,y,t,extra=''){ return `<text x="${x}" y="${y}" ${extra}>${esc(t)}</text>`; }
+  function dimH(x1,x2,y,objY,label){
+    return `<g class="dim">${line(x1,objY,x1,y)}${line(x2,objY,x2,y)}${line(x1,y,x2,y,'marker-start="url(#arrow)" marker-end="url(#arrow)"')} ${textEl((x1+x2)/2,y-5,label,'text-anchor="middle"')}</g>`;
+  }
+  function dimV(x,y1,y2,objX,label){
+    return `<g class="dim">${line(objX,y1,x,y1)}${line(objX,y2,x,y2)}${line(x,y1,x,y2,'marker-start="url(#arrow)" marker-end="url(#arrow)"')} ${textEl(x-7,(y1+y2)/2,label,'text-anchor="middle" transform="rotate(-90 '+(x-7)+' '+((y1+y2)/2)+')"')}</g>`;
+  }
+
+  function updateOrientationUI(){
+    const vertical=$("tankOrientation")?.value==='vertical';
+    if($("tankLengthLabel")) $("tankLengthLabel").textContent=vertical?'الارتفاع الكلي / Overall Height (mm)':'الطول الكلي / Overall Length (mm)';
+    if($("calcLengthBtn")) $("calcLengthBtn").textContent=vertical?'حساب ارتفاع أسطواني مبدئي من السعة':'حساب طول أسطواني مبدئي من السعة';
+  }
+  $("tankOrientation")?.addEventListener('change',()=>{updateOrientationUI();renderTankDrawing();});
+  updateOrientationUI();
+
+  function renderTankDrawing(){
+    if(!$('tankSvg')) return;
+    const d=collectDrawingData(), t=d.tank;
+    const L=Math.max(100,t.length), D=Math.max(100,t.diameter), thk=Math.max(.1,t.thickness||1);
+    const headType=t.headType||'elliptical', hd=Math.max(0,t.headDepth||autoHeadDepth(D,headType));
+    const straight=Math.max(0,L-2*hd); $('tankStraightLength').value=Math.round(straight);
+    const mhX=Math.max(0,Math.min(L,d.manhole.x)), mhD=Math.max(0,d.manhole.diameter), mhNeck=Math.max(0,d.manhole.neckHeight||180);
+    const r=D/2, cylV=Math.PI*r*r*straight/1e6, headsV=headPairVolume(D,hd,headType)/1e6, calcVol=cylV+headsV;
+    const area=(Math.PI*D*Math.max(0,straight)+Math.PI*D*D/2)/1e6;
+    $('metricCalcVol').textContent=fmt(calcVol,0); $('metricArea').textContent=fmt(area,2); $('metricRatio').textContent=fmt(L/D,2);
+    const opt=d.documentControl?.drawingOptions||{};
+
+    const warns=[];
+    if(t.capacity<=0||D<=0||L<=0) warns.push('السعة والقطر والطول يجب أن تكون أكبر من صفر.');
+    if(L<2*hd && headType!=='flat') warns.push('الطول الكلي أقل من مجموع عمق النهايتين.');
+    d.fittings.forEach((f,i)=>{if(Number(f.x)<0||Number(f.x)>L)warns.push(`موقع N${i+1} خارج حدود الخزان.`);});
+    (d.hooks.items||[]).forEach((h,i)=>{if(Number(h.x)<0||Number(h.x)>L)warns.push(`موقع H${i+1} خارج حدود الخزان.`);});
+    const minSep=Math.max(120,D*.10), sf=[...d.fittings].map((f,i)=>({...f,idx:i})).sort((a,b)=>a.x-b.x);
+    for(let i=1;i<sf.length;i++) if(Math.abs(sf[i].x-sf[i-1].x)<minSep&&sf[i].orientation===sf[i-1].orientation)warns.push(`المسافة بين N${sf[i-1].idx+1} و N${sf[i].idx+1} صغيرة؛ راجع التعارض.`);
+    const diff=t.capacity>0?Math.abs(calcVol-t.capacity)/t.capacity:0;if(diff>.12)warns.push(`السعة المدخلة تختلف عن الحجم الهندسي التقريبي بنسبة ${fmt(diff*100,1)}%.`);
+    const vb=$('drawValidation');vb.textContent=warns.length?warns.join(' '):'المدخلات الأساسية ضمن الحدود ويمكن توليد الرسم.';vb.className='validation show '+(warns.length?'warn':'ok');
+
+    const h=d.headerSnapshot;
+    $('actualReportHeader').style.borderColor=h.headerColor||'#1f5f52';$('actualReportHeader').style.borderWidth=(h.headerBorder||2)+'px';
+    $('reportCompanyAr').textContent=h.companyNameAr||'';$('reportCompanyEn').textContent=h.companyNameEn||'';$('reportCompanyAr').style.display=h.showArName?'':'none';$('reportCompanyEn').style.display=h.showEnName?'':'none';
+    $('reportDrawingTitle').textContent=`${t.orientation==='vertical'?'VERTICAL':'HORIZONTAL'} ${installLabel(t.installation)} ${useLabel(t.use)} FRP TANK - ${fmt(t.capacity,0)} L`;$('reportDrawingTitle').style.color=h.headerColor||'#1f5f52';
+    const rl=$('reportLogo');if(h.showLogo&&h.logoDataUrl)rl.innerHTML=`<img src="${h.logoDataUrl}" style="max-width:${h.logoWidth||130}px" alt="Logo">`;else if(h.showLogo)rl.innerHTML='<span class="fallback">LOGO</span>';else rl.innerHTML='';
+    $('reportDrawNo').textContent=d.project.drawingNo||'--';$('reportRev').textContent=d.project.revision||'--';$('reportDate').textContent=d.project.date||'--';$('reportClient').textContent=d.project.client||'--';$('reportProject').textContent=d.project.projectName||'--';
+    $('reportNotes').textContent=d.project.notes||`1. All dimensions are in mm unless noted otherwise.\n2. Verify site connections before manufacturing.\n3. FRP fabrication shall follow the approved material specification.`;
+    $('reportDrawnBy').textContent=d.project.drawnBy||'--';$('reportCheckedBy').textContent=d.project.checkedBy||'--';$('reportApprovedBy').textContent=d.project.approvedBy||'--';
+
+    const svg=$('tankSvg');
+    const defs=`<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto-start-reverse"><path d="M0,0 L7,3.5 L0,7 Z" fill="#253a35"/></marker><pattern id="hatch" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" stroke="#71827d" stroke-width=".7"/></pattern></defs>
+    <style>.obj{fill:none;stroke:#262626;stroke-width:1.55}.heavy{fill:none;stroke:#111;stroke-width:2.05}.thin{fill:none;stroke:#3f3f3f;stroke-width:.82}.hiddenline{fill:none;stroke:#777;stroke-width:.72;stroke-dasharray:5 3}.center{fill:none;stroke:#c77f86;stroke-width:.72;stroke-dasharray:13 4 2 4}.centerDark{fill:none;stroke:#333;stroke-width:.72;stroke-dasharray:10 4 2 4}.dim{fill:none;stroke:#222;stroke-width:.78}.dim text,.label{font:10px Arial,sans-serif;fill:#111;stroke:none}.viewtitle{font:700 11px Arial,sans-serif;fill:#111}.note{font:9px Arial,sans-serif;fill:#333}.tag{fill:#fff;stroke:#222;stroke-width:.9}.tagtext{font:700 8.4px Arial,sans-serif;fill:#111}.callbox{fill:#fff;stroke:#555;stroke-width:.65}.calltext{font:8.4px Arial,sans-serif;fill:#111}.flange{fill:#d6d6d6;stroke:#222;stroke-width:1.2}.manholefill{fill:#b7b7b7;stroke:#222;stroke-width:1.35}.rib{fill:#f7f7f7;stroke:#333;stroke-width:1}.draghandle{fill:rgba(31,95,82,.01);stroke:none;pointer-events:all;cursor:ew-resize}.draghandle.v{cursor:ns-resize}.hatchfill{fill:url(#hatch);stroke:#263c37;stroke-width:1}</style>`;
+    let parts=defs; const hookItems=(d.hooks.items||[]);
+    const showCenter=opt.centerLines!==false, showDims=opt.dimensions!==false, showTags=opt.tags!==false;
+    const showInner=opt.innerWall!==false, showPosDims=opt.positionDims!==false;
+
+    function calloutBox(x,y,label,anchorX,anchorY,align='center'){
+      if(!showTags)return '';
+      const w=Math.max(74,Math.min(145,34+String(label).length*4.4)),hh=18;let bx=x-w/2;if(align==='left')bx=x;if(align==='right')bx=x-w;const by=y-hh/2;
+      return `${line(anchorX,anchorY,x,y,'class="thin"')}<rect x="${bx}" y="${by}" width="${w}" height="${hh}" rx="2.5" class="callbox"/>${textEl(bx+w/2,y+3,label,'class="calltext" text-anchor="middle"')}`;
+    }
+    function headPathHorizontal(x0,x1,y0,y1,depthPx,type){
+      const cy=(y0+y1)/2, shellL=x0+depthPx, shellR=x1-depthPx;
+      if(type==='flat'||depthPx<2)return `M ${x0} ${y0} L ${x1} ${y0} L ${x1} ${y1} L ${x0} ${y1} Z`;
+      const k=type==='hemispherical'?.62:type==='torispherical'?.42:.50;
+      return `M ${shellL} ${y0} L ${shellR} ${y0} C ${shellR+depthPx*k} ${y0} ${x1} ${cy-depthPx*.36} ${x1} ${cy} C ${x1} ${cy+depthPx*.36} ${shellR+depthPx*k} ${y1} ${shellR} ${y1} L ${shellL} ${y1} C ${shellL-depthPx*k} ${y1} ${x0} ${cy+depthPx*.36} ${x0} ${cy} C ${x0} ${cy-depthPx*.36} ${shellL-depthPx*k} ${y0} ${shellL} ${y0} Z`;
+    }
+    function innerHeadPathHorizontal(x0,x1,y0,y1,depthPx,type,inset){return headPathHorizontal(x0+inset,x1-inset,y0+inset,y1-inset,Math.max(0,depthPx-inset),type);}
+    function drawNozzleSide(f,i,sx,sy,sw,sh,s,L){
+      const fx=sx+Math.max(0,Math.min(L,Number(f.x)||0))/L*sw, proj=Math.max(12,Math.min(38,(Number(f.neckLength)||150)*s*.75)), fOD=Math.max(14,Math.min(34,((Number(f.flangeOD)||80))*s*.55+12));
+      let x1=fx,y1=sy,x2=fx,y2=sy-proj,flange='';
+      if(f.orientation==='bottom'){y1=sy+sh;y2=y1+proj;flange=`<rect x="${fx-fOD/2}" y="${y2-3}" width="${fOD}" height="6" class="flange"/>`;}
+      else if(f.orientation==='left'){x1=sx;y1=sy+sh/2;x2=x1-proj;y2=y1;flange=`<rect x="${x2-3}" y="${y2-fOD/2}" width="6" height="${fOD}" class="flange"/>`;}
+      else if(f.orientation==='right'){x1=sx+sw;y1=sy+sh/2;x2=x1+proj;y2=y1;flange=`<rect x="${x2-3}" y="${y2-fOD/2}" width="6" height="${fOD}" class="flange"/>`;}
+      else flange=`<rect x="${fx-fOD/2}" y="${y2-3}" width="${fOD}" height="6" class="flange"/>`;
+      return {fx,x1,y1,x2,y2,svg:`${line(x1,y1,x2,y2,'class="obj"')}${flange}`};
+    }
+    function sideSaddleSupport(cx,shellBottomY,topW,baseW,heightPx,type,label){
+      const bodyTopY=shellBottomY+4, baseTopY=shellBottomY+Math.max(15,heightPx)-Math.max(5,d.supports.baseThickness*.25), plateH=Math.max(5,Math.min(10,d.supports.baseThickness*.35||6)),baseX=cx-baseW/2,typeKey=String(type||'steel').toLowerCase();let out='';
+      const cradleSag=Math.max(6,Math.min(14,(d.supports.contactAngle||120)/12));
+      out+=`<path d="M ${cx-topW/2} ${shellBottomY+1} Q ${cx} ${shellBottomY+cradleSag} ${cx+topW/2} ${shellBottomY+1}" class="heavy"/>`;
+      out+=`<path d="M ${cx-topW*.46} ${shellBottomY+3} L ${cx-baseW*.32} ${baseTopY} L ${cx+baseW*.32} ${baseTopY} L ${cx+topW*.46} ${shellBottomY+3}" class="obj"/>${line(cx,bodyTopY+7,cx,baseTopY,'class="thin"')}`;
+      if(typeKey==='frp'||typeKey==='steel-frp')for(let k=-2;k<=2;k++)out+=line(cx-18+k*8,bodyTopY+10,cx-5+k*8,baseTopY-3,'class="thin" stroke-dasharray="3 2"');
+      out+=`<rect x="${baseX}" y="${baseTopY}" width="${baseW}" height="${plateH}" class="obj"/>`;
+      const aq=Math.max(0,Number(d.supports.anchorQty)||0);if(typeKey!=='frp'&&aq>0){for(let b=0;b<aq;b++){const px=baseX+8+(baseW-16)*(aq===1?.5:b/(aq-1));out+=`<circle cx="${px}" cy="${baseTopY+plateH/2}" r="2" class="obj"/>`;}}
+      out+=textEl(cx,baseTopY+plateH+10,label,'class="tagtext" text-anchor="middle"');return out;
+    }
+    function crossSaddle(cx,cy,rr,type){
+      const topY=cy+rr*.72,bottom=cy+rr+31,baseW=rr*1.45,baseX=cx-baseW/2;let out=`<path d="M ${cx-rr*.70} ${topY} Q ${cx} ${cy+rr+6} ${cx+rr*.70} ${topY}" class="heavy"/><path d="M ${cx-rr*.70} ${topY} L ${cx-baseW*.34} ${bottom} L ${cx+baseW*.34} ${bottom} L ${cx+rr*.70} ${topY}" class="obj"/>`;
+      if(opt.sectionHatch!==false)out+=`<path d="M ${cx-rr*.60} ${topY+4} Q ${cx} ${cy+rr+10} ${cx+rr*.60} ${topY+4} L ${cx+baseW*.28} ${bottom-3} L ${cx-baseW*.28} ${bottom-3} Z" fill="url(#hatch)" stroke="none" opacity=".55"/>`;
+      out+=`<rect x="${baseX}" y="${bottom}" width="${baseW}" height="6" class="obj"/>`;return out;
+    }
+    function nozzleDetail(x,y){
+      if(opt.nozzleDetail===false)return '';
+      let o=textEl(x+60,y-9,'DETAIL A - TYP. NOZZLE','class="viewtitle" text-anchor="middle"');
+      o+=line(x,y+32,x+120,y+32,'class="heavy"');o+=`<rect x="${x+53}" y="${y+1}" width="14" height="31" class="obj"/><rect x="${x+42}" y="${y-3}" width="36" height="7" class="flange"/>`;
+      o+=line(x+60,y+4,x+60,y-2,'class="thin"');o+=textEl(x+84,y+14,'FLANGE','class="note"');o+=textEl(x+84,y+27,'NECK','class="note"');o+=textEl(x+5,y+46,'FRP SHELL','class="note"');return o;
+    }
+
+    if(t.orientation==='vertical'){
+      const area={x:75,y:45,w:430,h:250}, scale=Math.min(area.w/D,area.h/L),bw=D*scale,bh=L*scale,bx=area.x+(area.w-bw)/2,by=area.y+(area.h-bh)/2,wall=Math.max(1.2,Math.min(4,thk*scale));
+      dragGeometry={orientation:'vertical',start:by,span:bh,length:L};parts+=textEl(area.x+area.w/2,18,'FRONT ELEVATION','class="viewtitle" text-anchor="middle"');
+      const dome=Math.max(0,Math.min(bw*.28,hd*scale));
+      const topY=by+dome,bottomY=by+bh-dome;
+      let outline=`M ${bx} ${topY} Q ${bx+bw/2} ${by-Math.min(4,dome*.08)} ${bx+bw} ${topY} L ${bx+bw} ${bottomY} Q ${bx+bw/2} ${by+bh+Math.min(4,dome*.08)} ${bx} ${bottomY} Z`;
+      if(headType==='flat')outline=`M ${bx} ${by} L ${bx+bw} ${by} L ${bx+bw} ${by+bh} L ${bx} ${by+bh} Z`;
+      parts+=`<path d="${outline}" class="heavy"/>`;
+      if(showInner){const ibx=bx+wall, iby=by+wall, ibw=bw-2*wall, ibh=bh-2*wall;parts+=`<rect x="${ibx}" y="${iby+dome}" width="${ibw}" height="${Math.max(1,ibh-2*dome)}" class="hiddenline"/>`;}
+      if(showCenter){parts+=line(bx+bw/2,by-15,bx+bw/2,by+bh+15,'class="center"');parts+=line(bx-15,by+bh/2,bx+bw+15,by+bh/2,'class="center"');}
+      if(mhD>0){const mw=Math.max(30,Math.min(bw*.62,mhD*scale)),nh=Math.max(12,Math.min(34,mhNeck*scale));parts+=`<rect x="${bx+bw/2-mw/2}" y="${by-nh}" width="${mw}" height="${nh}" class="obj"/><rect x="${bx+bw/2-mw*.56}" y="${by-nh-5}" width="${mw*1.12}" height="6" class="flange"/>`;parts+=calloutBox(bx+bw+68,by-nh-5,`MH Ø${fmt(mhD)}`,bx+bw/2,by-nh-5,'left');}
+      d.fittings.forEach((f,i)=>{const yy=by+bh-(Math.max(0,Math.min(L,Number(f.x)||0))/L)*bh,left=f.orientation==='left',sideRight=f.orientation==='right'||f.orientation==='top',xx=left?bx:bx+bw,proj=Math.max(15,Math.min(38,(f.neckLength||150)*scale)),x2=left?xx-proj:xx+proj;parts+=line(xx,yy,x2,yy,'class="obj"');parts+=`<rect x="${x2-3}" y="${yy-10}" width="6" height="20" class="flange"/>`;parts+=calloutBox(left?bx-40:bx+bw+40,yy-20,`N${i+1} ${f.type} ${f.size}`,x2,yy,left?'right':'left');if(showPosDims)parts+=textEl(left?bx-8:bx+bw+8,yy+12,`EL ${fmt(f.x)}`,'class="note" text-anchor="middle"');});
+      hookItems.forEach((h,i)=>{const px=bx+bw*(i+1)/(hookItems.length+1);parts+=`<path d="M ${px-8} ${by+3} Q ${px} ${by-14} ${px+8} ${by+3}" class="obj"/>`;if(showTags)parts+=textEl(px,by-19,'H'+(i+1),'class="tagtext" text-anchor="middle"');});
+      if(t.installation==='above'){const sc=Math.max(0,d.supports.count),supportPx=Math.max(14,Math.min(48,d.supports.height*scale));for(let i=0;i<Math.max(2,Math.min(4,sc||2));i++){const cx=bx+bw*(i+1)/(Math.max(2,Math.min(4,sc||2))+1),topW=Math.max(16,bw*.12),baseW=topW*1.65;parts+=sideSaddleSupport(cx,by+bh-1,topW,baseW,supportPx,d.supports.type,`S${i+1}`);}if(showDims&&sc>0)parts+=dimV(bx-48,by+bh,by+bh+supportPx,bx,`${fmt(d.supports.height)} mm`);}else parts+=line(bx-50,by+bh+20,bx+bw+50,by+bh+20,'class="hiddenline"');
+      if(showDims){parts+=dimV(bx-62,by,by+bh,bx,`${fmt(L)} mm`);parts+=dimH(bx,bx+bw,by+bh+60,by+bh,`Ø ${fmt(D)} mm`);}
+      const tcx=790,tcy=178,tr=92;parts+=textEl(tcx,38,'TOP VIEW','class="viewtitle" text-anchor="middle"');parts+=`<circle cx="${tcx}" cy="${tcy}" r="${tr}" class="heavy"/>${showInner?`<circle cx="${tcx}" cy="${tcy}" r="${tr-3}" class="hiddenline"/>`:''}`;if(showCenter){parts+=line(tcx-tr-14,tcy,tcx+tr+14,tcy,'class="center"');parts+=line(tcx,tcy-tr-14,tcx,tcy+tr+14,'class="center"');}
+      if(mhD>0){const mr=Math.max(18,Math.min(45,(mhD/D)*tr));parts+=`<circle cx="${tcx}" cy="${tcy}" r="${mr}" class="obj"/>`;}
+      d.fittings.forEach((f,i)=>{const deg=Number(f.angle)||0,ang=(deg-90)*Math.PI/180,rr=tr*.73,px=tcx+Math.cos(ang)*rr,py=tcy+Math.sin(ang)*rr;parts+=`<circle cx="${px}" cy="${py}" r="5.5" class="obj"/>`;if(showTags)parts+=textEl(px,py-9,'N'+(i+1),'class="tagtext" text-anchor="middle"');});
+      if(showDims)parts+=dimH(tcx-tr,tcx+tr,tcy+tr+36,tcy+tr,`Ø ${fmt(D)} mm`);parts+=nozzleDetail(875,60);
+    }else{
+      // ===== JAK PRECISION 2D SHOP-DRAWING STYLE =====
+      // NTS presentation with true numeric dimensions: cross-section + side elevation + full top view.
+      const cross={cx:160,cy:176,r:90};
+      const side={x:355,y:92,w:790,h:158};
+      // Independent display scales are intentional: drawing is NTS, dimensions are authoritative.
+      const sxScale=side.w/L, syScale=side.h/D;
+      const sw=side.w, sh=side.h, sx=side.x, sy=side.y;
+      const hdpx=Math.min(sw*.28,Math.max(0,hd*sxScale));
+      const wallPx=Math.max(1.3,Math.min(4.2,thk*syScale*1.5));
+      const xMap=x=>sx+Math.max(0,Math.min(L,Number(x)||0))*sxScale;
+      const shellLeft=sx+hdpx, shellRight=sx+sw-hdpx;
+      dragGeometry={orientation:'horizontal',start:sx,span:sw,length:L};
+
+      function leaderLabel(tx,ty,label,ax,ay,sideDir='left'){
+        if(!showTags)return '';
+        const elbowX=sideDir==='right'?tx-18:tx+18;
+        return `${line(ax,ay,elbowX,ty,'class="thin"')}${line(elbowX,ty,tx,ty,'class="thin"')}${textEl(tx+(sideDir==='right'?-3:3),ty-4,label,`class="label" text-anchor="${sideDir==='right'?'end':'start'}"`)}`;
+      }
+      function classicNozzle(f,i){
+        const fx=xMap(f.x), proj=Math.max(17,Math.min(40,(Number(f.neckLength)||150)*syScale*.9));
+        const fOD=Math.max(14,Math.min(31,((Number(f.flangeOD)||90))*syScale*.28+12));
+        let svg='',anchorX=fx,anchorY=sy;
+        if(f.orientation==='left'){
+          const yy=sy+sh*.5,x2=sx-proj;svg+=line(sx,yy,x2,yy,'class="heavy"');svg+=`<rect x="${x2-5}" y="${yy-fOD/2}" width="5" height="${fOD}" class="flange"/>`;anchorX=x2;anchorY=yy;
+        }else if(f.orientation==='right'){
+          const yy=sy+sh*.5,x2=sx+sw+proj;svg+=line(sx+sw,yy,x2,yy,'class="heavy"');svg+=`<rect x="${x2}" y="${yy-fOD/2}" width="5" height="${fOD}" class="flange"/>`;anchorX=x2;anchorY=yy;
+        }else if(f.orientation==='bottom'){
+          const y2=sy+sh+proj;svg+=line(fx,sy+sh,fx,y2,'class="heavy"');svg+=`<rect x="${fx-fOD/2}" y="${y2}" width="${fOD}" height="5" class="flange"/>`;anchorX=fx;anchorY=y2;
+        }else{
+          const y2=sy-proj;svg+=line(fx,sy,fx,y2,'class="heavy"');svg+=`<rect x="${fx-fOD/2}" y="${y2-5}" width="${fOD}" height="5" class="flange"/>`;anchorX=fx;anchorY=y2;
+        }
+        svg+=`<circle cx="${fx}" cy="${sy+sh/2}" r="13" class="draghandle" data-drag-kind="fitting" data-drag-index="${i}"/>`;
+        return {svg,anchorX,anchorY,fx};
+      }
+      function posDatum(px,label,value,lane=0){
+        if(!showPosDims)return '';
+        const y=52-lane*13;
+        return `${line(px,sy-4,px,y+5,'class="thin"')}${line(px-4,y+5,px+4,y+5,'class="thin"')}${textEl(px,y,`${label} ${fmt(value)}`,'class="note" text-anchor="middle"')}`;
+      }
+      function smallTickDim(x1,x2,y,objY,label){
+        return `<g class="dim">${line(x1,objY,x1,y)}${line(x2,objY,x2,y)}${line(x1,y,x2,y)}${line(x1-3,y-4,x1+3,y+4)}${line(x2-3,y-4,x2+3,y+4)}${textEl((x1+x2)/2,y-4,label,'text-anchor="middle"')}</g>`;
+      }
+
+      // ---- CROSS SECTION A-A ----
+      parts+=textEl(cross.cx,36,'CROSS SECTION A-A','class="viewtitle" text-anchor="middle"');
+      parts+=`<circle cx="${cross.cx}" cy="${cross.cy}" r="${cross.r}" class="heavy"/>`;
+      if(showInner)parts+=`<circle cx="${cross.cx}" cy="${cross.cy}" r="${cross.r-4}" class="hiddenline"/>`;
+      if(showCenter){parts+=line(cross.cx-cross.r-22,cross.cy,cross.cx+cross.r+22,cross.cy,'class="center"');parts+=line(cross.cx,cross.cy-cross.r-28,cross.cx,cross.cy+cross.r+28,'class="centerDark"');}
+      if(mhD>0){
+        const mw=Math.max(38,Math.min(74,(mhD/D)*cross.r*2)),nh=Math.max(19,Math.min(38,(mhNeck/D)*cross.r*2));
+        parts+=`<rect x="${cross.cx-mw/2}" y="${cross.cy-cross.r-nh}" width="${mw}" height="${nh}" class="manholefill"/>`;
+        parts+=`<rect x="${cross.cx-mw*.58}" y="${cross.cy-cross.r-nh-5}" width="${mw*1.16}" height="6" class="obj"/>`;
+        // cover center line and flange separation
+        parts+=line(cross.cx,cross.cy-cross.r-nh-9,cross.cx,cross.cy-cross.r+4,'class="centerDark"');
+        parts+=leaderLabel(30,55,`MANHOLE Ø${fmt(mhD)} x ${fmt(mhNeck)}`,cross.cx-mw/2,cross.cy-cross.r-nh-3,'left');
+      }
+      if(showDims){
+        parts+=dimV(45,cross.cy-cross.r,cross.cy+cross.r,cross.cx-cross.r,`Ø ${fmt(D)} mm`);
+        parts+=dimH(cross.cx-cross.r,cross.cx+cross.r,cross.cy+cross.r+38,cross.cy+cross.r,`Ø ${fmt(D)} mm`);
+      }
+      if(showTags)parts+=textEl(cross.cx+cross.r+16,cross.cy-cross.r+12,`SHELL T=${fmt(thk,1)} mm`,'class="note"');
+
+      // ---- MAIN SIDE ELEVATION ----
+      parts+=textEl(sx+sw/2,25,'SIDE ELEVATION','class="viewtitle" text-anchor="middle"');
+      parts+=`<path d="${headPathHorizontal(sx,sx+sw,sy,sy+sh,hdpx,headType)}" class="heavy"/>`;
+      if(showInner)parts+=`<path d="${innerHeadPathHorizontal(sx,sx+sw,sy,sy+sh,hdpx,headType,wallPx)}" class="hiddenline"/>`;
+      if(showCenter)parts+=line(sx-28,sy+sh/2,sx+sw+28,sy+sh/2,'class="center"');
+      // tangent lines
+      if(headType!=='flat' && hdpx>2){
+        parts+=line(shellLeft,sy-14,shellLeft,sy+sh+14,'class="hiddenline"');
+        parts+=line(shellRight,sy-14,shellRight,sy+sh+14,'class="hiddenline"');
+        if(showTags){parts+=textEl(shellLeft,sy+sh+12,'T.L.','class="note" text-anchor="middle"');parts+=textEl(shellRight,sy+sh+12,'T.L.','class="note" text-anchor="middle"');}
+      }
+
+      // External stiffener rings.
+      const autoRibs=Math.max(3,Math.min(10,Math.round(Math.max(1,straight)/900)+1));
+      const ribCount=Math.max(0,Math.round(d.supports.stiffenerCount||0)) || (t.installation==='underground'?autoRibs:0);
+      const ribWidthPx=Math.max(5,Math.min(13,(d.supports.stiffenerWidth||90)*sxScale));
+      const ribProjPx=Math.max(3,Math.min(8,(d.supports.stiffenerProjection||45)*syScale));
+      const ribCenters=[];
+      if(ribCount>0){
+        const span=Math.max(10,shellRight-shellLeft);
+        for(let i=0;i<ribCount;i++){
+          const rx=shellLeft+span*(i+1)/(ribCount+1);ribCenters.push(rx);
+          parts+=`<rect x="${rx-ribWidthPx/2}" y="${sy-ribProjPx}" width="${ribWidthPx}" height="${sh+ribProjPx*2}" class="rib"/>`;
+          if(showTags)parts+=textEl(rx,sy+sh+22,`R${i+1}`,'class="tagtext" text-anchor="middle"');
+        }
+      }
+
+      // Manhole side view.
+      if(mhD>0){
+        const mx=xMap(mhX),mw=Math.max(36,Math.min(78,mhD*sxScale)),nh=Math.max(18,Math.min(36,mhNeck*syScale));
+        parts+=`<rect x="${mx-mw/2}" y="${sy-nh}" width="${mw}" height="${nh}" class="manholefill"/>`;
+        parts+=`<rect x="${mx-mw*.58}" y="${sy-nh-5}" width="${mw*1.16}" height="6" class="obj"/>`;
+        parts+=line(mx,sy-nh-9,mx,sy+5,'class="centerDark"');
+        parts+=`<circle cx="${mx}" cy="${sy+4}" r="15" class="draghandle" data-drag-kind="manhole"/>`;
+        parts+=leaderLabel(mx-10,sy-58,`MH Ø${fmt(mhD)} x ${fmt(mhNeck)}`,mx,sy-nh-5,'right');
+      }
+
+      // Nozzles + real leader notes.
+      const topNozzles=[];
+      d.fittings.forEach((f,i)=>{
+        const nz=classicNozzle(f,i);parts+=nz.svg;
+        const typ=String(f.type)==='VENT'?'AIR VENT':String(f.type).replaceAll('_',' '), label=`N${i+1}  ${typ}  ${f.size}`;
+        if(f.orientation==='left')parts+=leaderLabel(sx-75,sy-28-(i%2)*18,label,nz.anchorX,nz.anchorY,'right');
+        else if(f.orientation==='right')parts+=leaderLabel(sx+sw+75,sy-28-(i%2)*18,label,nz.anchorX,nz.anchorY,'left');
+        else if(f.orientation==='top')topNozzles.push({i,f,nz,label});
+        else parts+=leaderLabel(nz.fx,sy+sh+50,label,nz.anchorX,nz.anchorY,'left');
+      });
+      topNozzles.sort((a,b)=>a.f.x-b.f.x).forEach((o,j)=>{
+        const lane=j%3,dir=j%2===0?'right':'left',tx=o.nz.fx+(dir==='right'?-30:30),ty=sy-45-lane*17;
+        parts+=leaderLabel(tx,ty,o.label,o.nz.anchorX,o.nz.anchorY,dir);
+      });
+
+      // Lifting lugs.
+      hookItems.forEach((hh,i)=>{const hx=xMap(hh.x);parts+=`<path d="M ${hx-8} ${sy+2} Q ${hx} ${sy-13} ${hx+8} ${sy+2}" class="heavy"/>`;if(showTags)parts+=textEl(hx,sy-17,`H${i+1}`,'class="tagtext" text-anchor="middle"');parts+=`<circle cx="${hx}" cy="${sy-4}" r="12" class="draghandle" data-drag-kind="hook" data-drag-index="${i}"/>`;});
+
+      // Saddles for above-ground only.
+      const supportCenters=[];
+      if(t.installation==='above'){
+        const sc=Math.max(0,d.supports.count),supportPx=Math.max(20,Math.min(58,d.supports.height*syScale)),autoTop=Math.max(34,Math.min(sw/Math.max(3,sc*1.15),82)),topW=d.supports.topWidth>0?Math.max(22,d.supports.topWidth*sxScale):autoTop,baseW=d.supports.baseWidth>0?Math.max(topW+14,d.supports.baseWidth*sxScale):topW+42,sItems=d.supports.items||[];
+        for(let i=0;i<sc;i++){const pos=(d.supports.mode==='manual'&&sItems[i])?Math.max(0,Math.min(L,sItems[i].x))/L:(i+1)/(sc+1),cx=sx+sw*pos;supportCenters.push(cx);parts+=sideSaddleSupport(cx,sy+sh-1,topW,baseW,supportPx,d.supports.type,`S${i+1}`);}
+      }
+
+      // Side view dimension hierarchy.
+      if(showDims){
+        const dimBase=sy+sh+42;
+        if(headType!=='flat' && hd>0){
+          parts+=smallTickDim(sx,shellLeft,dimBase,sy+sh,`HEAD ${fmt(hd)}`);
+          parts+=smallTickDim(shellLeft,shellRight,dimBase,sy+sh,`STRAIGHT SHELL ${fmt(straight)}`);
+          parts+=smallTickDim(shellRight,sx+sw,dimBase,sy+sh,`HEAD ${fmt(hd)}`);
+        }
+        parts+=dimH(sx,sx+sw,dimBase+26,sy+sh,`OVERALL LENGTH ${fmt(L)} mm`);
+        parts+=dimV(sx+sw+36,sy,sy+sh,sx+sw,`Ø ${fmt(D)} mm`);
+        if(mhD>0){const overallH=D+mhNeck;parts+=dimV(sx+sw+68,sy-mhNeck*syScale,sy+sh,sx+sw,`O.A.H. ${fmt(overallH)} mm`);}
+      }
+      parts+=textEl(sx+sw/2,sy+sh+86,'SIDE VIEW','class="viewtitle" text-anchor="middle"');
+
+      // Position datum above side view: exact X from left end.
+      if(showPosDims){
+        const datums=[];
+        d.fittings.forEach((f,i)=>datums.push({x:f.x,label:`N${i+1}`}));
+        if(mhD>0)datums.push({x:mhX,label:'MH'});
+        hookItems.forEach((h,i)=>datums.push({x:h.x,label:`H${i+1}`}));
+        datums.sort((a,b)=>a.x-b.x).forEach((q,j)=>{parts+=posDatum(xMap(q.x),q.label,q.x,j%3);});
+        parts+=textEl(sx,47,'X DATUM = LEFT TANK END','class="note"');
+      }
+
+      // ---- FULL TOP VIEW ----
+      if(opt.topView!==false){
+        const top={x:355,y:348,w:790,h:82};
+        const tx0=top.x,ty0=top.y,tw=top.w,th=top.h,td=Math.min(tw*.28,(hd/L)*tw),topX=x=>tx0+Math.max(0,Math.min(L,Number(x)||0))/L*tw;
+        parts+=textEl(tx0+tw/2,326,'TOP VIEW','class="viewtitle" text-anchor="middle"');
+        parts+=`<path d="${headPathHorizontal(tx0,tx0+tw,ty0,ty0+th,td,headType)}" class="heavy"/>`;
+        if(showInner)parts+=`<path d="${innerHeadPathHorizontal(tx0,tx0+tw,ty0,ty0+th,td,headType,3)}" class="hiddenline"/>`;
+        if(showCenter){parts+=line(tx0-16,ty0+th/2,tx0+tw+16,ty0+th/2,'class="center"');}
+        if(headType!=='flat'&&td>2){parts+=line(tx0+td,ty0-7,tx0+td,ty0+th+7,'class="hiddenline"');parts+=line(tx0+tw-td,ty0-7,tx0+tw-td,ty0+th+7,'class="hiddenline"');}
+        // rings/bands in plan
+        ribCenters.forEach((rx,i)=>{const px=tx0+(rx-sx)/sw*tw;parts+=`<rect x="${px-Math.max(2,ribWidthPx*.35)}" y="${ty0-3}" width="${Math.max(4,ribWidthPx*.7)}" height="${th+6}" class="rib"/>`;});
+        supportCenters.forEach((cx,i)=>{const px=tx0+(cx-sx)/sw*tw;parts+=line(px,ty0-5,px,ty0+th+5,'class="thin" stroke-width="2"');if(showTags)parts+=textEl(px,ty0+th+14,`S${i+1}`,'class="tagtext" text-anchor="middle"');});
+        // manhole in plan
+        if(mhD>0){const mx=topX(mhX),mr=Math.max(8,Math.min(th*.38,(mhD/D)*th/2));parts+=`<circle cx="${mx}" cy="${ty0+th/2}" r="${mr}" class="obj"/>`;if(showTags)parts+=textEl(mx,ty0+th/2+3,'MH','class="tagtext" text-anchor="middle"');}
+        // nozzles in plan based on circumferential angle / orientation
+        d.fittings.forEach((f,i)=>{
+          const fx=topX(f.x);let frac=0;
+          const angle=Number(f.angle);if(Number.isFinite(angle)&&angle!==0)frac=Math.sin(angle*Math.PI/180);else if(f.orientation==='left')frac=-.72;else if(f.orientation==='right')frac=.72;else frac=0;
+          const fy=ty0+th/2+frac*(th*.43);
+          parts+=`<circle cx="${fx}" cy="${fy}" r="5" class="obj"/>`;
+          if(f.orientation==='bottom')parts+=`<circle cx="${fx}" cy="${fy}" r="7" class="hiddenline"/>`;
+          if(showTags)parts+=textEl(fx,fy-8,`N${i+1}`,'class="tagtext" text-anchor="middle"');
+        });
+        hookItems.forEach((h,i)=>{const hx=topX(h.x);parts+=`<path d="M ${hx-5} ${ty0+th/2-3} L ${hx} ${ty0+th/2-10} L ${hx+5} ${ty0+th/2-3}" class="obj"/>`;if(showTags)parts+=textEl(hx,ty0+th/2+16,`H${i+1}`,'class="tagtext" text-anchor="middle"');});
+        if(showDims){
+          parts+=dimH(tx0,tx0+tw,ty0+th+38,ty0+th,`OVERALL LENGTH ${fmt(L)} mm`);
+          parts+=dimV(tx0+tw+35,ty0,ty0+th,tx0+tw,`WIDTH / Ø ${fmt(D)} mm`);
+          if(headType!=='flat'&&hd>0)parts+=smallTickDim(tx0+td,tx0+tw-td,ty0-16,ty0,`STRAIGHT SHELL ${fmt(straight)} mm`);
+        }
+      }
+    }
+    parts+=textEl(1178,490,`${d.documentControl?.scale||'NTS'} - Dimensions in ${d.documentControl?.unit||'mm'}`,'class="note" text-anchor="end"');svg.innerHTML=parts;
+
+    $('projectDataBody').innerHTML=[['Client / العميل',d.project.client||'--'],['Project / المشروع',d.project.projectName||'--'],['Project Code',d.project.projectCode||'--'],['Client Ref.',d.project.clientRef||'--'],['Drawing No.',d.project.drawingNo||'--'],['Revision / الإصدار',d.project.revision||'--'],['Rev. Description',d.project.revisionDescription||'--'],['Status / الحالة',d.project.status.toUpperCase()]].map(r=>`<tr><td>${esc(r[0])}</td><td class="value">${esc(r[1])}</td></tr>`).join('');
+    $('tankDataBody').innerHTML=[['Capacity / السعة',`${fmt(t.capacity)} L`],['Diameter / القطر',`${fmt(D)} mm`],[t.orientation==='vertical'?'Overall Height / الارتفاع':'Overall Length / الطول',`${fmt(L)} mm`],['Head Type',String(headType).toUpperCase()],['Head Depth',`${fmt(hd)} mm`],['Straight Shell',`${fmt(straight)} mm`],['Thickness / السماكة',`${fmt(t.thickness,1)} mm`],['Approx. Weight / الوزن',t.weight?`${fmt(t.weight,1)} kg`:'--'],['Design Temp.',`${fmt(t.designTemp,1)} °C`],['Design Pressure',`${fmt(t.designPressure,1)} bar`],['Specific Gravity',fmt(t.specificGravity,2)],['Design Standard',t.designStandard||'--'],['Service Medium',t.serviceMedium||useLabel(t.use)],['Burial Depth',t.installation==='underground'?`${fmt(t.burialDepth)} mm`:'--'],['Resin / الراتنج',t.resin||'--'],['Gelcoat',t.gelcoat||'--'],['Reinforcement / التدعيم',t.glass||'--'],['Orientation / الاتجاه',t.orientation==='vertical'?'VERTICAL':'HORIZONTAL'],['Installation / التركيب',installLabel(t.installation)],['Supports / القواعد',`${fmt(d.supports.count)} - ${String(d.supports.type||'').toUpperCase()}`],['Stiffener Rings / حلقات التقوية',t.installation==='underground'?`${(d.supports.stiffenerCount||0)||Math.max(3,Math.min(9,Math.round(Math.max(1,straight)/900)+1))} x ${fmt(d.supports.stiffenerWidth||90)} mm`:'--'],['Hooks / الهوكات',`${fmt(hookItems.length)} Items`]].map(r=>`<tr><td>${esc(r[0])}</td><td class="value">${esc(r[1])}</td></tr>`).join('');
+    const mhRow=`<tr><td>MH</td><td>MANHOLE - ${esc(String(d.manhole.coverType||'').toUpperCase())}</td><td>Ø${fmt(mhD)} mm</td><td>FRP</td><td>1</td><td>X=${fmt(mhX)}</td></tr>`,hookRows=hookItems.map((hh,i)=>`<tr><td>H${i+1}</td><td>LIFTING LUG - ${esc(String(hh.type).toUpperCase())}</td><td>--</td><td>--</td><td>1</td><td>X=${fmt(hh.x)}</td></tr>`).join('');
+    $('fittingsDataBody').innerHTML=d.fittings.map((f,i)=>`<tr><td>N${i+1}</td><td>${esc(f.type)}</td><td>${esc(f.size)}</td><td>${esc(f.connection||'--')}</td><td>${fmt(f.qty||1)}</td><td>X=${fmt(f.x)} / ${esc(String(f.orientation).toUpperCase())}${Number(f.angle)?' / '+fmt(f.angle)+'°':''}</td></tr>`).join('')+hookRows+mhRow;
+  }
+
+  async function saveDrawing(opts={}){
+    try{
+      const data=collectDrawingData();
+      if(!data.project.drawingNo) return toast('أدخل رقم المخطط');
+      if(!opts.skipLock && currentDrawingId && systemSettings.strictApproval==='on' && ['approved','issued'].includes(loadedOriginalStatus||'')) return toast('النسخة المعتمدة/الصادرة مقفلة. أنشئ Revision جديد أولًا.');
+      if(currentDrawingId){ await setDoc(doc(db,'drawings',currentDrawingId),data,{merge:true}); }
+      else { data.createdAt=serverTimestamp(); data.createdBy=auth.currentUser?.uid||null; const ref=await addDoc(collection(db,'drawings'),data); currentDrawingId=ref.id; }
+      loadedOriginalStatus=data.project.status; $("saveStateText").textContent='محفوظ في Firebase'; updateApprovalLock(); if(!opts.silent) toast('تم حفظ المخطط بنجاح');
+    }catch(err){ console.error(err); toast('تعذر حفظ المخطط - راجع Firestore Rules'); }
+  }
+  $("saveDrawingBtn")?.addEventListener('click',saveDrawing);
+
+  function resetDrawing(){
+    currentDrawingId=null; loadedOriginalStatus=null; $("drawClient").value=''; $("drawProject").value=''; $("drawRevision").value='00'; $("drawDate").value=todayISO(); $("drawStatus").value='draft'; $("projectCode").value=''; $("clientRef").value=''; $("drawnBy").value=''; $("checkedBy").value=''; $("approvedBy").value=''; $("revisionDescription").value='Initial Issue'; $("drawingNotes").value=''; $("reportLanguage").value=systemSettings.defaultLanguage||'bilingual'; $("drawingScale").value=systemSettings.defaultScale||'NTS'; $("tankCapacity").value=15000; $("tankDiameter").value=2000; $("tankLength").value=5150; $("tankHeadType").value="elliptical"; $("tankHeadDepth").value=0; $("tankStraightLength").value=0; $("frpDensity").value=1850; $("tankThickness").value=10; $("tankWeight").value=0; $("designTemp").value=40; $("designPressure").value=0; $("specificGravity").value=1; $("designStandard").value="Manufacturer Standard / Approved Specification"; $("burialDepth").value=0; $("serviceMedium").value=""; $("tankGelcoat").value="Isophthalic Gelcoat"; $("tankGlassType").value="E-Glass"; $("tankBarrier").value="Resin-rich corrosion barrier"; $("tankOrientation").value='horizontal'; $("tankInstallation").value='above'; $("tankUse").value='water'; $("manholePosMode").value='center'; $("manholeNeckHeight").value=180; $("manholeCoverType").value='bolted'; $("hookCount").value=2; $("supportCount").value=3; $("supportHeight").value=250; $("supportType").value='steel'; $("supportTopWidth").value=0; $("supportBaseWidth").value=0; $("supportMode").value='auto'; $("supportContactAngle").value=120; $("supportBaseThickness").value=10; $("supportAnchorQty").value=2; $("stiffenerCount").value=0; $("stiffenerWidth").value=90; $("stiffenerProjection").value=45; ["optInnerWall","optCenterLines","optDimensions","optTags","optNozzleDetail","optSupportDetail","optSectionHatch","optPositionDims"].forEach(id=>$(id).checked=true); $("optTopView").checked=true; supportItems=defaultSupports(); $("paperSize").value=systemSettings.defaultPaper||'A3'; fittings=defaultFittings(); hooks=defaultHooks(); supportItems=defaultSupports(); renderFittingsEditor(); renderHooksEditor(); renderSupportsEditor(); syncManholeX(); suggestNextDrawingNo(); $("saveStateText").textContent='غير محفوظ'; updateApprovalLock(); renderTankDrawing();
+  }
+  $("newDrawingResetBtn")?.addEventListener('click',resetDrawing);
+
+  function statusHtml(v){ const names={draft:'DRAFT',review:'UNDER REVIEW',approved:'APPROVED',issued:'ISSUED'}; return `<span class="status status-${esc(v)}">${names[v]||esc(v)}</span>`; }
+  function renderDrawingsTable(){
+    const q=($("drawingSearch")?.value||'').trim().toLowerCase(), sf=$("drawingStatusFilter")?.value||'';
+    const arr=drawingsArray.filter(x=>{ const hay=[x.project?.drawingNo,x.project?.client,x.project?.projectName,x.project?.projectCode].join(' ').toLowerCase(); return (!q||hay.includes(q))&&(!sf||x.project?.status===sf); });
+    const body=$("drawingsListBody");
+    if(body){ body.innerHTML=arr.map(x=>`<tr><td class="ltr">${esc(x.project?.drawingNo||'--')}</td><td>${esc(x.project?.client||'--')}</td><td>${esc(x.project?.projectName||'--')}</td><td class="ltr">${fmt(x.tank?.capacity||0)} L</td><td>${x.tank?.orientation==='vertical'?'Vertical':'Horizontal'}</td><td>${statusHtml(x.project?.status||'draft')}</td><td class="ltr">${esc(x.project?.revision||'00')}</td><td><div class="project-actions"><button class="small-btn open-drawing" data-id="${x.id}">فتح</button><button class="small-btn history-drawing" data-id="${x.id}">History</button><button class="small-btn duplicate-list" data-id="${x.id}">نسخ</button></div></td></tr>`).join('');
+      body.querySelectorAll('.open-drawing').forEach(b=>b.addEventListener('click',()=>openDrawing(b.dataset.id)));
+      body.querySelectorAll('.history-drawing').forEach(b=>b.addEventListener('click',()=>openRevisionHistory(b.dataset.id)));
+      body.querySelectorAll('.duplicate-list').forEach(b=>b.addEventListener('click',()=>duplicateFromId(b.dataset.id)));
+    }
+    $("drawingsEmpty")?.classList.toggle('hidden',arr.length>0);
+  }
+  function renderRecentDrawings(){
+    const box=$("recentDrawings"); if(!box) return; const arr=drawingsArray.slice(0,5);
+    box.innerHTML=arr.length?arr.map(x=>`<div class="recent-row"><b>${esc(x.project?.drawingNo||'--')}</b><span>${esc((x.project?.client||'')+' - '+(x.project?.projectName||''))}</span>${statusHtml(x.project?.status||'draft')}</div>`).join(''):'<div class="empty-mini">لا توجد مخططات بعد.</div>';
+  }
+  function subscribeDrawings(){
+    if(drawingUnsubscribe) drawingUnsubscribe();
+    drawingUnsubscribe=onSnapshot(collection(db,'drawings'),snap=>{
+      drawingsCache=new Map(); drawingsArray=[]; snap.forEach(ds=>{const val=ds.data(); drawingsCache.set(ds.id,val); drawingsArray.push({id:ds.id,...val});});
+      drawingsArray.sort((a,b)=>String(b.project?.drawingNo||'').localeCompare(String(a.project?.drawingNo||''),undefined,{numeric:true}));
+      renderDrawingsTable(); renderRecentDrawings();
+      const stats=document.querySelectorAll('#page-dashboard .stat .num'); if(stats.length>=4){ stats[0].textContent=new Set(drawingsArray.map(x=>x.project?.projectName).filter(Boolean)).size; stats[1].textContent=drawingsArray.length; stats[2].textContent=drawingsArray.filter(x=>x.project?.status==='review').length; stats[3].textContent=drawingsArray.filter(x=>['approved','issued'].includes(x.project?.status)).length; }
+      suggestNextDrawingNo();
+    },err=>{console.error(err);toast('تعذر قراءة قائمة المخططات');});
+  }
+  $("drawingSearch")?.addEventListener('input',renderDrawingsTable); $("drawingStatusFilter")?.addEventListener('change',renderDrawingsTable);
+
+  function suggestNextDrawingNo(){
+    if(currentDrawingId||!$("drawNo")) return;
+    let max=0; drawingsCache.forEach(x=>{ const m=String(x.project?.drawingNo||'').match(/(\d+)$/); if(m) max=Math.max(max,Number(m[1])); });
+    const prefix=systemSettings.prefix||'JAK-FRP-'; const re=new RegExp('^'+prefix.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\d+$'); if(!$("drawNo").value||re.test($("drawNo").value)||/^JAK-FRP-\d+$/.test($("drawNo").value)) $("drawNo").value=`${prefix}${String(max+1).padStart(4,'0')}`;
+  }
+
+  function openDrawing(id){
+    const d=drawingsCache.get(id); if(!d) return; currentDrawingId=id;
+    $("drawClient").value=d.project?.client||''; $("drawProject").value=d.project?.projectName||''; $("drawNo").value=d.project?.drawingNo||''; $("drawRevision").value=d.project?.revision||'00'; $("drawDate").value=d.project?.date||todayISO(); $("drawStatus").value=d.project?.status||'draft'; $("projectCode").value=d.project?.projectCode||''; $("clientRef").value=d.project?.clientRef||''; $("drawnBy").value=d.project?.drawnBy||''; $("checkedBy").value=d.project?.checkedBy||''; $("approvedBy").value=d.project?.approvedBy||''; $("revisionDescription").value=d.project?.revisionDescription||''; $("drawingNotes").value=d.project?.notes||''; $("reportLanguage").value=d.documentControl?.language||systemSettings.defaultLanguage||'bilingual'; $("drawingScale").value=d.documentControl?.scale||systemSettings.defaultScale||'NTS'; loadedOriginalStatus=d.project?.status||'draft';
+    $("tankOrientation").value=d.tank?.orientation||'horizontal'; $("tankInstallation").value=d.tank?.installation||'above'; $("tankUse").value=d.tank?.use||'water'; $("tankCapacity").value=d.tank?.capacity||0; $("tankDiameter").value=d.tank?.diameter||0; $("tankLength").value=d.tank?.length||0; $("tankThickness").value=d.tank?.thickness||0; $("tankWeight").value=d.tank?.weight||0; $("designTemp").value=d.tank?.designTemp??40; $("designPressure").value=d.tank?.designPressure??0; $("specificGravity").value=d.tank?.specificGravity??1; $("designStandard").value=d.tank?.designStandard||"Manufacturer Standard / Approved Specification"; $("burialDepth").value=d.tank?.burialDepth||0; $("serviceMedium").value=d.tank?.serviceMedium||""; $("tankResin").value=d.tank?.resin||''; $("tankGlass").value=d.tank?.glass||''; $("tankInner").value=d.tank?.inner||''; $("tankColorText").value=d.tank?.color||''; $("tankGelcoat").value=d.tank?.gelcoat||"Isophthalic Gelcoat"; $("tankGlassType").value=d.tank?.glassType||"E-Glass"; $("tankBarrier").value=d.tank?.barrier||"Resin-rich corrosion barrier"; $("tankHeadType").value=d.tank?.headType||"elliptical"; $("tankHeadDepth").value=d.tank?.headDepth||0; $("tankStraightLength").value=d.tank?.straightLength||0; $("frpDensity").value=d.tank?.frpDensity||1850;
+    $("manholePosMode").value='custom'; $("manholeX").disabled=false; $("manholeDia").value=d.manhole?.diameter||0; $("manholeX").value=d.manhole?.x||0; $("manholeNeckHeight").value=d.manhole?.neckHeight??180; $("manholeCoverType").value=d.manhole?.coverType||'bolted'; $("hookCount").value=d.hooks?.count||((d.hooks?.items||[]).length)||0; $("supportCount").value=d.supports?.count||0; $("supportHeight").value=d.supports?.height||0; $("supportType").value=d.supports?.type||'steel'; $("supportTopWidth").value=d.supports?.topWidth||0; $("supportBaseWidth").value=d.supports?.baseWidth||0; $("supportMode").value=d.supports?.mode||'auto'; $("supportContactAngle").value=d.supports?.contactAngle??120; $("supportBaseThickness").value=d.supports?.baseThickness??10; $("supportAnchorQty").value=d.supports?.anchorQty??2; $("stiffenerCount").value=d.supports?.stiffenerCount??0; $("stiffenerWidth").value=d.supports?.stiffenerWidth??90; $("stiffenerProjection").value=d.supports?.stiffenerProjection??45; const ro=d.documentControl?.drawingOptions||{}; $("optInnerWall").checked=ro.innerWall!==false; $("optCenterLines").checked=ro.centerLines!==false; $("optDimensions").checked=ro.dimensions!==false; $("optTags").checked=ro.tags!==false; $("optNozzleDetail").checked=ro.nozzleDetail!==false; $("optSupportDetail").checked=ro.supportDetail!==false; $("optSectionHatch").checked=ro.sectionHatch!==false; $("optPositionDims").checked=ro.positionDims!==false; $("optTopView").checked=ro.topView!==false; supportItems=(d.supports?.items||[]).map(x=>({...x,id:x.id||crypto.randomUUID()}));
+    hooks=(d.hooks?.items||[]).map(h=>({...h,id:h.id||crypto.randomUUID()})); fittings=(d.fittings||[]).map(f=>({...f,id:f.id||crypto.randomUUID()})); renderFittingsEditor(); renderHooksEditor(); renderSupportsEditor(); updateOrientationUI(); $("paperSize").value=d.paperSize||systemSettings.defaultPaper||'A3'; $("saveStateText").textContent='محمّل من Firebase'; updateApprovalLock();
+    goPage('newDrawing'); updateOrientationUI(); renderTankDrawing();
+  }
+
+
+  // ===== Enterprise masters / settings / revisions =====
+  function stripServerFields(obj){
+    return {
+      project:{...(obj.project||{})}, tank:{...(obj.tank||{})},
+      manhole:{...(obj.manhole||{})}, hooks:{count:obj.hooks?.count||0,items:(obj.hooks?.items||[]).map(x=>({...x}))},
+      supports:{...(obj.supports||{}),items:(obj.supports?.items||[]).map(x=>({...x}))}, fittings:(obj.fittings||[]).map(x=>({...x})),
+      documentControl:{...(obj.documentControl||{})}, headerSnapshot:{...(obj.headerSnapshot||{})}, paperSize:obj.paperSize||'A3'
+    };
+  }
+  function updateApprovalLock(){
+    const locked=currentDrawingId && systemSettings.strictApproval==='on' && ['approved','issued'].includes(loadedOriginalStatus||'');
+    $("approvedLockBanner")?.classList.toggle('show',!!locked);
+    if($("saveDrawingBtn")) $("saveDrawingBtn").disabled=!!locked;
+  }
+  function nextRevision(rev){
+    const s=String(rev||'00').trim(); if(/^\d+$/.test(s)) return String(Number(s)+1).padStart(Math.max(2,s.length),'0');
+    if(/^[A-Z]$/i.test(s)) return String.fromCharCode(s.toUpperCase().charCodeAt(0)+1);
+    return s+'-1';
+  }
+  async function createNewRevision(){
+    try{
+      if(!currentDrawingId){ await saveDrawing({skipLock:true,silent:true}); if(!currentDrawingId) return; }
+      const prior=drawingsCache.get(currentDrawingId)||collectDrawingData();
+      await addDoc(collection(db,'revisions'),{drawingId:currentDrawingId,drawingNo:prior.project?.drawingNo||$("drawNo").value,revision:prior.project?.revision||$("drawRevision").value,description:prior.project?.revisionDescription||'',snapshot:stripServerFields(prior),savedAt:serverTimestamp(),savedBy:auth.currentUser?.uid||null});
+      $("drawRevision").value=nextRevision(prior.project?.revision||$("drawRevision").value); $("drawStatus").value='draft'; $("revisionDescription").value=''; loadedOriginalStatus='draft'; updateApprovalLock();
+      await saveDrawing({skipLock:true,silent:true}); toast('تم إنشاء Revision جديد وحفظ النسخة السابقة في السجل');
+    }catch(err){console.error(err);toast('تعذر إنشاء Revision');}
+  }
+  $("newRevisionBtn")?.addEventListener('click',createNewRevision);
+
+  function duplicateCurrent(){
+    const snap=collectDrawingData(); currentDrawingId=null; loadedOriginalStatus=null; $("drawRevision").value='00'; $("drawStatus").value='draft'; $("revisionDescription").value='Copied from '+(snap.project.drawingNo||'drawing'); $("drawNo").value=''; suggestNextDrawingNo(); $("saveStateText").textContent='نسخة جديدة غير محفوظة'; updateApprovalLock(); renderTankDrawing(); toast('تم إنشاء نسخة جديدة - عدّل البيانات ثم احفظ');
+  }
+  $("duplicateDrawingBtn")?.addEventListener('click',duplicateCurrent);
+  function duplicateFromId(id){ openDrawing(id); setTimeout(duplicateCurrent,50); }
+
+  function subscribeRevisions(){
+    if(revisionsUnsubscribe) revisionsUnsubscribe();
+    revisionsUnsubscribe=onSnapshot(collection(db,'revisions'),snap=>{revisionsCache=[];snap.forEach(ds=>revisionsCache.push({id:ds.id,...ds.data()}));});
+  }
+  function openRevisionHistory(id){
+    const drawing=drawingsCache.get(id); $("revisionDialogTitle").textContent=(drawing?.project?.drawingNo||'')+' - '+(drawing?.project?.projectName||'');
+    const rows=revisionsCache.filter(r=>r.drawingId===id).sort((a,b)=>String(b.revision||'').localeCompare(String(a.revision||''),undefined,{numeric:true}));
+    $("revisionList").innerHTML=rows.length?rows.map(r=>`<div class="revision-item"><div class="revision-code">REV ${esc(r.revision||'--')}</div><div class="revision-meta"><b>${esc(r.description||'No description')}</b><br>${esc(r.drawingNo||'')}</div><button class="small-btn restore-rev" data-id="${r.id}">تحميل للمراجعة</button></div>`).join(''):'<div class="empty-mini">لا توجد Revisions محفوظة لهذا المخطط بعد.</div>';
+    $("revisionList").querySelectorAll('.restore-rev').forEach(b=>b.addEventListener('click',()=>restoreRevision(b.dataset.id)));
+    $("revisionDialog").showModal();
+  }
+  $("closeRevisionDialog")?.addEventListener('click',()=>$("revisionDialog").close());
+  function restoreRevision(revId){ const r=revisionsCache.find(x=>x.id===revId); if(!r?.snapshot)return; loadDrawingObject(r.snapshot,false); $("revisionDialog").close(); toast('تم تحميل النسخة التاريخية للمراجعة - لم يتم الحفظ فوق المخطط الحالي'); }
+
+  function loadDrawingObject(d,keepId=false){
+    if(!keepId){ currentDrawingId=null; loadedOriginalStatus=null; }
+    $("drawClient").value=d.project?.client||''; $("drawProject").value=d.project?.projectName||''; $("drawNo").value=d.project?.drawingNo||''; $("drawRevision").value=d.project?.revision||'00'; $("drawDate").value=d.project?.date||todayISO(); $("drawStatus").value=d.project?.status||'draft'; $("projectCode").value=d.project?.projectCode||''; $("clientRef").value=d.project?.clientRef||''; $("drawnBy").value=d.project?.drawnBy||''; $("checkedBy").value=d.project?.checkedBy||''; $("approvedBy").value=d.project?.approvedBy||''; $("revisionDescription").value=d.project?.revisionDescription||''; $("drawingNotes").value=d.project?.notes||'';
+    $("tankOrientation").value=d.tank?.orientation||'horizontal'; $("tankInstallation").value=d.tank?.installation||'above'; $("tankUse").value=d.tank?.use||'water'; $("tankCapacity").value=d.tank?.capacity||0; $("tankDiameter").value=d.tank?.diameter||0; $("tankLength").value=d.tank?.length||0; $("tankThickness").value=d.tank?.thickness||0; $("tankWeight").value=d.tank?.weight||0; $("designTemp").value=d.tank?.designTemp??40; $("designPressure").value=d.tank?.designPressure??0; $("specificGravity").value=d.tank?.specificGravity??1; $("designStandard").value=d.tank?.designStandard||"Manufacturer Standard / Approved Specification"; $("burialDepth").value=d.tank?.burialDepth||0; $("serviceMedium").value=d.tank?.serviceMedium||""; $("tankResin").value=d.tank?.resin||''; $("tankGlass").value=d.tank?.glass||''; $("tankInner").value=d.tank?.inner||''; $("tankColorText").value=d.tank?.color||''; $("tankGelcoat").value=d.tank?.gelcoat||"Isophthalic Gelcoat"; $("tankGlassType").value=d.tank?.glassType||"E-Glass"; $("tankBarrier").value=d.tank?.barrier||"Resin-rich corrosion barrier"; $("tankHeadType").value=d.tank?.headType||"elliptical"; $("tankHeadDepth").value=d.tank?.headDepth||0; $("tankStraightLength").value=d.tank?.straightLength||0; $("frpDensity").value=d.tank?.frpDensity||1850;
+    $("manholePosMode").value='custom'; $("manholeX").disabled=false; $("manholeDia").value=d.manhole?.diameter||0; $("manholeX").value=d.manhole?.x||0; $("manholeNeckHeight").value=d.manhole?.neckHeight??180; $("manholeCoverType").value=d.manhole?.coverType||'bolted'; $("hookCount").value=d.hooks?.count||((d.hooks?.items||[]).length)||0; $("supportCount").value=d.supports?.count||0; $("supportHeight").value=d.supports?.height||0; $("supportType").value=d.supports?.type||'steel'; $("supportTopWidth").value=d.supports?.topWidth||0; $("supportBaseWidth").value=d.supports?.baseWidth||0; $("supportMode").value=d.supports?.mode||'auto'; $("supportContactAngle").value=d.supports?.contactAngle??120; $("supportBaseThickness").value=d.supports?.baseThickness??10; $("supportAnchorQty").value=d.supports?.anchorQty??2; $("stiffenerCount").value=d.supports?.stiffenerCount??0; $("stiffenerWidth").value=d.supports?.stiffenerWidth??90; $("stiffenerProjection").value=d.supports?.stiffenerProjection??45; const ro=d.documentControl?.drawingOptions||{}; $("optInnerWall").checked=ro.innerWall!==false; $("optCenterLines").checked=ro.centerLines!==false; $("optDimensions").checked=ro.dimensions!==false; $("optTags").checked=ro.tags!==false; $("optNozzleDetail").checked=ro.nozzleDetail!==false; $("optSupportDetail").checked=ro.supportDetail!==false; $("optSectionHatch").checked=ro.sectionHatch!==false; $("optPositionDims").checked=ro.positionDims!==false; $("optTopView").checked=ro.topView!==false; supportItems=(d.supports?.items||[]).map(x=>({...x,id:x.id||crypto.randomUUID()})); hooks=(d.hooks?.items||[]).map(h=>({...h,id:h.id||crypto.randomUUID()})); fittings=(d.fittings||[]).map(f=>({...f,id:f.id||crypto.randomUUID()})); renderFittingsEditor();renderHooksEditor();renderSupportsEditor(); $("paperSize").value=d.paperSize||systemSettings.defaultPaper||'A3'; $("reportLanguage").value=d.documentControl?.language||systemSettings.defaultLanguage||'bilingual'; $("drawingScale").value=d.documentControl?.scale||systemSettings.defaultScale||'NTS'; updateOrientationUI();updateApprovalLock();renderTankDrawing();
+  }
+
+  // Clients master
+  function subscribeClients(){
+    if(clientsUnsubscribe) clientsUnsubscribe(); clientsUnsubscribe=onSnapshot(collection(db,'clients'),snap=>{clientsCache=new Map();snap.forEach(ds=>clientsCache.set(ds.id,{id:ds.id,...ds.data()}));renderClients();renderClientDatalist();});
+  }
+  function renderClientDatalist(){const dl=$("clientDatalist");if(!dl)return;dl.innerHTML=[...clientsCache.values()].map(c=>`<option value="${esc(c.nameAr||c.nameEn||c.code||'')}">${esc(c.code||'')} ${esc(c.nameEn||'')}</option>`).join('');}
+  function renderClients(){const q=($("clientSearch")?.value||'').toLowerCase();const arr=[...clientsCache.values()].filter(c=>[c.code,c.nameAr,c.nameEn,c.contact,c.phone,c.email].join(' ').toLowerCase().includes(q)).sort((a,b)=>String(a.code||a.nameAr||'').localeCompare(String(b.code||b.nameAr||''))); const body=$("clientsTableBody");if(body){body.innerHTML=arr.map(c=>`<tr><td class="ltr">${esc(c.code||'--')}</td><td>${esc(c.nameAr||c.nameEn||'--')}</td><td>${esc(c.contact||'--')}</td><td class="ltr">${esc(c.phone||'--')}</td><td class="ltr">${esc(c.email||'--')}</td><td><button class="small-btn edit-client" data-id="${c.id}">تعديل</button><button class="small-btn use-client" data-id="${c.id}">استخدام</button></td></tr>`).join('');body.querySelectorAll('.edit-client').forEach(b=>b.addEventListener('click',()=>editClient(b.dataset.id)));body.querySelectorAll('.use-client').forEach(b=>b.addEventListener('click',()=>useClient(b.dataset.id)));} $("clientsEmpty")?.classList.toggle('hidden',arr.length>0);}
+  $("clientSearch")?.addEventListener('input',renderClients);
+  function clearClientForm(){currentClientId=null;['clientCode','clientNameAr','clientNameEn','clientContact','clientPhone','clientEmail','clientAddress'].forEach(id=>$(id).value='');}
+  $("clearClientBtn")?.addEventListener('click',clearClientForm);
+  function editClient(id){const c=clientsCache.get(id);if(!c)return;currentClientId=id;$("clientCode").value=c.code||'';$("clientNameAr").value=c.nameAr||'';$("clientNameEn").value=c.nameEn||'';$("clientContact").value=c.contact||'';$("clientPhone").value=c.phone||'';$("clientEmail").value=c.email||'';$("clientAddress").value=c.address||'';}
+  function useClient(id){const c=clientsCache.get(id);if(!c)return;$("drawClient").value=c.nameAr||c.nameEn||c.code||'';goPage('newDrawing');renderTankDrawing();}
+  $("saveClientBtn")?.addEventListener('click',async()=>{try{const id=currentClientId||crypto.randomUUID();const data={code:$("clientCode").value.trim(),nameAr:$("clientNameAr").value.trim(),nameEn:$("clientNameEn").value.trim(),contact:$("clientContact").value.trim(),phone:$("clientPhone").value.trim(),email:$("clientEmail").value.trim(),address:$("clientAddress").value.trim(),updatedAt:serverTimestamp(),updatedBy:auth.currentUser?.uid||null}; if(!data.nameAr&&!data.nameEn)return toast('أدخل اسم العميل');await setDoc(doc(db,'clients',id),data,{merge:true});currentClientId=id;toast('تم حفظ العميل');}catch(e){console.error(e);toast('تعذر حفظ العميل');}});
+
+  // Tank templates
+  function subscribeTemplates(){if(templatesUnsubscribe)templatesUnsubscribe();templatesUnsubscribe=onSnapshot(collection(db,'tankTemplates'),snap=>{templatesCache=new Map();snap.forEach(ds=>templatesCache.set(ds.id,{id:ds.id,...ds.data()}));renderTemplates();});}
+  function renderTemplates(){const box=$("templatesGrid");if(!box)return;const arr=[...templatesCache.values()];box.innerHTML=arr.length?arr.map(t=>`<div class="template-card"><h4>${esc(t.name||'Tank Template')}</h4><div class="template-meta">${esc((t.data?.tank?.orientation||'horizontal').toUpperCase())} • ${fmt(t.data?.tank?.capacity||0)} L • Ø ${fmt(t.data?.tank?.diameter||0)} mm<br>${esc(useLabel(t.data?.tank?.use||''))}</div><div class="template-actions"><button class="small-btn apply-template" data-id="${t.id}">تطبيق</button></div></div>`).join(''):'<div class="empty-mini">لا توجد قوالب بعد.</div>';box.querySelectorAll('.apply-template').forEach(b=>b.addEventListener('click',()=>applyTemplate(b.dataset.id)));}
+  $("saveTemplateBtn")?.addEventListener('click',async()=>{const name=$("templateName").value.trim();if(!name)return toast('اكتب اسم القالب');try{const d=collectDrawingData();const data={tank:d.tank,manhole:d.manhole,hooks:d.hooks,supports:d.supports,fittings:d.fittings,documentControl:d.documentControl};await setDoc(doc(db,'tankTemplates',crypto.randomUUID()),{name,data,updatedAt:serverTimestamp(),updatedBy:auth.currentUser?.uid||null});$("templateName").value='';toast('تم حفظ قالب الخزان');}catch(e){console.error(e);toast('تعذر حفظ القالب');}});
+  function applyTemplate(id){const t=templatesCache.get(id)?.data;if(!t)return;const keep=collectDrawingData().project;loadDrawingObject({project:keep,...t,paperSize:$("paperSize").value},false);$("drawNo").value='';$("drawRevision").value='00';$("drawStatus").value='draft';suggestNextDrawingNo();goPage('newDrawing');toast('تم تطبيق القالب');}
+
+  // System settings
+  function subscribeSystemSettings(){if(settingsUnsubscribe)settingsUnsubscribe();settingsUnsubscribe=onSnapshot(doc(db,'settings','system'),snap=>{if(snap.exists())systemSettings={...systemSettings,...snap.data()};fillSystemSettings();updateApprovalLock();suggestNextDrawingNo();});}
+  function fillSystemSettings(){if($("settingPrefix"))$("settingPrefix").value=systemSettings.prefix||'JAK-FRP-';if($("settingDefaultPaper"))$("settingDefaultPaper").value=systemSettings.defaultPaper||'A3';if($("settingDefaultLanguage"))$("settingDefaultLanguage").value=systemSettings.defaultLanguage||'bilingual';if($("settingDefaultScale"))$("settingDefaultScale").value=systemSettings.defaultScale||'NTS';if($("settingAutoSave"))$("settingAutoSave").value=systemSettings.autoSave||'off';if($("settingStrictApproval"))$("settingStrictApproval").value=systemSettings.strictApproval||'on';}
+  $("saveSystemSettings")?.addEventListener('click',async()=>{try{const data={prefix:$("settingPrefix").value.trim()||'JAK-FRP-',defaultPaper:$("settingDefaultPaper").value,defaultLanguage:$("settingDefaultLanguage").value,defaultScale:$("settingDefaultScale").value,autoSave:$("settingAutoSave").value,strictApproval:$("settingStrictApproval").value,updatedAt:serverTimestamp(),updatedBy:auth.currentUser?.uid||null};await setDoc(doc(db,'settings','system'),data,{merge:true});systemSettings={...systemSettings,...data};toast('تم حفظ إعدادات النظام');}catch(e){console.error(e);toast('تعذر حفظ الإعدادات');}});
+
+  // Autosave only after first manual save
+  function scheduleAutoSave(){ if(systemSettings.autoSave!=='on'||!currentDrawingId)return; clearTimeout(autoSaveTimer); autoSaveTimer=setTimeout(()=>saveDrawing({silent:true}).catch(()=>{}),1800); }
+  tankInputIds.forEach(id=>$(id)?.addEventListener('input',scheduleAutoSave));
+
+  // Export / import
+  function downloadTextFile(name,text,mime='application/json'){const blob=new Blob([text],{type:mime});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);}
+  $("exportJsonBtn")?.addEventListener('click',()=>{const d=collectDrawingData();delete d.updatedAt;downloadTextFile(($("drawNo").value||'drawing')+'.json',JSON.stringify(d,null,2));});
+  $("importJsonBtn")?.addEventListener('click',()=>$("importJsonInput").click());
+  $("importJsonInput")?.addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{const d=JSON.parse(await f.text());loadDrawingObject(d,false);$("drawNo").value='';suggestNextDrawingNo();toast('تم استيراد البيانات كمخطط جديد');}catch(err){console.error(err);toast('ملف JSON غير صالح');}e.target.value='';});
+  $("downloadSvgBtn")?.addEventListener('click',()=>{const svg=$("tankSvg");const xml='<?xml version="1.0" encoding="UTF-8"?>\n'+new XMLSerializer().serializeToString(svg);downloadTextFile(($("drawNo").value||'tank-drawing')+'.svg',xml,'image/svg+xml');});
+  function dxfPair(code,value){return `${code}\n${value}\n`;}
+  function exportDxf(){
+    const d=collectDrawingData(),t=d.tank,L=Math.max(1,t.length),D=Math.max(1,t.diameter),hd=Math.max(0,t.headDepth||autoHeadDepth(D,t.headType||'elliptical')),R=D/2;
+    let out='0\nSECTION\n2\nHEADER\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n';
+    const lineD=(x1,y1,x2,y2,layer='TANK')=>{out+='0\nLINE\n8\n'+layer+'\n10\n'+x1+'\n20\n'+y1+'\n11\n'+x2+'\n21\n'+y2+'\n';};
+    const circ=(x,y,r,layer='NOZZLES')=>{out+='0\nCIRCLE\n8\n'+layer+'\n10\n'+x+'\n20\n'+y+'\n40\n'+r+'\n';};
+    if(t.orientation==='horizontal'){
+      const xL=hd,xR=L-hd;lineD(xL,R,xR,R);lineD(xL,-R,xR,-R);lineD(0,0,xL,R);lineD(0,0,xL,-R);lineD(L,0,xR,R);lineD(L,0,xR,-R);lineD(0,0,L,0,'CENTER');
+      d.fittings.forEach((f,i)=>{const y=f.orientation==='bottom'?-R:f.orientation==='top'?R:0;circ(Number(f.x)||0,y,Math.max(20,Number(f.flangeOD)||50)/2);});
+      (d.supports.items||[]).forEach((s,i)=>lineD(Number(s.x)||0,-R,Number(s.x)||0,-R-(d.supports.height||250),'SUPPORTS'));
+    }else{lineD(-R,0,-R,L);lineD(R,0,R,L);lineD(-R,0,R,0);lineD(-R,L,R,L);lineD(0,0,0,L,'CENTER');d.fittings.forEach(f=>circ(R,Number(f.x)||0,Math.max(20,Number(f.flangeOD)||50)/2));}
+    out+='0\nENDSEC\n0\nEOF\n';downloadTextFile(($("drawNo").value||'tank-drawing')+'.dxf',out,'application/dxf');
+  }
+  $("downloadDxfBtn")?.addEventListener('click',exportDxf);
+
+  // Direct drag editing on SVG
+  function eventToSvgPoint(evt){const svg=$("tankSvg"),r=svg.getBoundingClientRect(),vb=svg.viewBox.baseVal;return{x:vb.x+(evt.clientX-r.left)*vb.width/r.width,y:vb.y+(evt.clientY-r.top)*vb.height/r.height};}
+  $("tankSvg")?.addEventListener('pointerdown',e=>{const h=e.target.closest?.('[data-drag-kind]');if(!h||!dragGeometry)return;activeDrag={kind:h.dataset.dragKind,index:Number(h.dataset.dragIndex)};e.preventDefault();});
+  window.addEventListener('pointermove',e=>{if(!activeDrag||!dragGeometry)return;const p=eventToSvgPoint(e);let v=0;if(dragGeometry.orientation==='horizontal')v=(p.x-dragGeometry.start)/dragGeometry.span*dragGeometry.length;else v=(dragGeometry.start+dragGeometry.span-p.y)/dragGeometry.span*dragGeometry.length;v=Math.max(0,Math.min(dragGeometry.length,Math.round(v/10)*10));if(activeDrag.kind==='fitting'&&fittings[activeDrag.index])fittings[activeDrag.index].x=v;if(activeDrag.kind==='hook'&&hooks[activeDrag.index])hooks[activeDrag.index].x=v;if(activeDrag.kind==='manhole'){$("manholePosMode").value='custom';$("manholeX").disabled=false;$("manholeX").value=v;}renderTankDrawing();});
+  window.addEventListener('pointerup',()=>{if(!activeDrag)return;activeDrag=null;renderFittingsEditor();renderHooksEditor();scheduleAutoSave();});
+
+  function downloadSvgPng(){
+    const svg=$("tankSvg"); const xml=new XMLSerializer().serializeToString(svg); const blob=new Blob([xml],{type:'image/svg+xml;charset=utf-8'}); const url=URL.createObjectURL(blob); const img=new Image(); img.onload=()=>{ const c=document.createElement('canvas'); c.width=2400;c.height=1000; const ctx=c.getContext('2d'); ctx.fillStyle='#fff';ctx.fillRect(0,0,c.width,c.height);ctx.drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);c.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=($("drawNo").value||'tank-drawing')+'.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);},'image/png'); }; img.onerror=()=>{URL.revokeObjectURL(url);toast('تعذر تصدير PNG');}; img.src=url;
+  }
+  $("downloadPngBtn")?.addEventListener('click',downloadSvgPng);
+  function printReportSheet(){
+    const size=$("paperSize").value;
+    const source=$("printArea");
+    const win=window.open('', '_blank', 'width=1400,height=1000');
+    if(!win) return toast('اسمح للنظام بفتح نافذة الطباعة');
+    const allStyles=[...document.querySelectorAll('style')].map(s=>s.outerHTML).join('');
+    const extra=`<style>body{margin:0;background:#fff} .print-wrap{display:flex;justify-content:center;align-items:flex-start;padding:0} #printArea{margin:0 auto!important;box-shadow:none!important;border:1px solid #aebbb7!important} @page{size:${size} landscape;margin:7mm}</style>`;
+    const paper = size==='A4'?{w:1050,h:720}:size==='A3'?{w:1500,h:1040}:size==='A2'?{w:2100,h:1450}:{w:2970,h:2050};
+    const html = `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">${allStyles}${extra}</head><body><div class="print-wrap">${source.outerHTML}</div><script>window.onload=()=>{const report=document.getElementById('printArea');const rect=report.getBoundingClientRect();const scale=Math.min(PAPER_W/rect.width,PAPER_H/rect.height,1);report.style.setProperty('width',rect.width+'px','important');report.style.setProperty('transform','scale('+scale+')','important');report.style.setProperty('transform-origin','top center','important');report.style.setProperty('position','relative','important');report.parentElement.style.height=(rect.height*scale)+'px';report.parentElement.style.overflow='hidden';document.body.style.height=(rect.height*scale)+'px';setTimeout(()=>{window.focus();window.print();},500);};<\/script></body></html>`
+      .replace('PAPER_W', String(paper.w))
+      .replace('PAPER_H', String(paper.h));
+    win.document.write(html);
+    win.document.close();
+  }
+  $("printReportBtn")?.addEventListener('click',printReportSheet);
+
+  // Initialize phase 2 after login is ready
+  const oldAuthPhase2=onAuthStateChanged(auth,user=>{ if(user){ subscribeDrawings();subscribeClients();subscribeTemplates();subscribeRevisions();subscribeSystemSettings();setTimeout(()=>{suggestNextDrawingNo();renderTankDrawing();},120); } else { [drawingUnsubscribe,clientsUnsubscribe,templatesUnsubscribe,revisionsUnsubscribe,settingsUnsubscribe].forEach(fn=>{try{fn&&fn()}catch(e){}});drawingUnsubscribe=clientsUnsubscribe=templatesUnsubscribe=revisionsUnsubscribe=settingsUnsubscribe=null;} });
+
+  $("todayText").textContent=new Intl.DateTimeFormat("en-GB").format(new Date());
+  updateHeaderPreview();
+</script>
+</body>
+</html>
